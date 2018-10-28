@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>瞿璐祎的博客</title>
+  
+  <subtitle>try something new</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://luyiqu.github.io/"/>
+  <updated>2018-10-28T07:41:12.263Z</updated>
+  <id>https://luyiqu.github.io/</id>
+  
+  <author>
+    <name>luyiqu</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mapreduce</title>
+    <link href="https://luyiqu.github.io/2018/10/28/mapreduce/"/>
+    <id>https://luyiqu.github.io/2018/10/28/mapreduce/</id>
+    <published>2018-10-28T15:40:32.000Z</published>
+    <updated>2018-10-28T07:41:12.263Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;#MapReduce 处理系统&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MPI 并行计算框架 &amp;amp; MapReduce区别&lt;/li&gt;
+&lt;/ul&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
