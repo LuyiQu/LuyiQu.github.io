@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://luyiqu.github.io/"/>
-  <updated>2018-10-28T15:26:52.405Z</updated>
+  <updated>2018-10-31T03:06:06.351Z</updated>
   <id>https://luyiqu.github.io/</id>
   
   <author>
@@ -17,11 +17,47 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>sql</title>
+    <link href="https://luyiqu.github.io/2018/10/31/sql/"/>
+    <id>https://luyiqu.github.io/2018/10/31/sql/</id>
+    <published>2018-10-31T10:59:18.000Z</published>
+    <updated>2018-10-31T03:06:06.351Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>关系数据库物理设计</title>
+    <link href="https://luyiqu.github.io/2018/10/29/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%A9%E7%90%86%E8%AE%BE%E8%AE%A1/"/>
+    <id>https://luyiqu.github.io/2018/10/29/关系数据库物理设计/</id>
+    <published>2018-10-29T13:07:23.000Z</published>
+    <updated>2018-10-31T03:06:14.330Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;关系数据库物理设计&quot;&gt;&lt;a href=&quot;#关系数据库物理设计&quot; class=&quot;headerlink&quot; title=&quot;关系数据库物理设计&quot;&gt;&lt;/a&gt;关系数据库物理设计&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;实际中，在关系设计中，物理设计和逻辑设计是混为一谈的&lt;br&gt;-&lt;/li&gt;
+      
+    
+    </summary>
+    
+      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>xgboost</title>
     <link href="https://luyiqu.github.io/2018/10/29/xgboost/"/>
     <id>https://luyiqu.github.io/2018/10/29/xgboost/</id>
     <published>2018-10-28T23:24:19.000Z</published>
-    <updated>2018-10-28T15:26:52.405Z</updated>
+    <updated>2018-10-31T03:06:58.407Z</updated>
     
     <summary type="html">
     
