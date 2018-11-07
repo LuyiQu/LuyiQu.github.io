@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://luyiqu.github.io/"/>
-  <updated>2018-10-31T03:06:06.351Z</updated>
+  <updated>2018-11-07T05:58:47.585Z</updated>
   <id>https://luyiqu.github.io/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Spark 编程</title>
+    <link href="https://luyiqu.github.io/2018/11/07/Spark-%E7%BC%96%E7%A8%8B/"/>
+    <id>https://luyiqu.github.io/2018/11/07/Spark-编程/</id>
+    <published>2018-11-07T13:58:47.000Z</published>
+    <updated>2018-11-07T05:58:47.585Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Spark-处理系统</title>
+    <link href="https://luyiqu.github.io/2018/11/07/Spark-%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    <id>https://luyiqu.github.io/2018/11/07/Spark-处理系统/</id>
+    <published>2018-11-06T21:58:25.000Z</published>
+    <updated>2018-11-07T05:54:57.225Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Spark-vs-MapReduce&quot;&gt;&lt;a href=&quot;#Spark-vs-MapReduce&quot; class=&quot;headerlink&quot; title=&quot;Spark vs. MapReduce&quot;&gt;&lt;/a&gt;Spark vs. MapReduce&lt;/h1&gt;&lt;pre&gt;&lt;c
+      
+    
+    </summary>
+    
+      <category term="分布式模型与编程" scheme="https://luyiqu.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>sql</title>
