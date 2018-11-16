@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="数据管理系统笔记,">
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="文档型数据库简介1. MongoDB:文档型数据库，按照文档的形式存储     a. Web App（用的较多） 2. 数据库管理系统（DBMS）     a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明 基础概念：a. 文档（数据模型）   【关系数据库的数据模型是表格】     i. 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式">
-<meta name="keywords" content="个人博客">
+<meta name="description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta name="keywords" content="数据管理系统笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="瞿璐祎的博客">
-<meta property="og:url" content="https://luyiqu.github.io/2018/11/16/文档型数据库/index.html">
+<meta property="og:title" content="数据模型.md">
+<meta property="og:url" content="https://luyiqu.github.io/2018/11/12/数据模型/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="文档型数据库简介1. MongoDB:文档型数据库，按照文档的形式存储     a. Web App（用的较多） 2. 数据库管理系统（DBMS）     a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明 基础概念：a. 文档（数据模型）   【关系数据库的数据模型是表格】     i. 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式">
+<meta property="og:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-16T02:25:42.613Z">
+<meta property="og:updated_time" content="2018-11-16T02:38:35.367Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="瞿璐祎的博客">
-<meta name="twitter:description" content="文档型数据库简介1. MongoDB:文档型数据库，按照文档的形式存储     a. Web App（用的较多） 2. 数据库管理系统（DBMS）     a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明 基础概念：a. 文档（数据模型）   【关系数据库的数据模型是表格】     i. 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式">
+<meta name="twitter:title" content="数据模型.md">
+<meta name="twitter:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://luyiqu.github.io/2018/11/16/文档型数据库/">
+  <link rel="canonical" href="https://luyiqu.github.io/2018/11/12/数据模型/">
 
 
 
 
 
-  <title> | 瞿璐祎的博客</title>
+  <title>数据模型.md | 瞿璐祎的博客</title>
   
 
 
@@ -260,12 +260,12 @@
   
   
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/16/文档型数据库/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">数据模型.md</h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-16T10:26:18+08:00">
-                2018-11-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-12T06:28:48+08:00">
+                2018-11-11
               </time>
             
 
@@ -304,6 +304,28 @@
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
+                    <span itemprop="name">数据管理系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -332,64 +354,62 @@
       
 
       
-        <h1 id="文档型数据库"><a href="#文档型数据库" class="headerlink" title="文档型数据库"></a>文档型数据库</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><pre><code>1. MongoDB:文档型数据库，按照文档的形式存储
-    a. Web App（用的较多）
-2. 数据库管理系统（DBMS）
-    a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明
-</code></pre><h2 id="基础概念："><a href="#基础概念：" class="headerlink" title="基础概念："></a>基础概念：</h2><pre><code>a. 文档（数据模型）   【关系数据库的数据模型是表格】
-    i. 用&lt;key/attribute,value&gt;存放，json的格式
-    ii. 一个文档里还可以包括子文档
-    iii. 每个文档都有个_id，如果在一个文档中没有说_id是什么，数据库会自动分配一个，可以通过_id找到数据库的任何一个文档
-    iv. 一个文档可以是做一个对象（json）
+        <h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><h2 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h2><pre><code>○ 功能通用、完善
+    § 满足尽量多应用的需求
+○ 实现细节对应用透明
+    § 应用开发独立于系统实现
+</code></pre><h2 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h2><pre><code>    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）
+    a. 文档模型（Mongodb   2000s)
+    b. 层次模型（IBM IMS   1960s)
+    c. 网状模型（GE IDS 1960s）
+    d. 关系模型（SQL DB 1970s~80s)
 
-b. 文档集(collection)
-    i. 文档的集合（一个文档集可以视为一类对象）
+注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性
+</code></pre><h2 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h2><pre><code>a. 对数据库中数据的结构性描述
+    i. 参照schema才能正确书写查询
+b. 一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）
+e.g. 
+Schema
+{
+    Name:string,
+    Manufacturer:string
+    Catalog_numver:num
+}
+c. Data Model相当于Schema的Metadata，即Meta Metadata
+注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema
+</code></pre><h2 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h2><h2 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h2><pre><code>a. 表达能力：
+    i. 数据本身能够表达什么信息？
+        1) 计算机能够理解的信息
+    ii. 查询能够满足哪些信息需求？
+注： 表达能力越强，查询时返回的值越快越准确
 
-c. 数据库(database)
-    i. 若干个文档集构成一个数据库
-    ii. 部署在一个服务器上，【一般】一个数据库对应一个应用
-</code></pre><h2 id="文档的访问接口"><a href="#文档的访问接口" class="headerlink" title="文档的访问接口"></a>文档的访问接口</h2><pre><code>a. 插入文档
-    i. db.foo.insert({&quot;bar&quot;:&quot;baz&quot;})
-        1) db:datebase      foo:collection
-    ii. db.foo.batchinsert() 批量插入
-b. 查找文档
-    i. db.blog.find()    [查blog文档集的所有文档]
-    ii. Joe=db.people.findOne({&quot;name&quot;:&quot;joe&quot;,&quot;age&quot;:20});  [查people文档集特定属性的文档]
-    iii. db.users.find({},{&quot;username&quot;:1,&quot;email&quot;:1})   [只返回users文档的username,email这两个属性、前面的空括号表明不限定如何查询条件，如果这里去掉后面两个属性就变成查询条件了]
-    iv. db.users.find({&quot;age&quot;:{&quot;$gte&quot;:18,&quot;$lte&quot;:30}})  【查年龄在18~30的用户文档】
-    v. db.raffle.find({&quot;ticket_no&quot;}:{&quot;$in&quot;} :{ [725,542,390]}})
-c. 删除文档
-    i. db.foo.remove()
-    ii. db.mailing.list.remove({&quot;opt-out&quot;:true})
+b. 表达能力的两个维度
+    i. 范围：能够满足哪些信息需求
+        1) 上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）
+    ii. 精简程度：用户描述需求是是否方便
+        1) Prolog比Java表达更强更精炼，因为Prolog逻辑性强
+注：数据库系统将查询的语言转换成数据库查找的语言
+</code></pre><h2 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h2><pre><code>    a. Charles Bachman     网状模型     Navigational Database Network Model
+    Edgar F.Codd       关系模型    Relational Database Relation Model
+    b. 70年代末更倾向于关系数据库
 
-d. 更新文档
-    i. db.users.update({&quot;_id&quot; : ObjectId(&quot;28h32j223e92e&quot;)},…{&quot;$set&quot; :  {&quot;favorite book&quot; : &quot;War and Peace&quot;}})     【$set指置换】
-    ii. db.games.update({&quot;game&quot; : &quot;pinball&quot;, &quot;user&quot; : &quot;joe&quot;},…{&quot;$inc&quot; : {&quot;score&quot; : 50}})
-</code></pre><p>##文档模型的设计思想<br>        a. 优点：每个元素都被视为对象（储存为json格式）</p>
-<h2 id="存储器件"><a href="#存储器件" class="headerlink" title="存储器件"></a>存储器件</h2><pre><code>3. 数据处理性能的宗旨
-    a. 提高数据访问的局部性：
-        i. 对磁盘/闪存而言
-            1) 减少I/O的次数；
-            2) 变随机访问为顺序访问。
-        ii. 对内存而言
-            1) 增加Cache的命中率
-4. 数据库的基本存储架构
-    a. 以页为单位存放数据。每一页为512bytes的整数倍，4KB到4MB。
-</code></pre><h3 id="索引："><a href="#索引：" class="headerlink" title="索引："></a>索引：</h3><pre><code>    a. 对于非聚集索引，有些查询甚至可以不访问数据页。
-    b. 聚集索引可以避免数据插入操作集中于表的最后一个数据页。
+7. 网状数据库(Navigational DB)
+    a. 查询通过指针访问
+8. Codd坚持的看法
+    a. DBMS应该和应用程序尽可能保持相互独立（模块化）
+        i. 数据的存放顺序与程序无关
+        ii. 数据的使用与程序无关
+        iii. 数据的访问方式与程序无关（网状和层次模型违背了这点）
+</code></pre><h2 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h2><pre><code>    a. 提升数据模型的表达能力
+    b. 声明是程序设计语言(而不是过程式语言）
+        i. Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）
+        ii. 只把需求说出来，不说具体怎么做。
 
-当然，众所周知，虽然索引可以提高查询速度，但是它们也会导致数据库系统更新数据的性能下降，因为大部分数据更新需要同时更新索引。
-</code></pre><p>参考 <a href="https://www.cnblogs.com/ccsccs/articles/4243644.html" target="_blank" rel="noopener">https://www.cnblogs.com/ccsccs/articles/4243644.html</a></p>
-<pre><code>B-Tree
-    a. B-Tree的平衡性
-        i. 每个节点的大小固定（e.g. 4KB或8KB），因此最多只能容纳n个键和n+1个指针。
-
-    b. 什么决定B-Tree的效率？
-        i. 树的高度决定查询需要I/O次数。
-        ii. 对于同样规模的数据，n越大树的高度越低。
-        iii. 为了提高B-Tree的效率，我们需要增加n，即增加每个节点容纳键和指针的数量。
-            1) 用简短的数据类型定义键的属性，e.g. smallint.
-            2) 对B-Tree进行压缩。
+注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理
+</code></pre><h2 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h2><pre><code>a. 声明式程序一定比过程式的更好吗？
+    i. 并不是
+b. 表达能力越高越好吗？
+    i. 不是，度的把握，如单反照相机和傻瓜相机
 </code></pre>
       
     </div>
@@ -414,7 +434,7 @@ d. 更新文档
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://luyiqu.github.io/2018/11/16/文档型数据库/" title="">https://luyiqu.github.io/2018/11/16/文档型数据库/</a>
+    <a href="https://luyiqu.github.io/2018/11/12/数据模型/" title="数据模型.md">https://luyiqu.github.io/2018/11/12/数据模型/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -427,6 +447,12 @@ d. 更新文档
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/数据管理系统笔记/" rel="tag"># 数据管理系统笔记</a>
+          
+        </div>
+      
 
       
       
@@ -436,8 +462,8 @@ d. 更新文档
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/16/数据模型/" rel="next" title="">
-                <i class="fa fa-chevron-left"></i> 
+              <a href="/2018/11/12/Spark之join操作/" rel="next" title="Spark之join操作.md">
+                <i class="fa fa-chevron-left"></i> Spark之join操作.md
               </a>
             
           </div>
@@ -445,6 +471,10 @@ d. 更新文档
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/12/文档型数据库/" rel="prev" title="文档型数据库.md">
+                文档型数据库.md <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -585,7 +615,7 @@ d. 更新文档
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文档型数据库"><span class="nav-number">1.</span> <span class="nav-text">文档型数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础概念："><span class="nav-number">1.2.</span> <span class="nav-text">基础概念：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档的访问接口"><span class="nav-number">1.3.</span> <span class="nav-text">文档的访问接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储器件"><span class="nav-number">1.4.</span> <span class="nav-text">存储器件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引："><span class="nav-number">1.4.1.</span> <span class="nav-text">索引：</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型"><span class="nav-number">1.</span> <span class="nav-text">数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#好系统的标准"><span class="nav-number">1.1.</span> <span class="nav-text">好系统的标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型定义"><span class="nav-number">1.2.</span> <span class="nav-text">数据模型定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库模式（Schema"><span class="nav-number">1.3.</span> <span class="nav-text">数据库模式（Schema)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型：JSON-BSON"><span class="nav-number">1.4.</span> <span class="nav-text">数据模型：JSON/BSON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何衡量数据模型的能力？"><span class="nav-number">1.5.</span> <span class="nav-text">如何衡量数据模型的能力？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型的论战："><span class="nav-number">1.6.</span> <span class="nav-text">数据模型的论战：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免依赖性"><span class="nav-number">1.7.</span> <span class="nav-text">如何避免依赖性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问答："><span class="nav-number">1.8.</span> <span class="nav-text">问答：</span></a></li></ol></li></ol></div>
             
 
           </div>
