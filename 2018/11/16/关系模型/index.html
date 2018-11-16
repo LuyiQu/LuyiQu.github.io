@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="blog">
+<meta name="description" content="关系模型1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束 2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的 关系数据结构1. 域（demain）：一组具有相同数据类型的值的集合（如整数） 2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）     a. 基数：一个域允许的不同取值个数     b. 笛卡尔积">
 <meta name="keywords" content="个人博客">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sql">
-<meta property="og:url" content="https://luyiqu.github.io/2018/10/31/sql/index.html">
+<meta property="og:title" content="瞿璐祎的博客">
+<meta property="og:url" content="https://luyiqu.github.io/2018/11/16/关系模型/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="blog">
+<meta property="og:description" content="关系模型1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束 2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的 关系数据结构1. 域（demain）：一组具有相同数据类型的值的集合（如整数） 2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）     a. 基数：一个域允许的不同取值个数     b. 笛卡尔积">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-31T03:06:06.351Z">
+<meta property="og:updated_time" content="2018-11-16T02:25:48.937Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sql">
-<meta name="twitter:description" content="blog">
+<meta name="twitter:title" content="瞿璐祎的博客">
+<meta name="twitter:description" content="关系模型1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束 2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的 关系数据结构1. 域（demain）：一组具有相同数据类型的值的集合（如整数） 2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）     a. 基数：一个域允许的不同取值个数     b. 笛卡尔积">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://luyiqu.github.io/2018/10/31/sql/">
+  <link rel="canonical" href="https://luyiqu.github.io/2018/11/16/关系模型/">
 
 
 
 
 
-  <title>sql | 瞿璐祎的博客</title>
+  <title> | 瞿璐祎的博客</title>
   
 
 
@@ -260,12 +260,12 @@
   
   
 
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
   
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/10/31/sql/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/16/关系模型/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">sql</h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-31T18:59:18+08:00">
-                2018-10-31
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-16T10:26:12+08:00">
+                2018-11-16
               </time>
             
 
@@ -332,7 +332,91 @@
       
 
       
-        
+        <h1 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h1><pre><code>1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
+2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的
+</code></pre><h2 id="关系数据结构"><a href="#关系数据结构" class="headerlink" title="关系数据结构"></a>关系数据结构</h2><pre><code>1. 域（demain）：一组具有相同数据类型的值的集合（如整数）
+2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）
+    a. 基数：一个域允许的不同取值个数
+    b. 笛卡尔积可表示为一张二维表，表中的每行对应一个元组，表中的每列对应一个域
+
+3. 关系：笛卡尔积的子集
+    a. 关系： R（D1，D2，…，Dn）：R：关系名，n：关系的目或度（Degree）
+    b. 元组：关系中的每个元素是关系中的元组，通常用t表示。
+    c. 属性：表的每一列是一种属性
+    d. 码
+        i. 候选码
+            1) 若关系中的某一属性组的值能唯一地表示一个元组，则称该属性组为候选码
+            注：简单的情况：候选码只包含一个属性
+        ii. 主属性：候选码的诸属性
+        iii. 非主属性：不包含在任何候选码中的属性
+        iv. 全码：关系模式的所有属性组是这个关系模式的候选码
+        v. 主码：若一个关系有多个候选码，则选定其中一个为主码：可以一个组合作为一个主码，或者是定义一个id属性为主码
+    e. 关系的三种类型：基本关系（实际存在的表）、查询表（查询结果对应的表）、视图表（基本表或其他视图表导出的表，是虚表，不对应实际存储的数据）
+    f. 基本关系的性质
+        ① 列是同质的（Homogeneous）
+        ② 不同的列可出自同一个域
+            其中的每一列称为一个属性
+            不同的属性要给予不同的属性名
+        ③ 列的顺序无所谓,，列的次序可以任意交换
+        ④ 任意两个元组的候选码不能相同
+        ⑤ 行的顺序无所谓，行的次序可以任意交换
+            i. 最重要的：关系的每一个分量必须是一个不可分的数据项
+</code></pre><h2 id="关系代数"><a href="#关系代数" class="headerlink" title="关系代数"></a>关系代数</h2><pre><code>1. 关系代数（Relational Algebra)
+    a. 是一种抽象的查询语言，它用对关系的运算来表示查询
+    b. 运算对象是关系、运算结果亦为关系
+    c. 两类运算符：
+        i. 并、差、交、笛卡尔积（传统的集合运算符）
+        ii. 选择、投影、连接、除（专门的关系运算符）
+    d. 传统的集合运算是从关系的“水平”方向即行的角度进行，专门的关系运算不仅涉及行而且涉及列
+
+2. 选择selection（限制）
+    a. 类型一个MongoDB中的find操作
+    b. 将一些不需要的行排除掉
+        i.  σF(R) = {t |t属于R ∧ F (t )= &apos;真&apos;}
+        ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，≥，＜，≤，＝或&lt;&gt;
+
+3. 投影projection
+    a. 从R 中选择出若干属性列组成新的关系    πA(R) = { t [A] | t 属于 R } ， A：R 中的属性列 
+    b. 将一些不需要的列排除，还需要将重复行的合并起来（不然就不符合关系的定义）
+
+4. 连接（两张表连接成一张表）join   (连接也称为θ连接)
+    a. MongoDB中没有连接
+    b. 从两个关系的笛卡尔积中选取属性间满足一定条件的元组
+
+        A和B：分别为R和S上度数相等且可比的属性组
+
+    c. 两种常用的连接:
+        i. 等值连接  ： 有重复的属性列（从关系R与S 的广义笛卡尔积中选取A、B属性值相等的那些元组)   θ为“＝”
+        ii. 自然连接：在等值连接的基础上，并且在结果中把重复的属性列去除掉
+
+注：所有的数据都是关系，在上面可以做运算
+    d. 悬浮元组（Dangling tuple）:
+        两个关系R和S在做自然连接时，关系R中某些元组有可能在S中不存在公共属性上值相等的元组，从而造成R中这些元组在操作时被舍弃了，这些被舍弃的元组称为悬浮元组。
+    e. 外连接（Outer Join）：
+    如果把悬浮元组也保存在结果关系中，而在其他属性上填空值(Null)，就叫做外连接
+    f. 左外连接(LEFT OUTER JOIN或LEFT JOIN)：
+        只保留左边关系R中的悬浮元组
+    g. 右外连接(RIGHT OUTER JOIN或RIGHT JOIN)：
+        只保留右边关系S中的悬浮元组
+</code></pre><h2 id="网状模型-、-文档模型的比较"><a href="#网状模型-、-文档模型的比较" class="headerlink" title="网状模型 、 文档模型的比较"></a>网状模型 、 文档模型的比较</h2><pre><code>a. 关系模型的特点：
+    i. 更强的表达能力（连接MongoDB做不了）
+    ii. 比网状模型简洁
+    iii. 在查询的时候还是有过程性的内容（关系代数）
+</code></pre><h2 id="关系演算（Relational-Calculus"><a href="#关系演算（Relational-Calculus" class="headerlink" title="关系演算（Relational Calculus)"></a>关系演算（Relational Calculus)</h2><pre><code>a. 声明式查询语言
+b. 类似FOL的表达方式
+c. 与关系代数基本等价
+d. 关系演算可以翻译成若干个关系代数，（有些内容的先后顺序不确定）
+e. 关系代数+逻辑表达 ===》 声明式的
+f. 是SQL的基础
+g. 关系模型相当于网状模型，将更多细节藏在了里面，更倾向于声明式语言
+</code></pre><h2 id="表达能力范围比较-不涉及精简度）"><a href="#表达能力范围比较-不涉及精简度）" class="headerlink" title="表达能力范围比较(不涉及精简度）"></a>表达能力范围比较(不涉及精简度）</h2><pre><code>a. Mongodb CRUD &lt; 关系代数/演算 &lt; FOL(一阶代词逻辑） &lt; Turing Machine
+注： 关系代数不能有递归，一阶逻辑可以由递归
+</code></pre><h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><pre><code>注：App和DB独立，将更多的操作推给数据库，只告诉数据库需要什么，接口就会变得很简洁（表达能力强）
+
+初衷：以防两个app同时使用一个DB，引起冲突，因此把操作都放在DB中。
+
+现在：推崇模块化，将DB都放在每个模块中，为了更新一个模块时不会动另一个模块。
+</code></pre>
       
     </div>
     
@@ -356,7 +440,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://luyiqu.github.io/2018/10/31/sql/" title="sql">https://luyiqu.github.io/2018/10/31/sql/</a>
+    <a href="https://luyiqu.github.io/2018/11/16/关系模型/" title="">https://luyiqu.github.io/2018/11/16/关系模型/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -378,8 +462,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/29/关系数据库物理设计/" rel="next" title="关系数据库物理设计">
-                <i class="fa fa-chevron-left"></i> 关系数据库物理设计
+              <a href="/2018/11/12/jieba分词-tfidf文本表征-SVM分类/" rel="next" title="jieba分词+tfidf文本表征+SVM分类.md">
+                <i class="fa fa-chevron-left"></i> jieba分词+tfidf文本表征+SVM分类.md
               </a>
             
           </div>
@@ -388,8 +472,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/07/Spark-处理系统/" rel="prev" title="Spark-处理系统">
-                Spark-处理系统 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/16/数据模型/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -442,8 +526,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -512,6 +605,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关系模型"><span class="nav-number">1.</span> <span class="nav-text">关系模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关系数据结构"><span class="nav-number">1.1.</span> <span class="nav-text">关系数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关系代数"><span class="nav-number">1.2.</span> <span class="nav-text">关系代数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网状模型-、-文档模型的比较"><span class="nav-number">1.3.</span> <span class="nav-text">网状模型 、 文档模型的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关系演算（Relational-Calculus"><span class="nav-number">1.4.</span> <span class="nav-text">关系演算（Relational Calculus)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表达能力范围比较-不涉及精简度）"><span class="nav-number">1.5.</span> <span class="nav-text">表达能力范围比较(不涉及精简度）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">1.6.</span> <span class="nav-text">总结：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
