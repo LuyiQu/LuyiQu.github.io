@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://luyiqu.github.io/"/>
-  <updated>2018-11-12T02:42:50.332Z</updated>
+  <updated>2020-04-17T15:27:11.508Z</updated>
   <id>https://luyiqu.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>测试.md</title>
+    <link href="https://luyiqu.github.io/2020/04/18/%E6%B5%8B%E8%AF%95/"/>
+    <id>https://luyiqu.github.io/2020/04/18/测试/</id>
+    <published>2020-04-17T23:26:48.000Z</published>
+    <updated>2020-04-17T15:27:11.508Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;测试&quot;&gt;&lt;a href=&quot;#测试&quot; class=&quot;headerlink&quot; title=&quot;测试&quot;&gt;&lt;/a&gt;测试&lt;/h1&gt;
+      
+    
+    </summary>
+    
+      <category term="数据库相关论文笔记" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="paper" scheme="https://luyiqu.github.io/tags/paper/"/>
+    
+  </entry>
   
   <entry>
     <title>jieba分词+tfidf文本表征+SVM分类.md</title>
@@ -69,29 +92,6 @@
   </entry>
   
   <entry>
-    <title>文档型数据库.md</title>
-    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
-    <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2018-11-16T02:38:50.200Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;文档型数据库&quot;&gt;&lt;a href=&quot;#文档型数据库&quot; class=&quot;headerlink&quot; title=&quot;文档型数据库&quot;&gt;&lt;/a&gt;文档型数据库&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;
-      
-    
-    </summary>
-    
-      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
     <title>数据模型.md</title>
     <link href="https://luyiqu.github.io/2018/11/12/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/"/>
     <id>https://luyiqu.github.io/2018/11/12/数据模型/</id>
@@ -134,6 +134,29 @@
     
     
       <category term="spark" scheme="https://luyiqu.github.io/tags/spark/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>文档型数据库.md</title>
+    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
+    <published>2018-11-11T22:28:48.000Z</published>
+    <updated>2018-11-16T02:38:50.200Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;文档型数据库&quot;&gt;&lt;a href=&quot;#文档型数据库&quot; class=&quot;headerlink&quot; title=&quot;文档型数据库&quot;&gt;&lt;/a&gt;文档型数据库&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;
+      
+    
+    </summary>
+    
+      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -258,24 +281,6 @@
   </entry>
   
   <entry>
-    <title>xgboost</title>
-    <link href="https://luyiqu.github.io/2018/10/29/xgboost/"/>
-    <id>https://luyiqu.github.io/2018/10/29/xgboost/</id>
-    <published>2018-10-28T23:24:19.000Z</published>
-    <updated>2018-10-31T03:06:58.407Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-      <category term="机器学习" scheme="https://luyiqu.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="决策树" scheme="https://luyiqu.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91/"/>
-    
-  </entry>
-  
-  <entry>
     <title>mapreduce</title>
     <link href="https://luyiqu.github.io/2018/10/29/mapreduce/"/>
     <id>https://luyiqu.github.io/2018/10/29/mapreduce/</id>
@@ -293,6 +298,24 @@
     
       <category term="分布式模型与编程" scheme="https://luyiqu.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B/"/>
     
+    
+  </entry>
+  
+  <entry>
+    <title>xgboost</title>
+    <link href="https://luyiqu.github.io/2018/10/29/xgboost/"/>
+    <id>https://luyiqu.github.io/2018/10/29/xgboost/</id>
+    <published>2018-10-28T23:24:19.000Z</published>
+    <updated>2018-10-31T03:06:58.407Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="机器学习" scheme="https://luyiqu.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="决策树" scheme="https://luyiqu.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91/"/>
     
   </entry>
   
