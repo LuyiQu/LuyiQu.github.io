@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="数据管理系统笔记,">
+  <meta name="keywords" content="分布式模型与编程,">
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
-<meta name="keywords" content="数据管理系统笔记">
+<meta name="description" content="序列化与压缩1. 序列化的基本概念 2. 数据压缩的原理  3. 序列化与压缩     a. 序列化的意义：         i. 编写程序写文件A，另一个程序读取文件A         ii. 进程通信时传输的数据             1) 基本数据类型实例：int，long，double等数值             2) 用户自定义类的实例：对象         iii. 如何完成进程间">
+<meta name="keywords" content="分布式模型与编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据模型">
-<meta property="og:url" content="https://luyiqu.github.io/2018/11/12/数据模型/index.html">
+<meta property="og:title" content="序列化与压缩">
+<meta property="og:url" content="https://luyiqu.github.io/2020/05/06/序列化与压缩/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta property="og:description" content="序列化与压缩1. 序列化的基本概念 2. 数据压缩的原理  3. 序列化与压缩     a. 序列化的意义：         i. 编写程序写文件A，另一个程序读取文件A         ii. 进程通信时传输的数据             1) 基本数据类型实例：int，long，double等数值             2) 用户自定义类的实例：对象         iii. 如何完成进程间">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-05T12:33:13.888Z">
+<meta property="og:updated_time" content="2020-05-06T04:09:45.527Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据模型">
-<meta name="twitter:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta name="twitter:title" content="序列化与压缩">
+<meta name="twitter:description" content="序列化与压缩1. 序列化的基本概念 2. 数据压缩的原理  3. 序列化与压缩     a. 序列化的意义：         i. 编写程序写文件A，另一个程序读取文件A         ii. 进程通信时传输的数据             1) 基本数据类型实例：int，long，double等数值             2) 用户自定义类的实例：对象         iii. 如何完成进程间">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://luyiqu.github.io/2018/11/12/数据模型/">
+  <link rel="canonical" href="https://luyiqu.github.io/2020/05/06/序列化与压缩/">
 
 
 
 
 
-  <title>数据模型 | 瞿璐祎的博客</title>
+  <title>序列化与压缩 | 瞿璐祎的博客</title>
   
 
 
@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/序列化与压缩/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">数据模型</h1>
+          <h1 class="post-title" itemprop="name headline">序列化与压缩</h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-12T06:28:48+08:00">
-                2018-11-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T12:09:14Z">
+                2020-05-06
               </time>
             
 
@@ -317,8 +317,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
                   </a>
                 </span>
 
@@ -354,62 +354,38 @@
       
 
       
-        <h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><h2 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h2><pre><code>○ 功能通用、完善
-    § 满足尽量多应用的需求
-○ 实现细节对应用透明
-    § 应用开发独立于系统实现
-</code></pre><h2 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h2><pre><code>    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）
-    a. 文档模型（Mongodb   2000s)
-    b. 层次模型（IBM IMS   1960s)
-    c. 网状模型（GE IDS 1960s）
-    d. 关系模型（SQL DB 1970s~80s)
+        <h2 id="序列化与压缩"><a href="#序列化与压缩" class="headerlink" title="序列化与压缩"></a>序列化与压缩</h2><pre><code>1. 序列化的基本概念
+2. 数据压缩的原理
 
-注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性
-</code></pre><h2 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h2><pre><code>a. 对数据库中数据的结构性描述
-    i. 参照schema才能正确书写查询
-b. 一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）
-e.g. 
-Schema
-{
-    Name:string,
-    Manufacturer:string
-    Catalog_numver:num
-}
-c. Data Model相当于Schema的Metadata，即Meta Metadata
-注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema
-</code></pre><h2 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h2><h2 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h2><pre><code>a. 表达能力：
-    i. 数据本身能够表达什么信息？
-        1) 计算机能够理解的信息
-    ii. 查询能够满足哪些信息需求？
-注： 表达能力越强，查询时返回的值越快越准确
+3. 序列化与压缩
+    a. 序列化的意义：
+        i. 编写程序写文件A，另一个程序读取文件A
+        ii. 进程通信时传输的数据
+            1) 基本数据类型实例：int，long，double等数值
+            2) 用户自定义类的实例：对象
+        iii. 如何完成进程间的对象传送？
+            1) 
+                a) C c = new C(x,x,x)；是在另外一个进程，调用class c 吗
+                b) 然后class c是作为进程通信时传输的数据，进行序列化传到C c 所在的进程？
 
-b. 表达能力的两个维度
-    i. 范围：能够满足哪些信息需求
-        1) 上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）
-    ii. 精简程度：用户描述需求是是否方便
-        1) Prolog比Java表达更强更精炼，因为Prolog逻辑性强
-注：数据库系统将查询的语言转换成数据库查找的语言
-</code></pre><h2 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h2><pre><code>    a. Charles Bachman     网状模型     Navigational Database Network Model
-    Edgar F.Codd       关系模型    Relational Database Relation Model
-    b. 70年代末更倾向于关系数据库
+    b. 定义：
+        i. 序列化：把对象状态按照一定的格式转换成有序字节流，以便在网络上传输或者保存在本地文件中 
+        ii. 反序列化：从文件中或网络上获得序列化后的对象字节流后，根据字节流中所保存的对象状态及描述信息，重建对象
 
-7. 网状数据库(Navigational DB)
-    a. 查询通过指针访问
-8. Codd坚持的看法
-    a. DBMS应该和应用程序尽可能保持相互独立（模块化）
-        i. 数据的存放顺序与程序无关
-        ii. 数据的使用与程序无关
-        iii. 数据的访问方式与程序无关（网状和层次模型违背了这点）
-</code></pre><h2 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h2><pre><code>    a. 提升数据模型的表达能力
-    b. 声明是程序设计语言(而不是过程式语言）
-        i. Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）
-        ii. 只把需求说出来，不说具体怎么做。
+    c. 序列化：
+        i. 数据需要序列化以后才能在服务端和客户端之间传输。
+        ii. 这个服务端和客户端的概念是广义的，可以在网络上，也可以在同一台机器的不同进程中，甚至在同一个进程中进行通信。
+        iii. 序列化协议：JSON、XML、Thrift、Protobuf…
 
-注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理
-</code></pre><h2 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h2><pre><code>a. 声明式程序一定比过程式的更好吗？
-    i. 并不是
-b. 表达能力越高越好吗？
-    i. 不是，度的把握，如单反照相机和傻瓜相机
+
+    a. 压缩：通过一些有别于原始编码的特殊编码方式来保存数据，使数据占用的存储空间比较小
+        i. 压缩可以减少网络传输时间，但是压缩和解压缩需要时间
+    b. 解压缩：将被压缩的数据从特殊编码方式还原为原始数据的过程
+        i. 解压需要时间
+    c. 压缩算法的评价
+        i. 时间：压缩速度、解压速度
+        ii. 空间： 压缩比 = 压缩后所占空间/压缩前所占空间
+        iii. 故 压缩时间要短、空间占比要小
 </code></pre>
       
     </div>
@@ -434,7 +410,7 @@ b. 表达能力越高越好吗？
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://luyiqu.github.io/2018/11/12/数据模型/" title="数据模型">https://luyiqu.github.io/2018/11/12/数据模型/</a>
+    <a href="https://luyiqu.github.io/2020/05/06/序列化与压缩/" title="序列化与压缩">https://luyiqu.github.io/2020/05/06/序列化与压缩/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -449,7 +425,7 @@ b. 表达能力越高越好吗？
       
         <div class="post-tags">
           
-            <a href="/tags/数据管理系统笔记/" rel="tag"># 数据管理系统笔记</a>
+            <a href="/tags/分布式模型与编程/" rel="tag"># 分布式模型与编程</a>
           
         </div>
       
@@ -462,8 +438,8 @@ b. 表达能力越高越好吗？
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/12/文档型数据库/" rel="next" title="文档型数据库">
-                <i class="fa fa-chevron-left"></i> 文档型数据库
+              <a href="/2020/05/06/进程通信/" rel="next" title="进程通信">
+                <i class="fa fa-chevron-left"></i> 进程通信
               </a>
             
           </div>
@@ -472,8 +448,8 @@ b. 表达能力越高越好吗？
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/12/Spark之join操作/" rel="prev" title="Spark之join操作">
-                Spark之join操作 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/06/Hadoop分布式文件系统（HDFS）/" rel="prev" title="Hadoop分布式文件系统（HDFS）">
+                Hadoop分布式文件系统（HDFS） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -615,7 +591,7 @@ b. 表达能力越高越好吗？
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型"><span class="nav-number">1.</span> <span class="nav-text">数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#好系统的标准"><span class="nav-number">1.1.</span> <span class="nav-text">好系统的标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型定义"><span class="nav-number">1.2.</span> <span class="nav-text">数据模型定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库模式（Schema"><span class="nav-number">1.3.</span> <span class="nav-text">数据库模式（Schema)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型：JSON-BSON"><span class="nav-number">1.4.</span> <span class="nav-text">数据模型：JSON/BSON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何衡量数据模型的能力？"><span class="nav-number">1.5.</span> <span class="nav-text">如何衡量数据模型的能力？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型的论战："><span class="nav-number">1.6.</span> <span class="nav-text">数据模型的论战：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免依赖性"><span class="nav-number">1.7.</span> <span class="nav-text">如何避免依赖性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问答："><span class="nav-number">1.8.</span> <span class="nav-text">问答：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化与压缩"><span class="nav-number">1.</span> <span class="nav-text">序列化与压缩</span></a></li></ol></div>
             
 
           </div>

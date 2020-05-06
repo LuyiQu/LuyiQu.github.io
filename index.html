@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/AWR/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/Hadoop分布式文件系统（HDFS）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -284,7 +284,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/05/06/AWR/" itemprop="url">AWR</a></h1>
+                <a class="post-title-link" href="/2020/05/06/Hadoop分布式文件系统（HDFS）/" itemprop="url">Hadoop分布式文件系统（HDFS）</a></h1>
         
 
         <div class="post-meta">
@@ -296,8 +296,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-05T20:34:43Z">
-                2020-05-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T12:10:31Z">
+                2020-05-06
               </time>
             
 
@@ -319,8 +319,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/oracle/" itemprop="url" rel="index">
-                    <span itemprop="name">oracle</span>
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
                   </a>
                 </span>
 
@@ -358,35 +358,667 @@
       
         
           
-            <h2 id="Oracle-AWR"><a href="#Oracle-AWR" class="headerlink" title="Oracle AWR"></a>Oracle AWR</h2><pre><code>- 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用
-- 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗)
-- 启动： STATISTICS_LEVEL设为TYPICAL或ALL
-- 总结：只是一个历史性能数据的库，不具备实时的功能
-</code></pre><h2 id="AWR包括的统计信息"><a href="#AWR包括的统计信息" class="headerlink" title="AWR包括的统计信息"></a>AWR包括的统计信息</h2><pre><code>- 对象统计
-- 时间模型统计
-- 系统和会话统计
-- 获取会话历史统计
-</code></pre><h2 id="Snapshot"><a href="#Snapshot" class="headerlink" title="Snapshot"></a>Snapshot</h2><pre><code>- 默认oracle每个小时自动产生一次快照，并保留8天负载统计信息
-- 可通过自动数据库诊断器进行分析（ADDM）
-    - 定期分析AWR数据
-    - 诊断性能问题的起因
-    - 为纠错提供推荐
-    - 定义系统中没问题的部分
-- AWR比较不同快照之间的差异来确定捕获影响系统负载的SQL语句【这个有意思】
-- 可以修改Snapshot设置的单个参数，Retention（保留时间，min=1，max=100 年），Interval（收集的频率 min=10分钟,max=1年）、Topnsql（指定收集的比较占用资源的SQL数量 ,min=30,max=100000000）
-</code></pre><h2 id="Baselines"><a href="#Baselines" class="headerlink" title="Baselines"></a>Baselines</h2><pre><code>- 定义：专门用于比较的基准线，Baseline中包含指定时间点时的性能数据，过期也不会被清除
-- 使用：
-    - 检阅DBA_HIST_SNAPSHOT视图中已存在的快照 
-    - 用CREATE_BASELINE过程来创建期望快照范围基线
-- 类型：
-    - 固定基线
-    - 移动窗口基线
-    - 模板基线
-</code></pre><h2 id="Adaptive-Thresholds"><a href="#Adaptive-Thresholds" class="headerlink" title="Adaptive Thresholds"></a>Adaptive Thresholds</h2><pre><code>- 可以监控和检测性能问题，同时可以最大限度地减少管理开销。
-</code></pre><h2 id="Space-Consumption"><a href="#Space-Consumption" class="headerlink" title="Space Consumption"></a>Space Consumption</h2><pre><code>- AWR中空间消耗由是三个因素导致：
-    - 系统中活动时间的会话数
-    - 快照间隔
-    - 历史数据的保留期
+            <p>一、 设计考量</p>
+<pre><code>1. HDFS设计假设、目标
+    a. 硬件失效
+        i. 硬件的异常比软件的异常更加常见
+    b. 流式数据访问
+        i. Dataflow
+        ii. hdfs是量身定制，并非以通用业务为目的
+        iii. 关注吞吐量，并非响应时间
+
+    c. 存储数据较大
+
+    d. 简化的数据一致性模型
+        i. 数据写入之后，不允许再修改了，只允许在后面追加
+
+    e. 多硬件平台支持
+        i. 易于运行不同的平台上（故用java编写）
+
+    f. 移动计算能力比移动数据更划算
+        i. 计算和存储采用就近原则，计算离数据最近
+            1) 移动计算就是移动代码，对远程的数据进行计算
+
+2. 如何应对大文件
+    a. 文件由数据块集合组成
+        i. 通常每块大小为64MB
+        ii. 与os的块的区别：
+            1) os的目的：省io的时间、不满还是会占整个block的大小的
+            2) hdfs目的：把大的文件切小、不满是不会占64mb的
+
+3. 索引文件
+    a. 跨机器索引
+</code></pre><p>二、 HDFS 架构</p>
+<pre><code>1. HDFS节点类型
+    a. NameNode      每个集群一个名字节点（master）
+        i. 负责文件系统元数据操作、数据块的复制和定位
+    b. SecondaryNamenode       NameNode的备份
+    c. Datanode
+
+2. NameNode ：
+    a. 作用：管理节点、接收用户的操作请求
+    b. 核心数据文件包括：
+        i. 元数据镜像文件fsimage: 维护文件系统树以及文件树中所有的文件/目录的元数据
+        ii. 操作日志文件EditLog: 记录所有针对文件的创建、删除、重命名等操作。
+            1) 如果元数据镜像文件可以承受恢复的代价，那么日志也可以不需要了，日志为了减轻元数据镜像文件的负担。
+    c. 元数据保存在内存中
+    d. 做了block和datanode之间的映射关系
+
+3. SecondaryNameNode
+    a. 执行过程：
+        i. 定期从Namenode上下载fsimage,edits，二者合并，生成新的fsimage
+        ii. 在本地保存，并写回NameNode
+    b. 它是“检查点”，而不是“热备份”（即并非实时备份）
+
+
+4. DataNode
+    a. 作用：一共文件的存储
+    b. 文件块：一个Linux文件
+    c. HDFS中，如果一个文件小于一个数据块的大小，并不占用整个数据块存储空间
+    d. 数据备份：默认是三个
+    e. 文件内容保存在磁盘
+</code></pre><p>三、 文件访问</p>
+<pre><code>1. 文件写入HDFS 
+    a. NameNode 告知客户端文件的每一个数据块存储在何处
+    b. 客户端将数据块直接传输到指定的数据节点
+
+2. 数据访问
+
+3. 从HDFS读取文件
+    a. 从NameNode 返回每个数据块的位置给客户端
+    b. 从数据节点上传数据块（不同的数据块可以并行读取）
+
+4. 数据读取策略
+
+5. 文件访问模型
+    a. “一次写入多次读取”
+        i. 修改内容需删除，重新写入
+        ii. 仅允许追加append()   
+            1) 注： 此为追加一个block，而不是在原来的block追加内容
+    b. 好处：避免读写冲突，无需文件锁
+
+6. HDFS数据备份
+</code></pre><p>四、 备份与一致性</p>
+<pre><code>1. 一个文件有若干备份
+2. 备份之间是否可能不一致？
+    a. Q：同时append两个备份
+</code></pre><p>五、容错机制</p>
+<pre><code>1. HDFS在设计时就考虑到故障（硬件和软件）会经常出现
+
+2. DataNode故障：
+    a. “宕机”：节点上面的所有数据都会被标记为“不可读”
+    b. 定期检查备份因子
+
+3. NameNode故障
+    a. 根据SecondaryNameNode中的Fslmage和Editlog数据进行恢复
+
+4. 其他故障
+    a. 磁盘错误或故障：数据校验
+    b. 交换机/机架故障
+    c. 数据中心故障
+</code></pre><p>六、 HDFS功能</p>
+<pre><code>1. 适用：
+    a. 大文件存储、流式数据访问
+2. 不合适:
+    a. 大量小文件（无法完美利用数据并行读取）
+    b. 随机读取（因为有固定的代价）
+    c. 低延迟读取
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/序列化与压缩/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/06/序列化与压缩/" itemprop="url">序列化与压缩</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T12:09:14Z">
+                2020-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="序列化与压缩"><a href="#序列化与压缩" class="headerlink" title="序列化与压缩"></a>序列化与压缩</h2><pre><code>1. 序列化的基本概念
+2. 数据压缩的原理
+
+3. 序列化与压缩
+    a. 序列化的意义：
+        i. 编写程序写文件A，另一个程序读取文件A
+        ii. 进程通信时传输的数据
+            1) 基本数据类型实例：int，long，double等数值
+            2) 用户自定义类的实例：对象
+        iii. 如何完成进程间的对象传送？
+            1) 
+                a) C c = new C(x,x,x)；是在另外一个进程，调用class c 吗
+                b) 然后class c是作为进程通信时传输的数据，进行序列化传到C c 所在的进程？
+
+    b. 定义：
+        i. 序列化：把对象状态按照一定的格式转换成有序字节流，以便在网络上传输或者保存在本地文件中 
+        ii. 反序列化：从文件中或网络上获得序列化后的对象字节流后，根据字节流中所保存的对象状态及描述信息，重建对象
+
+    c. 序列化：
+        i. 数据需要序列化以后才能在服务端和客户端之间传输。
+        ii. 这个服务端和客户端的概念是广义的，可以在网络上，也可以在同一台机器的不同进程中，甚至在同一个进程中进行通信。
+        iii. 序列化协议：JSON、XML、Thrift、Protobuf…
+
+
+    a. 压缩：通过一些有别于原始编码的特殊编码方式来保存数据，使数据占用的存储空间比较小
+        i. 压缩可以减少网络传输时间，但是压缩和解压缩需要时间
+    b. 解压缩：将被压缩的数据从特殊编码方式还原为原始数据的过程
+        i. 解压需要时间
+    c. 压缩算法的评价
+        i. 时间：压缩速度、解压速度
+        ii. 空间： 压缩比 = 压缩后所占空间/压缩前所占空间
+        iii. 故 压缩时间要短、空间占比要小
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/进程通信/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/06/进程通信/" itemprop="url">进程通信</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T12:06:03Z">
+                2020-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="进程通信"><a href="#进程通信" class="headerlink" title="进程通信"></a>进程通信</h2><pre><code>1. 进程与线程的区别
+    a. 线程是进程的一个实体，是CPU调度和分派的基本单位
+    b. 进程在执行过程中拥有独立的内存单元，而多个线程共享内存
+    c. 线程不能够独立执行，必须依赖进程
+
+2. 进程间的通信方式
+    a. 进程之间需要交换数据
+    b. 进程各自有不同的用户地址空间
+        i. 同一台机器
+        ii. 不同机器
+    c. 通过操作系统内核
+    d. 方式：信号，信号量，消息队列（小的）、文件 、管道(pipe)、 有名管道（FIFO) 、 共享内存 、套接字
+
+3. 远程过程调用RPC
+
+4. 进程间通信方式 IPC
+    a. 控制 control flow  ： 信号，信号量，消息队列（小的）
+        i. 信号：
+            1) 信号可以在任何时候由内核发给某一进程
+        ii. 消息队列： 
+            1) 两个不相关进程间。独立于发送进程、接受进程而存在。
+        iii. 信号量：
+            1) 进程间对共享数据的互斥访问
+
+    b. 数据 data flow  ：文件 、管道(pipe)、 有名管道（FIFO) 、 共享内存 、套接字
+        i. 管道：半双工（数据只能向一个方向流动）、只能用于父子进程或兄弟进程之间（必须在同一台机器上，两台机器上不存在）、实质是一个内核缓冲区，独立于文件系统
+        ii. 匿名管道：半双工、不相关的进程也可以，有名管道的名字存在于文件系统中，内容存放在内存中
+        iii. 共享内存：
+            1) 内核留出了一块内存区，可以由需要访问的进程将其映射到自己的私有地址空间
+            2) 需要同步机制来达到进程间的同步及互斥
+        iv. 套接字：
+            1) TCP/IP 的网络通信
+            2) 进程间使用套接字中的相关函数来通信 
+            3) 本地单机或跨网络
+
+
+        注：需要端口的原因：区别服务种类，一台主机上可能存有很多数据
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/分布式模型与编程大纲/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/06/分布式模型与编程大纲/" itemprop="url">分布式模型与编程大纲</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T12:00:16Z">
+                2020-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="大纲"><a href="#大纲" class="headerlink" title="大纲"></a>大纲</h1><h2 id="分布式系统"><a href="#分布式系统" class="headerlink" title="分布式系统"></a>分布式系统</h2><pre><code>1. 分布式系统应用
+    a. 科学计算：CPU是瓶颈
+    b. 数据密集：数据IO是计算过程的瓶颈
+    c. 智能家居
+    d. 事务处理
+    e. 传感网络：扫车牌是否能进门？
+2. 纵向扩展： scalue-up （提高单台机器的处理能力）
+    a. 异步通信：  成批传输数据
+        i. 将check form 从服务器端转移到客户端，可以减轻服务器端的压力，进而可以提高单台机器的处理能力。
+        ii. 可能双方的时钟频率不一致
+3. 横向扩展：scale-out （增加机器的数量）
+4. 事务处理：考虑到并发控制，假如没有事务处理，可以会读到脏数据、丢失数据修改等等
+</code></pre><h2 id="大数据处理"><a href="#大数据处理" class="headerlink" title="大数据处理"></a>大数据处理</h2><pre><code>1. 大数据概念：大量化、快速化（双十一购物）、多样化、价值化
+2. Web1.0 与 Web2.0的区别：
+    a. 前者是只有文本、图像、视频(用户不能发帖，只能看）
+    b. 后者用户可以发帖，数据量更大了。
+3. 大数据由结构化（10% 在数据库中）和非结构化数据（90%）组成
+</code></pre><h2 id="分布式数据处理系统"><a href="#分布式数据处理系统" class="headerlink" title="分布式数据处理系统"></a>分布式数据处理系统</h2><pre><code>1. 分布式数据管理 两大核心技术：
+    a. 分布式事务管理：NoSQL/NewSQL
+    b. 分布式数据处理：批处理/流计算
+2. 进程通信
+3. 序列化与压缩
+    a. 序列化的三种途径：
+        i. 一种持久化格式：一个对象序列化以后他的编码可以存储在磁盘上
+        ii. 通信数据格式
+    b. 序列化的作用：
+        i. 把对象变成一串字节流，是持久化的一种方式（保存在磁盘上）
+    c. 序列化机制：将数据转换为连续的byte数据，并且不用担心平台移植性。
+    d. 两者都是为了节省空间
+    e.  序列化可理解为将一个组合办公桌（对象）按标准拆解为散件，以方便运输（网络上传输），到达目的地后再重新组装成一个整体办公桌，所以序列化的目的不是压缩，而是变成  流以方便网络传输并能重新组装为对象,  后来大家又发现一张桌子有四条腿，不需要运输1111这种方式，改成1,4就可以了，这就是压缩了。
+
+4. 支持数据管理的底层系统
+    a. 元数据管理系统：Zookeeper
+    b. 资源管理系统：Yarn
+    c. 分布式文件系统：HDFS
+5. 面向分析的分布式数据处理系统
+    a. 批处理系统：MapReduce、Spark
+    b. 流计算系统：Storm、Spark Streaming
+    c. 批处理流计算一体化系统：Google Dataflow、Flink
+
+6. 支持领域应用的分布式数据处理系统
+    a. 图数据处理系统：Hama、GraphX、Gelly
+    b. 可扩展机器学习系统：Mahout、SystemML、Parameter Server、Tensorflow
+</code></pre><h2 id="分布式编程"><a href="#分布式编程" class="headerlink" title="分布式编程"></a>分布式编程</h2><pre><code>1. 经典问题：单词计算
+2. 分布式并行编程：
+    a. 传统并行编程：MPI:
+    基于消息传递的并行程序。消息传递指的是并行运行的各个进程具有自己独立的堆栈和代码段，作为互不相关的多个程序独立运行，进程之间的信息交互全然通过显示地调用通信函数来完毕。
+
+    b. MapReduce
+
+3. 分布式编程模型
+    a. MapReduce （实现&lt;key,value&gt;的键值对）
+    b. DAG模型
+    c. Dataflow模型（流计算和批处理的一体化）
+    d. 流计算模型
+    e. 图计算模型（顶点-边）
+    f. 迭代模型
+    g. 广播变量模型（Kmeans中的参数）
 </code></pre>
           
         
@@ -1187,7 +1819,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Spark之join操作/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/关系模型/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -1206,157 +1838,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/12/Spark之join操作/" itemprop="url">Spark之join操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式模型与编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Spark之join操作-md"><a href="#Spark之join操作-md" class="headerlink" title="Spark之join操作.md"></a>Spark之join操作.md</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">join</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SparkConf conf = <span class="keyword">new</span> SparkConf().setAppName(<span class="string">"join"</span>).setMaster(<span class="string">"local[*]"</span>);</span><br><span class="line">		JavaSparkContext jsc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br><span class="line">		JavaRDD&lt;String&gt; persons = jsc.textFile(<span class="string">"spark/input3/person.txt"</span>);</span><br><span class="line">		JavaRDD&lt;String&gt; addresses = jsc.textFile(<span class="string">"spark/input3/address.txt"</span>);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">		<span class="comment">//得到 key: 邮编号，value:学号和名字</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; personkv = persons.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				</span><br><span class="line">					String[] personsplit = str.split(<span class="string">" |\t"</span>);     <span class="comment">// notice maybe \t</span></span><br><span class="line">					<span class="comment">//System.out.println("length"+personsplit.length);</span></span><br><span class="line">					<span class="comment">//处理缺省数据</span></span><br><span class="line">					<span class="keyword">if</span> (personsplit.length == <span class="number">3</span>)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="comment">//System.out.println("i am not null");</span></span><br><span class="line">						String code=personsplit[<span class="number">2</span>];</span><br><span class="line">						String value = personsplit[<span class="number">0</span>] +<span class="string">" "</span>+ personsplit[<span class="number">1</span>];		<span class="comment">//number + name</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span> &#123;</span><br><span class="line">						</span><br><span class="line">						<span class="comment">//System.out.println("null null null ++++++++="+personsplit.length);	</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String,String&gt;(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">						&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);  <span class="comment">// to split the person and get the form &lt;210000,1 Aaron&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//得到key: 邮编号 value:城市</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; addresskv = addresses.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				String[] addresssplit = str.split(<span class="string">" |\t"</span>);</span><br><span class="line">				String code=addresssplit[<span class="number">0</span>];</span><br><span class="line">				String value = addresssplit[<span class="number">1</span>];		<span class="comment">//city</span></span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);				<span class="comment">//to split the address and get the  form &lt;210000,Nanjing&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进行join操作</span></span><br><span class="line">		JavaPairRDD&lt;String, Tuple2&lt;String, String&gt;&gt; joinres=personkv.join(addresskv);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//遍历输出</span></span><br><span class="line">		joinres.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt;&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt; t)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				System.out.println(t._2()._1+<span class="string">" "</span>+t._1+ <span class="string">" "</span>+t._2()._2);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		joinres.saveAsTextFile(<span class="string">"./spark/output3/"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="输入"><a href="#输入" class="headerlink" title="输入:"></a>输入:</h2><pre><code>person.txt:
-    1 Aaron 210000
-    .....
-address.txt:
-    210000 Nanjing
-    .........
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/数据模型/" itemprop="url">数据模型</a></h1>
+                <a class="post-title-link" href="/2018/11/12/关系模型/" itemprop="url">关系模型.md</a></h1>
         
 
         <div class="post-meta">
@@ -1430,443 +1912,90 @@ address.txt:
       
         
           
-            <h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><h2 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h2><pre><code>○ 功能通用、完善
-    § 满足尽量多应用的需求
-○ 实现细节对应用透明
-    § 应用开发独立于系统实现
-</code></pre><h2 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h2><pre><code>    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）
-    a. 文档模型（Mongodb   2000s)
-    b. 层次模型（IBM IMS   1960s)
-    c. 网状模型（GE IDS 1960s）
-    d. 关系模型（SQL DB 1970s~80s)
-
-注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性
-</code></pre><h2 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h2><pre><code>a. 对数据库中数据的结构性描述
-    i. 参照schema才能正确书写查询
-b. 一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）
-e.g. 
-Schema
-{
-    Name:string,
-    Manufacturer:string
-    Catalog_numver:num
-}
-c. Data Model相当于Schema的Metadata，即Meta Metadata
-注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema
-</code></pre><h2 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h2><h2 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h2><pre><code>a. 表达能力：
-    i. 数据本身能够表达什么信息？
-        1) 计算机能够理解的信息
-    ii. 查询能够满足哪些信息需求？
-注： 表达能力越强，查询时返回的值越快越准确
-
-b. 表达能力的两个维度
-    i. 范围：能够满足哪些信息需求
-        1) 上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）
-    ii. 精简程度：用户描述需求是是否方便
-        1) Prolog比Java表达更强更精炼，因为Prolog逻辑性强
-注：数据库系统将查询的语言转换成数据库查找的语言
-</code></pre><h2 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h2><pre><code>    a. Charles Bachman     网状模型     Navigational Database Network Model
-    Edgar F.Codd       关系模型    Relational Database Relation Model
-    b. 70年代末更倾向于关系数据库
-
-7. 网状数据库(Navigational DB)
-    a. 查询通过指针访问
-8. Codd坚持的看法
-    a. DBMS应该和应用程序尽可能保持相互独立（模块化）
-        i. 数据的存放顺序与程序无关
-        ii. 数据的使用与程序无关
-        iii. 数据的访问方式与程序无关（网状和层次模型违背了这点）
-</code></pre><h2 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h2><pre><code>    a. 提升数据模型的表达能力
-    b. 声明是程序设计语言(而不是过程式语言）
-        i. Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）
-        ii. 只把需求说出来，不说具体怎么做。
-
-注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理
-</code></pre><h2 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h2><pre><code>a. 声明式程序一定比过程式的更好吗？
-    i. 并不是
-b. 表达能力越高越好吗？
-    i. 不是，度的把握，如单反照相机和傻瓜相机
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/文档型数据库/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/文档型数据库/" itemprop="url">文档型数据库</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="文档型数据库"><a href="#文档型数据库" class="headerlink" title="文档型数据库"></a>文档型数据库</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><pre><code>1. MongoDB:文档型数据库，按照文档的形式存储
-    a. Web App（用的较多）
-2. 数据库管理系统（DBMS）
-    a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明
-</code></pre><h2 id="基础概念："><a href="#基础概念：" class="headerlink" title="基础概念："></a>基础概念：</h2><pre><code>a. 文档（数据模型）   【关系数据库的数据模型是表格】
-    i. 用&lt;key/attribute,value&gt;存放，json的格式
-    ii. 一个文档里还可以包括子文档
-    iii. 每个文档都有个_id，如果在一个文档中没有说_id是什么，数据库会自动分配一个，可以通过_id找到数据库的任何一个文档
-    iv. 一个文档可以是做一个对象（json）
-
-b. 文档集(collection)
-    i. 文档的集合（一个文档集可以视为一类对象）
-
-c. 数据库(database)
-    i. 若干个文档集构成一个数据库
-    ii. 部署在一个服务器上，【一般】一个数据库对应一个应用
-</code></pre><h2 id="文档的访问接口"><a href="#文档的访问接口" class="headerlink" title="文档的访问接口"></a>文档的访问接口</h2><pre><code>a. 插入文档
-    i. db.foo.insert({&quot;bar&quot;:&quot;baz&quot;})
-        1) db:datebase      foo:collection
-    ii. db.foo.batchinsert() 批量插入
-b. 查找文档
-    i. db.blog.find()    [查blog文档集的所有文档]
-    ii. Joe=db.people.findOne({&quot;name&quot;:&quot;joe&quot;,&quot;age&quot;:20});  [查people文档集特定属性的文档]
-    iii. db.users.find({},{&quot;username&quot;:1,&quot;email&quot;:1})   [只返回users文档的username,email这两个属性、前面的空括号表明不限定如何查询条件，如果这里去掉后面两个属性就变成查询条件了]
-    iv. db.users.find({&quot;age&quot;:{&quot;$gte&quot;:18,&quot;$lte&quot;:30}})  【查年龄在18~30的用户文档】
-    v. db.raffle.find({&quot;ticket_no&quot;}:{&quot;$in&quot;} :{ [725,542,390]}})
-c. 删除文档
-    i. db.foo.remove()
-    ii. db.mailing.list.remove({&quot;opt-out&quot;:true})
-
-d. 更新文档
-    i. db.users.update({&quot;_id&quot; : ObjectId(&quot;28h32j223e92e&quot;)},…{&quot;$set&quot; :  {&quot;favorite book&quot; : &quot;War and Peace&quot;}})     【$set指置换】
-    ii. db.games.update({&quot;game&quot; : &quot;pinball&quot;, &quot;user&quot; : &quot;joe&quot;},…{&quot;$inc&quot; : {&quot;score&quot; : 50}})
-</code></pre><p>##文档模型的设计思想<br>        a. 优点：每个元素都被视为对象（储存为json格式）</p>
-<h2 id="存储器件"><a href="#存储器件" class="headerlink" title="存储器件"></a>存储器件</h2><pre><code>3. 数据处理性能的宗旨
-    a. 提高数据访问的局部性：
-        i. 对磁盘/闪存而言
-            1) 减少I/O的次数；
-            2) 变随机访问为顺序访问。
-        ii. 对内存而言
-            1) 增加Cache的命中率
-4. 数据库的基本存储架构
-    a. 以页为单位存放数据。每一页为512bytes的整数倍，4KB到4MB。
-</code></pre><h3 id="索引："><a href="#索引：" class="headerlink" title="索引："></a>索引：</h3><pre><code>    a. 对于非聚集索引，有些查询甚至可以不访问数据页。
-    b. 聚集索引可以避免数据插入操作集中于表的最后一个数据页。
-
-当然，众所周知，虽然索引可以提高查询速度，但是它们也会导致数据库系统更新数据的性能下降，因为大部分数据更新需要同时更新索引。
-</code></pre><p>参考 <a href="https://www.cnblogs.com/ccsccs/articles/4243644.html" target="_blank" rel="noopener">https://www.cnblogs.com/ccsccs/articles/4243644.html</a></p>
-<pre><code>B-Tree
-    a. B-Tree的平衡性
-        i. 每个节点的大小固定（e.g. 4KB或8KB），因此最多只能容纳n个键和n+1个指针。
-
-    b. 什么决定B-Tree的效率？
-        i. 树的高度决定查询需要I/O次数。
-        ii. 对于同样规模的数据，n越大树的高度越低。
-        iii. 为了提高B-Tree的效率，我们需要增加n，即增加每个节点容纳键和指针的数量。
-            1) 用简短的数据类型定义键的属性，e.g. smallint.
-            2) 对B-Tree进行压缩。
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/Mongodb数据库设计/" itemprop="url">Mongodb数据库设计</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><pre><code>- Mongodb是以面向对象存储的 ， 做Obj&lt;---&gt;Doc之间的转换，一般用Java去实践
-- ORM工具：Obj Relation Mapping
-</code></pre><h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><pre><code>- 数据库设计
-    ○ 什么样的数据存在里面
-    ○ 数据怎么样存在里面（组织形式） &amp; 应用如何去访问数据库
-- 数据库设计的基本步骤
-    ○ 需求设计（软件的功能是什么）
-        § 了解用户需求，确定软件的基本功能
-    ○ 概念结构设计（存什么）
-        § 确定数据库需要记录哪些对象
-    ○ 逻辑结构设计设计（抽象怎么存）
-        § 确定对象之间的关系以及文档结构。
-    ○ 物理结构设计 （代码的实现）
-        § 确定数据的存储方式、索引的使用、系统配置等等
-    ○ 数据库实施
-        § 安装数据库管理系统、创建数据、调试、运行。
-    ○ 数据库运行和维护
-        根据需求的扩展与变化，对以上结果进行调整和变更
-</code></pre><h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><pre><code>MVC  (model  -- view -- controller)
-</code></pre><h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><pre><code>1. 对象的确定
-    ○ 软件功能涉及到的概念
-        § 博客：用户、文章、评论、粉丝
-        § 网上书店：图书、用户、购物车、订单、评论
-    ○ 软件开发过程中出现的持久化需求
-        § Java开发中遇到需要序列化的对象
-        § MVC中Model的构建
-
-2. 对象之间的关系(Cardiality)
-    ○ 1：1     ——   企业与CEO  、 配偶关系
-    ○ 1：M    ——  博客与评论、国家与城市
-    ○ M:N      ——  书与作者、用户与粉丝
-</code></pre><h2 id="拇指法则"><a href="#拇指法则" class="headerlink" title="拇指法则"></a>拇指法则</h2><pre><code>赞成嵌入，除非有一个令人信服的理由不这样做。
-需要访问一个对象本身是一个令人信服的理由不嵌入它。
-数组不应该无限制地增长。如果在“多”方面有超过几百个文档，不要嵌入它们;如果“多”方面有几千个文档，不要使用ObjectID引用数组。高基数数组是不嵌入的一个令人信服的理由。
-不要害怕应用程序级连接:如果正确索引并使用了投影说明符，那么应用程序级连接的开销几乎不比关系数据库中的服务器端连接高。
-在反规范化时考虑写/读比。一个通常会被读取但很少被更新的字段是反规范化的一个很好的候选:如果你对一个经常更新的字段进行反规范化，那么查找和更新所有实例的额外工作很可能会超过你从反规范化中获得的节省。
-与MongoDB一样，如何建模数据完全取决于特定应用程序的数据访问模式。您希望构造数据，以匹配应用程序查询和更新数据的方式。
+            <h1 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h1><pre><code>1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
+2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的
+</code></pre><h2 id="关系数据结构"><a href="#关系数据结构" class="headerlink" title="关系数据结构"></a>关系数据结构</h2><pre><code>1. 域（demain）：一组具有相同数据类型的值的集合（如整数）
+2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）
+    a. 基数：一个域允许的不同取值个数
+    b. 笛卡尔积可表示为一张二维表，表中的每行对应一个元组，表中的每列对应一个域
+
+3. 关系：笛卡尔积的子集
+    a. 关系： R（D1，D2，…，Dn）：R：关系名，n：关系的目或度（Degree）
+    b. 元组：关系中的每个元素是关系中的元组，通常用t表示。
+    c. 属性：表的每一列是一种属性
+    d. 码
+        i. 候选码
+            1) 若关系中的某一属性组的值能唯一地表示一个元组，则称该属性组为候选码
+            注：简单的情况：候选码只包含一个属性
+        ii. 主属性：候选码的诸属性
+        iii. 非主属性：不包含在任何候选码中的属性
+        iv. 全码：关系模式的所有属性组是这个关系模式的候选码
+        v. 主码：若一个关系有多个候选码，则选定其中一个为主码：可以一个组合作为一个主码，或者是定义一个id属性为主码
+    e. 关系的三种类型：基本关系（实际存在的表）、查询表（查询结果对应的表）、视图表（基本表或其他视图表导出的表，是虚表，不对应实际存储的数据）
+    f. 基本关系的性质
+        ① 列是同质的（Homogeneous）
+        ② 不同的列可出自同一个域
+            其中的每一列称为一个属性
+            不同的属性要给予不同的属性名
+        ③ 列的顺序无所谓,，列的次序可以任意交换
+        ④ 任意两个元组的候选码不能相同
+        ⑤ 行的顺序无所谓，行的次序可以任意交换
+            i. 最重要的：关系的每一个分量必须是一个不可分的数据项
+</code></pre><h2 id="关系代数"><a href="#关系代数" class="headerlink" title="关系代数"></a>关系代数</h2><pre><code>1. 关系代数（Relational Algebra)
+    a. 是一种抽象的查询语言，它用对关系的运算来表示查询
+    b. 运算对象是关系、运算结果亦为关系
+    c. 两类运算符：
+        i. 并、差、交、笛卡尔积（传统的集合运算符）
+        ii. 选择、投影、连接、除（专门的关系运算符）
+    d. 传统的集合运算是从关系的“水平”方向即行的角度进行，专门的关系运算不仅涉及行而且涉及列
+
+2. 选择selection（限制）
+    a. 类型一个MongoDB中的find操作
+    b. 将一些不需要的行排除掉
+        i.  σF(R) = {t |t属于R ∧ F (t )= &apos;真&apos;}
+        ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，≥，＜，≤，＝或&lt;&gt;
+
+3. 投影projection
+    a. 从R 中选择出若干属性列组成新的关系    πA(R) = { t [A] | t 属于 R } ， A：R 中的属性列 
+    b. 将一些不需要的列排除，还需要将重复行的合并起来（不然就不符合关系的定义）
+
+4. 连接（两张表连接成一张表）join   (连接也称为θ连接)
+    a. MongoDB中没有连接
+    b. 从两个关系的笛卡尔积中选取属性间满足一定条件的元组
+
+        A和B：分别为R和S上度数相等且可比的属性组
+
+    c. 两种常用的连接:
+        i. 等值连接  ： 有重复的属性列（从关系R与S 的广义笛卡尔积中选取A、B属性值相等的那些元组)   θ为“＝”
+        ii. 自然连接：在等值连接的基础上，并且在结果中把重复的属性列去除掉
+
+注：所有的数据都是关系，在上面可以做运算
+    d. 悬浮元组（Dangling tuple）:
+        两个关系R和S在做自然连接时，关系R中某些元组有可能在S中不存在公共属性上值相等的元组，从而造成R中这些元组在操作时被舍弃了，这些被舍弃的元组称为悬浮元组。
+    e. 外连接（Outer Join）：
+    如果把悬浮元组也保存在结果关系中，而在其他属性上填空值(Null)，就叫做外连接
+    f. 左外连接(LEFT OUTER JOIN或LEFT JOIN)：
+        只保留左边关系R中的悬浮元组
+    g. 右外连接(RIGHT OUTER JOIN或RIGHT JOIN)：
+        只保留右边关系S中的悬浮元组
+</code></pre><h2 id="网状模型-、-文档模型的比较"><a href="#网状模型-、-文档模型的比较" class="headerlink" title="网状模型 、 文档模型的比较"></a>网状模型 、 文档模型的比较</h2><pre><code>a. 关系模型的特点：
+    i. 更强的表达能力（连接MongoDB做不了）
+    ii. 比网状模型简洁
+    iii. 在查询的时候还是有过程性的内容（关系代数）
+</code></pre><h2 id="关系演算（Relational-Calculus"><a href="#关系演算（Relational-Calculus" class="headerlink" title="关系演算（Relational Calculus)"></a>关系演算（Relational Calculus)</h2><pre><code>a. 声明式查询语言
+b. 类似FOL的表达方式
+c. 与关系代数基本等价
+d. 关系演算可以翻译成若干个关系代数，（有些内容的先后顺序不确定）
+e. 关系代数+逻辑表达 ===》 声明式的
+f. 是SQL的基础
+g. 关系模型相当于网状模型，将更多细节藏在了里面，更倾向于声明式语言
+</code></pre><h2 id="表达能力范围比较-不涉及精简度）"><a href="#表达能力范围比较-不涉及精简度）" class="headerlink" title="表达能力范围比较(不涉及精简度）"></a>表达能力范围比较(不涉及精简度）</h2><pre><code>a. Mongodb CRUD &lt; 关系代数/演算 &lt; FOL(一阶代词逻辑） &lt; Turing Machine
+注： 关系代数不能有递归，一阶逻辑可以由递归
+</code></pre><h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><pre><code>注：App和DB独立，将更多的操作推给数据库，只告诉数据库需要什么，接口就会变得很简洁（表达能力强）
+
+初衷：以防两个app同时使用一个DB，引起冲突，因此把操作都放在DB中。
+
+现在：推崇模块化，将DB都放在每个模块中，为了更新一个模块时不会动另一个模块。
 </code></pre>
           
         
@@ -1908,7 +2037,7 @@ d. 更新文档
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1956,7 +2085,7 @@ d. 更新文档
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1978,7 +2107,7 @@ d. 更新文档
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

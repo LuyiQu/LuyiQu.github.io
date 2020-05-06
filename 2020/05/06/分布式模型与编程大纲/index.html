@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="数据管理系统笔记,">
+  <meta name="keywords" content="分布式模型,">
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
-<meta name="keywords" content="数据管理系统笔记">
+<meta name="description" content="大纲分布式系统1. 分布式系统应用     a. 科学计算：CPU是瓶颈     b. 数据密集：数据IO是计算过程的瓶颈     c. 智能家居     d. 事务处理     e. 传感网络：扫车牌是否能进门？ 2. 纵向扩展： scalue-up （提高单台机器的处理能力）     a. 异步通信：  成批传输数据         i. 将check form 从服务器端转移到客户端，可以减">
+<meta name="keywords" content="分布式模型">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据模型">
-<meta property="og:url" content="https://luyiqu.github.io/2018/11/12/数据模型/index.html">
+<meta property="og:title" content="分布式模型与编程大纲">
+<meta property="og:url" content="https://luyiqu.github.io/2020/05/06/分布式模型与编程大纲/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta property="og:description" content="大纲分布式系统1. 分布式系统应用     a. 科学计算：CPU是瓶颈     b. 数据密集：数据IO是计算过程的瓶颈     c. 智能家居     d. 事务处理     e. 传感网络：扫车牌是否能进门？ 2. 纵向扩展： scalue-up （提高单台机器的处理能力）     a. 异步通信：  成批传输数据         i. 将check form 从服务器端转移到客户端，可以减">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-05T12:33:13.888Z">
+<meta property="og:updated_time" content="2020-05-06T04:01:31.951Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据模型">
-<meta name="twitter:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta name="twitter:title" content="分布式模型与编程大纲">
+<meta name="twitter:description" content="大纲分布式系统1. 分布式系统应用     a. 科学计算：CPU是瓶颈     b. 数据密集：数据IO是计算过程的瓶颈     c. 智能家居     d. 事务处理     e. 传感网络：扫车牌是否能进门？ 2. 纵向扩展： scalue-up （提高单台机器的处理能力）     a. 异步通信：  成批传输数据         i. 将check form 从服务器端转移到客户端，可以减">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="https://luyiqu.github.io/2018/11/12/数据模型/">
+  <link rel="canonical" href="https://luyiqu.github.io/2020/05/06/分布式模型与编程大纲/">
 
 
 
 
 
-  <title>数据模型 | 瞿璐祎的博客</title>
+  <title>分布式模型与编程大纲 | 瞿璐祎的博客</title>
   
 
 
@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/分布式模型与编程大纲/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">数据模型</h1>
+          <h1 class="post-title" itemprop="name headline">分布式模型与编程大纲</h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-12T06:28:48+08:00">
-                2018-11-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T20:00:16+08:00">
+                2020-05-06
               </time>
             
 
@@ -317,8 +317,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
                   </a>
                 </span>
 
@@ -354,62 +354,64 @@
       
 
       
-        <h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><h2 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h2><pre><code>○ 功能通用、完善
-    § 满足尽量多应用的需求
-○ 实现细节对应用透明
-    § 应用开发独立于系统实现
-</code></pre><h2 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h2><pre><code>    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）
-    a. 文档模型（Mongodb   2000s)
-    b. 层次模型（IBM IMS   1960s)
-    c. 网状模型（GE IDS 1960s）
-    d. 关系模型（SQL DB 1970s~80s)
+        <h1 id="大纲"><a href="#大纲" class="headerlink" title="大纲"></a>大纲</h1><h2 id="分布式系统"><a href="#分布式系统" class="headerlink" title="分布式系统"></a>分布式系统</h2><pre><code>1. 分布式系统应用
+    a. 科学计算：CPU是瓶颈
+    b. 数据密集：数据IO是计算过程的瓶颈
+    c. 智能家居
+    d. 事务处理
+    e. 传感网络：扫车牌是否能进门？
+2. 纵向扩展： scalue-up （提高单台机器的处理能力）
+    a. 异步通信：  成批传输数据
+        i. 将check form 从服务器端转移到客户端，可以减轻服务器端的压力，进而可以提高单台机器的处理能力。
+        ii. 可能双方的时钟频率不一致
+3. 横向扩展：scale-out （增加机器的数量）
+4. 事务处理：考虑到并发控制，假如没有事务处理，可以会读到脏数据、丢失数据修改等等
+</code></pre><h2 id="大数据处理"><a href="#大数据处理" class="headerlink" title="大数据处理"></a>大数据处理</h2><pre><code>1. 大数据概念：大量化、快速化（双十一购物）、多样化、价值化
+2. Web1.0 与 Web2.0的区别：
+    a. 前者是只有文本、图像、视频(用户不能发帖，只能看）
+    b. 后者用户可以发帖，数据量更大了。
+3. 大数据由结构化（10% 在数据库中）和非结构化数据（90%）组成
+</code></pre><h2 id="分布式数据处理系统"><a href="#分布式数据处理系统" class="headerlink" title="分布式数据处理系统"></a>分布式数据处理系统</h2><pre><code>1. 分布式数据管理 两大核心技术：
+    a. 分布式事务管理：NoSQL/NewSQL
+    b. 分布式数据处理：批处理/流计算
+2. 进程通信
+3. 序列化与压缩
+    a. 序列化的三种途径：
+        i. 一种持久化格式：一个对象序列化以后他的编码可以存储在磁盘上
+        ii. 通信数据格式
+    b. 序列化的作用：
+        i. 把对象变成一串字节流，是持久化的一种方式（保存在磁盘上）
+    c. 序列化机制：将数据转换为连续的byte数据，并且不用担心平台移植性。
+    d. 两者都是为了节省空间
+    e.  序列化可理解为将一个组合办公桌（对象）按标准拆解为散件，以方便运输（网络上传输），到达目的地后再重新组装成一个整体办公桌，所以序列化的目的不是压缩，而是变成  流以方便网络传输并能重新组装为对象,  后来大家又发现一张桌子有四条腿，不需要运输1111这种方式，改成1,4就可以了，这就是压缩了。
 
-注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性
-</code></pre><h2 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h2><pre><code>a. 对数据库中数据的结构性描述
-    i. 参照schema才能正确书写查询
-b. 一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）
-e.g. 
-Schema
-{
-    Name:string,
-    Manufacturer:string
-    Catalog_numver:num
-}
-c. Data Model相当于Schema的Metadata，即Meta Metadata
-注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema
-</code></pre><h2 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h2><h2 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h2><pre><code>a. 表达能力：
-    i. 数据本身能够表达什么信息？
-        1) 计算机能够理解的信息
-    ii. 查询能够满足哪些信息需求？
-注： 表达能力越强，查询时返回的值越快越准确
+4. 支持数据管理的底层系统
+    a. 元数据管理系统：Zookeeper
+    b. 资源管理系统：Yarn
+    c. 分布式文件系统：HDFS
+5. 面向分析的分布式数据处理系统
+    a. 批处理系统：MapReduce、Spark
+    b. 流计算系统：Storm、Spark Streaming
+    c. 批处理流计算一体化系统：Google Dataflow、Flink
 
-b. 表达能力的两个维度
-    i. 范围：能够满足哪些信息需求
-        1) 上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）
-    ii. 精简程度：用户描述需求是是否方便
-        1) Prolog比Java表达更强更精炼，因为Prolog逻辑性强
-注：数据库系统将查询的语言转换成数据库查找的语言
-</code></pre><h2 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h2><pre><code>    a. Charles Bachman     网状模型     Navigational Database Network Model
-    Edgar F.Codd       关系模型    Relational Database Relation Model
-    b. 70年代末更倾向于关系数据库
+6. 支持领域应用的分布式数据处理系统
+    a. 图数据处理系统：Hama、GraphX、Gelly
+    b. 可扩展机器学习系统：Mahout、SystemML、Parameter Server、Tensorflow
+</code></pre><h2 id="分布式编程"><a href="#分布式编程" class="headerlink" title="分布式编程"></a>分布式编程</h2><pre><code>1. 经典问题：单词计算
+2. 分布式并行编程：
+    a. 传统并行编程：MPI:
+    基于消息传递的并行程序。消息传递指的是并行运行的各个进程具有自己独立的堆栈和代码段，作为互不相关的多个程序独立运行，进程之间的信息交互全然通过显示地调用通信函数来完毕。
 
-7. 网状数据库(Navigational DB)
-    a. 查询通过指针访问
-8. Codd坚持的看法
-    a. DBMS应该和应用程序尽可能保持相互独立（模块化）
-        i. 数据的存放顺序与程序无关
-        ii. 数据的使用与程序无关
-        iii. 数据的访问方式与程序无关（网状和层次模型违背了这点）
-</code></pre><h2 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h2><pre><code>    a. 提升数据模型的表达能力
-    b. 声明是程序设计语言(而不是过程式语言）
-        i. Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）
-        ii. 只把需求说出来，不说具体怎么做。
+    b. MapReduce
 
-注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理
-</code></pre><h2 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h2><pre><code>a. 声明式程序一定比过程式的更好吗？
-    i. 并不是
-b. 表达能力越高越好吗？
-    i. 不是，度的把握，如单反照相机和傻瓜相机
+3. 分布式编程模型
+    a. MapReduce （实现&lt;key,value&gt;的键值对）
+    b. DAG模型
+    c. Dataflow模型（流计算和批处理的一体化）
+    d. 流计算模型
+    e. 图计算模型（顶点-边）
+    f. 迭代模型
+    g. 广播变量模型（Kmeans中的参数）
 </code></pre>
       
     </div>
@@ -434,7 +436,7 @@ b. 表达能力越高越好吗？
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="https://luyiqu.github.io/2018/11/12/数据模型/" title="数据模型">https://luyiqu.github.io/2018/11/12/数据模型/</a>
+    <a href="https://luyiqu.github.io/2020/05/06/分布式模型与编程大纲/" title="分布式模型与编程大纲">https://luyiqu.github.io/2020/05/06/分布式模型与编程大纲/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -449,7 +451,7 @@ b. 表达能力越高越好吗？
       
         <div class="post-tags">
           
-            <a href="/tags/数据管理系统笔记/" rel="tag"># 数据管理系统笔记</a>
+            <a href="/tags/分布式模型/" rel="tag"># 分布式模型</a>
           
         </div>
       
@@ -462,8 +464,8 @@ b. 表达能力越高越好吗？
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/12/文档型数据库/" rel="next" title="文档型数据库">
-                <i class="fa fa-chevron-left"></i> 文档型数据库
+              <a href="/2020/04/27/第十三章-索引结构/" rel="next" title="第十三章 索引结构">
+                <i class="fa fa-chevron-left"></i> 第十三章 索引结构
               </a>
             
           </div>
@@ -472,8 +474,8 @@ b. 表达能力越高越好吗？
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/12/Spark之join操作/" rel="prev" title="Spark之join操作">
-                Spark之join操作 <i class="fa fa-chevron-right"></i>
+              <a href="/2020/05/06/进程通信/" rel="prev" title="进程通信">
+                进程通信 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -615,7 +617,7 @@ b. 表达能力越高越好吗？
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型"><span class="nav-number">1.</span> <span class="nav-text">数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#好系统的标准"><span class="nav-number">1.1.</span> <span class="nav-text">好系统的标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型定义"><span class="nav-number">1.2.</span> <span class="nav-text">数据模型定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库模式（Schema"><span class="nav-number">1.3.</span> <span class="nav-text">数据库模式（Schema)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型：JSON-BSON"><span class="nav-number">1.4.</span> <span class="nav-text">数据模型：JSON/BSON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何衡量数据模型的能力？"><span class="nav-number">1.5.</span> <span class="nav-text">如何衡量数据模型的能力？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型的论战："><span class="nav-number">1.6.</span> <span class="nav-text">数据模型的论战：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免依赖性"><span class="nav-number">1.7.</span> <span class="nav-text">如何避免依赖性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问答："><span class="nav-number">1.8.</span> <span class="nav-text">问答：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#大纲"><span class="nav-number">1.</span> <span class="nav-text">大纲</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式系统"><span class="nav-number">1.1.</span> <span class="nav-text">分布式系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大数据处理"><span class="nav-number">1.2.</span> <span class="nav-text">大数据处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式数据处理系统"><span class="nav-number">1.3.</span> <span class="nav-text">分布式数据处理系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分布式编程"><span class="nav-number">1.4.</span> <span class="nav-text">分布式编程</span></a></li></ol></li></ol></div>
             
 
           </div>
