@@ -1819,7 +1819,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/关系模型/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Spark之join操作/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -1838,7 +1838,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/12/关系模型/" itemprop="url">关系模型.md</a></h1>
+                <a class="post-title-link" href="/2018/11/12/Spark之join操作/" itemprop="url">Spark之join操作</a></h1>
         
 
         <div class="post-meta">
@@ -1873,8 +1873,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
                   </a>
                 </span>
 
@@ -1912,90 +1912,13 @@
       
         
           
-            <h1 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h1><pre><code>1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
-2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的
-</code></pre><h2 id="关系数据结构"><a href="#关系数据结构" class="headerlink" title="关系数据结构"></a>关系数据结构</h2><pre><code>1. 域（demain）：一组具有相同数据类型的值的集合（如整数）
-2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）
-    a. 基数：一个域允许的不同取值个数
-    b. 笛卡尔积可表示为一张二维表，表中的每行对应一个元组，表中的每列对应一个域
-
-3. 关系：笛卡尔积的子集
-    a. 关系： R（D1，D2，…，Dn）：R：关系名，n：关系的目或度（Degree）
-    b. 元组：关系中的每个元素是关系中的元组，通常用t表示。
-    c. 属性：表的每一列是一种属性
-    d. 码
-        i. 候选码
-            1) 若关系中的某一属性组的值能唯一地表示一个元组，则称该属性组为候选码
-            注：简单的情况：候选码只包含一个属性
-        ii. 主属性：候选码的诸属性
-        iii. 非主属性：不包含在任何候选码中的属性
-        iv. 全码：关系模式的所有属性组是这个关系模式的候选码
-        v. 主码：若一个关系有多个候选码，则选定其中一个为主码：可以一个组合作为一个主码，或者是定义一个id属性为主码
-    e. 关系的三种类型：基本关系（实际存在的表）、查询表（查询结果对应的表）、视图表（基本表或其他视图表导出的表，是虚表，不对应实际存储的数据）
-    f. 基本关系的性质
-        ① 列是同质的（Homogeneous）
-        ② 不同的列可出自同一个域
-            其中的每一列称为一个属性
-            不同的属性要给予不同的属性名
-        ③ 列的顺序无所谓,，列的次序可以任意交换
-        ④ 任意两个元组的候选码不能相同
-        ⑤ 行的顺序无所谓，行的次序可以任意交换
-            i. 最重要的：关系的每一个分量必须是一个不可分的数据项
-</code></pre><h2 id="关系代数"><a href="#关系代数" class="headerlink" title="关系代数"></a>关系代数</h2><pre><code>1. 关系代数（Relational Algebra)
-    a. 是一种抽象的查询语言，它用对关系的运算来表示查询
-    b. 运算对象是关系、运算结果亦为关系
-    c. 两类运算符：
-        i. 并、差、交、笛卡尔积（传统的集合运算符）
-        ii. 选择、投影、连接、除（专门的关系运算符）
-    d. 传统的集合运算是从关系的“水平”方向即行的角度进行，专门的关系运算不仅涉及行而且涉及列
-
-2. 选择selection（限制）
-    a. 类型一个MongoDB中的find操作
-    b. 将一些不需要的行排除掉
-        i.  σF(R) = {t |t属于R ∧ F (t )= &apos;真&apos;}
-        ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，≥，＜，≤，＝或&lt;&gt;
-
-3. 投影projection
-    a. 从R 中选择出若干属性列组成新的关系    πA(R) = { t [A] | t 属于 R } ， A：R 中的属性列 
-    b. 将一些不需要的列排除，还需要将重复行的合并起来（不然就不符合关系的定义）
-
-4. 连接（两张表连接成一张表）join   (连接也称为θ连接)
-    a. MongoDB中没有连接
-    b. 从两个关系的笛卡尔积中选取属性间满足一定条件的元组
-
-        A和B：分别为R和S上度数相等且可比的属性组
-
-    c. 两种常用的连接:
-        i. 等值连接  ： 有重复的属性列（从关系R与S 的广义笛卡尔积中选取A、B属性值相等的那些元组)   θ为“＝”
-        ii. 自然连接：在等值连接的基础上，并且在结果中把重复的属性列去除掉
-
-注：所有的数据都是关系，在上面可以做运算
-    d. 悬浮元组（Dangling tuple）:
-        两个关系R和S在做自然连接时，关系R中某些元组有可能在S中不存在公共属性上值相等的元组，从而造成R中这些元组在操作时被舍弃了，这些被舍弃的元组称为悬浮元组。
-    e. 外连接（Outer Join）：
-    如果把悬浮元组也保存在结果关系中，而在其他属性上填空值(Null)，就叫做外连接
-    f. 左外连接(LEFT OUTER JOIN或LEFT JOIN)：
-        只保留左边关系R中的悬浮元组
-    g. 右外连接(RIGHT OUTER JOIN或RIGHT JOIN)：
-        只保留右边关系S中的悬浮元组
-</code></pre><h2 id="网状模型-、-文档模型的比较"><a href="#网状模型-、-文档模型的比较" class="headerlink" title="网状模型 、 文档模型的比较"></a>网状模型 、 文档模型的比较</h2><pre><code>a. 关系模型的特点：
-    i. 更强的表达能力（连接MongoDB做不了）
-    ii. 比网状模型简洁
-    iii. 在查询的时候还是有过程性的内容（关系代数）
-</code></pre><h2 id="关系演算（Relational-Calculus"><a href="#关系演算（Relational-Calculus" class="headerlink" title="关系演算（Relational Calculus)"></a>关系演算（Relational Calculus)</h2><pre><code>a. 声明式查询语言
-b. 类似FOL的表达方式
-c. 与关系代数基本等价
-d. 关系演算可以翻译成若干个关系代数，（有些内容的先后顺序不确定）
-e. 关系代数+逻辑表达 ===》 声明式的
-f. 是SQL的基础
-g. 关系模型相当于网状模型，将更多细节藏在了里面，更倾向于声明式语言
-</code></pre><h2 id="表达能力范围比较-不涉及精简度）"><a href="#表达能力范围比较-不涉及精简度）" class="headerlink" title="表达能力范围比较(不涉及精简度）"></a>表达能力范围比较(不涉及精简度）</h2><pre><code>a. Mongodb CRUD &lt; 关系代数/演算 &lt; FOL(一阶代词逻辑） &lt; Turing Machine
-注： 关系代数不能有递归，一阶逻辑可以由递归
-</code></pre><h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><pre><code>注：App和DB独立，将更多的操作推给数据库，只告诉数据库需要什么，接口就会变得很简洁（表达能力强）
-
-初衷：以防两个app同时使用一个DB，引起冲突，因此把操作都放在DB中。
-
-现在：推崇模块化，将DB都放在每个模块中，为了更新一个模块时不会动另一个模块。
+            <h1 id="Spark之join操作-md"><a href="#Spark之join操作-md" class="headerlink" title="Spark之join操作.md"></a>Spark之join操作.md</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">join</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SparkConf conf = <span class="keyword">new</span> SparkConf().setAppName(<span class="string">"join"</span>).setMaster(<span class="string">"local[*]"</span>);</span><br><span class="line">		JavaSparkContext jsc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br><span class="line">		JavaRDD&lt;String&gt; persons = jsc.textFile(<span class="string">"spark/input3/person.txt"</span>);</span><br><span class="line">		JavaRDD&lt;String&gt; addresses = jsc.textFile(<span class="string">"spark/input3/address.txt"</span>);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">		<span class="comment">//得到 key: 邮编号，value:学号和名字</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; personkv = persons.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				</span><br><span class="line">					String[] personsplit = str.split(<span class="string">" |\t"</span>);     <span class="comment">// notice maybe \t</span></span><br><span class="line">					<span class="comment">//System.out.println("length"+personsplit.length);</span></span><br><span class="line">					<span class="comment">//处理缺省数据</span></span><br><span class="line">					<span class="keyword">if</span> (personsplit.length == <span class="number">3</span>)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="comment">//System.out.println("i am not null");</span></span><br><span class="line">						String code=personsplit[<span class="number">2</span>];</span><br><span class="line">						String value = personsplit[<span class="number">0</span>] +<span class="string">" "</span>+ personsplit[<span class="number">1</span>];		<span class="comment">//number + name</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span> &#123;</span><br><span class="line">						</span><br><span class="line">						<span class="comment">//System.out.println("null null null ++++++++="+personsplit.length);	</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String,String&gt;(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">						&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);  <span class="comment">// to split the person and get the form &lt;210000,1 Aaron&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//得到key: 邮编号 value:城市</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; addresskv = addresses.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				String[] addresssplit = str.split(<span class="string">" |\t"</span>);</span><br><span class="line">				String code=addresssplit[<span class="number">0</span>];</span><br><span class="line">				String value = addresssplit[<span class="number">1</span>];		<span class="comment">//city</span></span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);				<span class="comment">//to split the address and get the  form &lt;210000,Nanjing&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进行join操作</span></span><br><span class="line">		JavaPairRDD&lt;String, Tuple2&lt;String, String&gt;&gt; joinres=personkv.join(addresskv);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//遍历输出</span></span><br><span class="line">		joinres.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt;&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt; t)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				System.out.println(t._2()._1+<span class="string">" "</span>+t._1+ <span class="string">" "</span>+t._2()._2);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		joinres.saveAsTextFile(<span class="string">"./spark/output3/"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="输入"><a href="#输入" class="headerlink" title="输入:"></a>输入:</h2><pre><code>person.txt:
+    1 Aaron 210000
+    .....
+address.txt:
+    210000 Nanjing
+    .........
 </code></pre>
           
         
