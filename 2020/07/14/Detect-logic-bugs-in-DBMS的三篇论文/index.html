@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="瞿璐祎的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Testing Database Engines via Pivoted Query Synthesis论文主要内容 随机生成table和rows 从每个表随机生成一行 根据选择的rows随机生成表达式并评估结果 修改表达式 直到返回真  领域 检测logic bug，logic bug即是否返回正常的行  研究常用的方法 差异性测试，不适用于所有DBMS    各项性能指标 观察是否返回 随机生">
+<meta name="keywords" content="个人博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Detect logic bugs in DBMS的三篇论文">
+<meta property="og:url" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/index.html">
+<meta property="og:site_name" content="瞿璐祎的博客">
+<meta property="og:description" content="Testing Database Engines via Pivoted Query Synthesis论文主要内容 随机生成table和rows 从每个表随机生成一行 根据选择的rows随机生成表达式并评估结果 修改表达式 直到返回真  领域 检测logic bug，logic bug即是否返回正常的行  研究常用的方法 差异性测试，不适用于所有DBMS    各项性能指标 观察是否返回 随机生">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618202218604.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618202406294.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618192500114.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618202756024.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618192837917.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618203712878.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618203725136.png">
+<meta property="og:updated_time" content="2020-07-13T12:43:54.804Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Detect logic bugs in DBMS的三篇论文">
+<meta name="twitter:description" content="Testing Database Engines via Pivoted Query Synthesis论文主要内容 随机生成table和rows 从每个表随机生成一行 根据选择的rows随机生成表达式并评估结果 修改表达式 直到返回真  领域 检测logic bug，logic bug即是否返回正常的行  研究常用的方法 差异性测试，不适用于所有DBMS    各项性能指标 观察是否返回 随机生">
+<meta name="twitter:image" content="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618202218604.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/">
+
+
+
+
+
+  <title>Detect logic bugs in DBMS的三篇论文 | 瞿璐祎的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">瞿璐祎的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">try something new</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Detect logic bugs in DBMS的三篇论文</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-14T04:27:12+08:00">
+                2020-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Testing-Database-Engines-via-Pivoted-Query-Synthesis论文"><a href="#Testing-Database-Engines-via-Pivoted-Query-Synthesis论文" class="headerlink" title="Testing Database Engines via Pivoted Query Synthesis论文"></a>Testing Database Engines via Pivoted Query Synthesis论文</h1><h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><ul>
+<li>随机生成table和rows</li>
+<li>从每个表随机生成<strong>一行</strong></li>
+<li>根据选择的rows随机生成表达式并评估结果</li>
+<li>修改表达式 直到返回真</li>
+</ul>
+<h2 id="领域"><a href="#领域" class="headerlink" title="领域"></a>领域</h2><ul>
+<li>检测logic bug，logic bug即是否返回正常的行</li>
+</ul>
+<h2 id="研究常用的方法"><a href="#研究常用的方法" class="headerlink" title="研究常用的方法"></a>研究常用的方法</h2><ul>
+<li><p>差异性测试，不适用于所有DBMS</p>
+<p><img src="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618202218604.png" alt="image-20200618202218604"></p>
+</li>
+</ul>
+<h2 id="各项性能指标"><a href="#各项性能指标" class="headerlink" title="各项性能指标"></a>各项性能指标</h2><ul>
+<li>观察是否返回 随机生成的row</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>不适用于大数据集</li>
+<li>可能只能做where里面的AST树</li>
+</ul>
+<h2 id="扩展知识点"><a href="#扩展知识点" class="headerlink" title="扩展知识点"></a>扩展知识点</h2><ul>
+<li>AST树</li>
+<li>差异性比较</li>
+</ul>
+<p><img src="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618202406294.png" alt="image-20200618202406294"></p>
+<h1 id="Detecting-Optimization-Bugs-in-Database-Engines-via-Non-Optimizing-Reference-Engine-Construction论文"><a href="#Detecting-Optimization-Bugs-in-Database-Engines-via-Non-Optimizing-Reference-Engine-Construction论文" class="headerlink" title="Detecting Optimization Bugs in Database Engines via Non-Optimizing Reference Engine Construction论文"></a>Detecting Optimization Bugs in Database Engines via Non-Optimizing Reference Engine Construction论文</h1><h2 id="主要内容-1"><a href="#主要内容-1" class="headerlink" title="主要内容"></a>主要内容</h2><ul>
+<li><p>不正常的优化可能会导致logic bug</p>
+</li>
+<li><p>核心：重写DBMS不能优化的潜在随机生成优化的query</p>
+</li>
+<li><p>让DBMS不做优化，做全表的扫描</p>
+<p><img src="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618192500114.png" alt="image-20200618192500114"></p>
+<ul>
+<li>左边是原本数据库会优化的，右边是数据库不会优化的。</li>
+</ul>
+</li>
+<li><p><img src="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618202756024.png" alt="image-20200618202756024"></p>
+</li>
+</ul>
+<h1 id="Ternary-Logic-Partitioning-Detecting-Logic-Bugs-in-Database-Management-Systems"><a href="#Ternary-Logic-Partitioning-Detecting-Logic-Bugs-in-Database-Management-Systems" class="headerlink" title="Ternary Logic Partitioning: Detecting Logic Bugs in Database Management Systems"></a>Ternary Logic Partitioning: Detecting Logic Bugs in Database Management Systems</h1><h2 id="主要内容-2"><a href="#主要内容-2" class="headerlink" title="主要内容"></a>主要内容</h2><ul>
+<li>query分区，将一条给定原始的query，分成多份更复杂的queries，每个部分都计算结果的一部分。</li>
+<li><p>三元逻辑分区：</p>
+<ul>
+<li>基于一个布尔谓词p计算成True,False,NULL的观察</li>
+</ul>
+</li>
+<li><p><img src="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618192837917.png" alt="image-20200618192837917"></p>
+</li>
+</ul>
+<p><img src="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618203712878.png" alt="image-20200618203712878"></p>
+<p><img src="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/image-20200618203725136.png" alt="image-20200618203725136"></p>
+
+      
+    </div>
+    
+    
+    
+<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS�� sweetalert ���޸�·�� -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+
+  <p><span>���ı���:</span>Detect logic bugs in DBMS的三篇论文</p>
+  <p><span>��������:</span>luyiqu</p>
+  <p><span>����ʱ��:</span>2020��07��13�� - 20:27:12</p>
+  <p><span>������:</span>2020��07��13�� - 20:43:54</p>
+  <p><span>ԭʼ����:</span><a href="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/" title="Detect logic bugs in DBMS的三篇论文">https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/</a>
+    <span class="copy-path" title="���������������"><i class="fa fa-clipboard" data-clipboard-text="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/" aria-label="���Ƴɹ���"></i></span>
+  </p>
+  <p><span>���Э��:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">����-����ҵ��ʹ��-��ֹ���� 4.0 ����</a> ת���뱣��ԭ�����Ӽ����ߡ�</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({   
+          title: "",   
+          text: '���Ƴɹ�',   
+          html: false,
+          timer: 500,   
+          showConfirmButton: false
+        });
+      });
+    }));  
+</script>
+
+      
+</div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    luyiqu
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/" title="Detect logic bugs in DBMS的三篇论文">https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/" rel="next" title="Automated Grading of SQL Queries 论文解读">
+                <i class="fa fa-chevron-left"></i> Automated Grading of SQL Queries 论文解读
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="luyiqu">
+            
+              <p class="site-author-name" itemprop="name">luyiqu</p>
+              <p class="site-description motion-element" itemprop="description">blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Testing-Database-Engines-via-Pivoted-Query-Synthesis论文"><span class="nav-number">1.</span> <span class="nav-text">Testing Database Engines via Pivoted Query Synthesis论文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要内容"><span class="nav-number">1.1.</span> <span class="nav-text">主要内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#领域"><span class="nav-number">1.2.</span> <span class="nav-text">领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#研究常用的方法"><span class="nav-number">1.3.</span> <span class="nav-text">研究常用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各项性能指标"><span class="nav-number">1.4.</span> <span class="nav-text">各项性能指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺点"><span class="nav-number">1.5.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展知识点"><span class="nav-number">1.6.</span> <span class="nav-text">扩展知识点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Detecting-Optimization-Bugs-in-Database-Engines-via-Non-Optimizing-Reference-Engine-Construction论文"><span class="nav-number">2.</span> <span class="nav-text">Detecting Optimization Bugs in Database Engines via Non-Optimizing Reference Engine Construction论文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要内容-1"><span class="nav-number">2.1.</span> <span class="nav-text">主要内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ternary-Logic-Partitioning-Detecting-Logic-Bugs-in-Database-Management-Systems"><span class="nav-number">3.</span> <span class="nav-text">Ternary Logic Partitioning: Detecting Logic Bugs in Database Management Systems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要内容-2"><span class="nav-number">3.1.</span> <span class="nav-text">主要内容</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luyiqu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

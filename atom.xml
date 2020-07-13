@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://luyiqu.github.io/"/>
-  <updated>2020-05-06T04:11:12.504Z</updated>
+  <updated>2020-07-13T12:43:54.804Z</updated>
   <id>https://luyiqu.github.io/</id>
   
   <author>
@@ -15,6 +15,50 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Detect logic bugs in DBMS的三篇论文</title>
+    <link href="https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS%E7%9A%84%E4%B8%89%E7%AF%87%E8%AE%BA%E6%96%87/"/>
+    <id>https://luyiqu.github.io/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/</id>
+    <published>2020-07-13T20:27:12.000Z</published>
+    <updated>2020-07-13T12:43:54.804Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Testing-Database-Engines-via-Pivoted-Query-Synthesis论文&quot;&gt;&lt;a href=&quot;#Testing-Database-Engines-via-Pivoted-Query-Synthesis论文&quot; class=&quot;hea
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Automated Grading of SQL Queries 论文解读</title>
+    <link href="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/"/>
+    <id>https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/</id>
+    <published>2020-06-20T10:50:42.000Z</published>
+    <updated>2020-07-13T12:32:43.094Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Automated-Grading-of-SQL-Queries-论文解读&quot;&gt;&lt;a href=&quot;#Automated-Grading-of-SQL-Queries-论文解读&quot; class=&quot;headerlink&quot; title=&quot;Automated Grading 
+      
+    
+    </summary>
+    
+      <category term="SQL Queries Paper" scheme="https://luyiqu.github.io/categories/SQL-Queries-Paper/"/>
+    
+    
+      <category term="Grade SQL" scheme="https://luyiqu.github.io/tags/Grade-SQL/"/>
+    
+      <category term="SQL" scheme="https://luyiqu.github.io/tags/SQL/"/>
+    
+  </entry>
   
   <entry>
     <title>Hadoop分布式文件系统（HDFS）</title>
@@ -256,6 +300,29 @@
   </entry>
   
   <entry>
+    <title>数据模型</title>
+    <link href="https://luyiqu.github.io/2018/11/12/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/"/>
+    <id>https://luyiqu.github.io/2018/11/12/数据模型/</id>
+    <published>2018-11-11T22:28:48.000Z</published>
+    <updated>2020-05-05T12:33:13.888Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;数据模型&quot;&gt;&lt;a href=&quot;#数据模型&quot; class=&quot;headerlink&quot; title=&quot;数据模型&quot;&gt;&lt;/a&gt;数据模型&lt;/h1&gt;&lt;h2 id=&quot;好系统的标准&quot;&gt;&lt;a href=&quot;#好系统的标准&quot; class=&quot;headerlink&quot; title=&quot;好系统的标
+      
+    
+    </summary>
+    
+      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Mongodb数据库设计</title>
     <link href="https://luyiqu.github.io/2018/11/12/Mongodb%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/"/>
     <id>https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/</id>
@@ -268,6 +335,29 @@
       
         &lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;- Mongodb是以面向对象存储的 ， 做Obj&amp;lt;---&amp;gt;Doc之间的转换，一般用Java去实践
 - ORM工
+      
+    
+    </summary>
+    
+      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>文档型数据库</title>
+    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
+    <published>2018-11-11T22:28:48.000Z</published>
+    <updated>2020-05-05T12:33:19.102Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;文档型数据库&quot;&gt;&lt;a href=&quot;#文档型数据库&quot; class=&quot;headerlink&quot; title=&quot;文档型数据库&quot;&gt;&lt;/a&gt;文档型数据库&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;
       
     
     </summary>
@@ -299,52 +389,6 @@
     
     
       <category term="spark" scheme="https://luyiqu.github.io/tags/spark/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>文档型数据库</title>
-    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
-    <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2020-05-05T12:33:19.102Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;文档型数据库&quot;&gt;&lt;a href=&quot;#文档型数据库&quot; class=&quot;headerlink&quot; title=&quot;文档型数据库&quot;&gt;&lt;/a&gt;文档型数据库&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;
-      
-    
-    </summary>
-    
-      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数据模型</title>
-    <link href="https://luyiqu.github.io/2018/11/12/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/"/>
-    <id>https://luyiqu.github.io/2018/11/12/数据模型/</id>
-    <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2020-05-05T12:33:13.888Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;数据模型&quot;&gt;&lt;a href=&quot;#数据模型&quot; class=&quot;headerlink&quot; title=&quot;数据模型&quot;&gt;&lt;/a&gt;数据模型&lt;/h1&gt;&lt;h2 id=&quot;好系统的标准&quot;&gt;&lt;a href=&quot;#好系统的标准&quot; class=&quot;headerlink&quot; title=&quot;好系统的标
-      
-    
-    </summary>
-    
-      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -419,46 +463,6 @@
     
     </summary>
     
-    
-  </entry>
-  
-  <entry>
-    <title>关系数据库物理设计</title>
-    <link href="https://luyiqu.github.io/2018/10/29/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%A9%E7%90%86%E8%AE%BE%E8%AE%A1/"/>
-    <id>https://luyiqu.github.io/2018/10/29/关系数据库物理设计/</id>
-    <published>2018-10-29T13:07:23.000Z</published>
-    <updated>2018-10-31T03:06:14.330Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;关系数据库物理设计&quot;&gt;&lt;a href=&quot;#关系数据库物理设计&quot; class=&quot;headerlink&quot; title=&quot;关系数据库物理设计&quot;&gt;&lt;/a&gt;关系数据库物理设计&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;实际中，在关系设计中，物理设计和逻辑设计是混为一谈的&lt;br&gt;-&lt;/li&gt;
-      
-    
-    </summary>
-    
-      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>xgboost</title>
-    <link href="https://luyiqu.github.io/2018/10/29/xgboost/"/>
-    <id>https://luyiqu.github.io/2018/10/29/xgboost/</id>
-    <published>2018-10-28T23:24:19.000Z</published>
-    <updated>2018-10-31T03:06:58.407Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-      <category term="机器学习" scheme="https://luyiqu.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="决策树" scheme="https://luyiqu.github.io/tags/%E5%86%B3%E7%AD%96%E6%A0%91/"/>
     
   </entry>
   

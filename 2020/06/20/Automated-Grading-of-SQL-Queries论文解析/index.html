@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Grade SQL,SQL,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="瞿璐祎的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Automated Grading of SQL Queries 论文解读主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;g">
+<meta name="keywords" content="Grade SQL,SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Automated Grading of SQL Queries 论文解读">
+<meta property="og:url" content="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/index.html">
+<meta property="og:site_name" content="瞿璐祎的博客">
+<meta property="og:description" content="Automated Grading of SQL Queries 论文解读主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;g">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/image-20200620103146416.png">
+<meta property="og:updated_time" content="2020-07-13T12:32:43.094Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Automated Grading of SQL Queries 论文解读">
+<meta name="twitter:description" content="Automated Grading of SQL Queries 论文解读主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;g">
+<meta name="twitter:image" content="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/image-20200620103146416.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/">
+
+
+
+
+
+  <title>Automated Grading of SQL Queries 论文解读 | 瞿璐祎的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">瞿璐祎的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">try something new</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Automated Grading of SQL Queries 论文解读</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-20T18:50:42+08:00">
+                2020-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL-Queries-Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">SQL Queries Paper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Automated-Grading-of-SQL-Queries-论文解读"><a href="#Automated-Grading-of-SQL-Queries-论文解读" class="headerlink" title="Automated Grading of SQL Queries 论文解读"></a>Automated Grading of SQL Queries 论文解读</h1><h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><ul>
+<li><p>自动给学生的sql query打分，局部打分，通过判断错误严重的程度。</p>
+</li>
+<li><p>采用 <strong>weighted equivalence edit distance metric</strong>，找到最小的编辑序列，能将原始错误的sql query转为正确的query。</p>
+</li>
+<li><p>使用query规范化规则针对语法和语义进行规划</p>
+<ul>
+<li>语法，如将Not(A&gt;B) 替换为A&lt;=B; 将操作构建一棵flattened tree</li>
+<li>语义，将query中主键上的distinct移除，将query中冗余的关系移除。</li>
+</ul>
+</li>
+<li><p>Flattened Tree Structure</p>
+<p><img src="/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/image-20200620103146416.png" alt="image-20200620103146416.png"></p>
+<ul>
+<li>将query中有连接关系的都flatten一下，转化为等价形式。</li>
+<li>针对flattened tree，谓词/投影/聚类操作都作为一棵棵子树</li>
+</ul>
+</li>
+<li><p>计算规范化的编辑距离</p>
+<ul>
+<li>对于每个组件（子树）分别计算编辑距离，然后找到每个quert的带权距离。Σc∈<em>components</em>W<strong>c <em>∗</em> E</strong>c</li>
+</ul>
+</li>
+<li><p>根据编辑距离给分</p>
+</li>
+</ul>
+<h2 id="领域"><a href="#领域" class="headerlink" title="领域"></a>领域</h2><ul>
+<li>指出错误sql query错在那个部分，也就是做最小的改动，能让sql query变成正确的。</li>
+</ul>
+<h2 id="研究常用的方法"><a href="#研究常用的方法" class="headerlink" title="研究常用的方法"></a>研究常用的方法</h2><ul>
+<li>XData通过比较正确query和学生query得到的结果，对学生 sql query进行二分类，即判别正确or错误，但太简单了，想得到更细致的。</li>
+<li>根据正确query和学生query返回结果交集所占正确结果的比例，但有可能因为一个很小的错误得出的结果很差，导致分数低。</li>
+<li>学生的sql query需要做<strong>多少个变化</strong>才能和正确的sql等价，但许多具有语义差异的sql在返回的结果却没什么差异。<strong>（本文）</strong>针对此，使用大量query规范化技巧移除学生和正确的queries的不相关的语法和语义差别。但是需要给出多个正确的queries，将学生query与其相比较，选出匹配度最高的query。这个问题可以抽象为图中找最短路径，提出一个贪心启发性技巧。</li>
+</ul>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>基于规范化编辑距离的给分有可能是不公平的，在规范化部分还存在一些问题。</li>
+</ul>
+<h2 id="实验部分和讨论部分"><a href="#实验部分和讨论部分" class="headerlink" title="实验部分和讨论部分"></a>实验部分和讨论部分</h2><ul>
+<li><p>随机创建一对不正确的学生queries，a和b，让两个志愿者对每对queries分类，第一类是a queriy的分高，第二类是b query的分高，第三类是a,b query的分数一样高。</p>
+</li>
+<li><p>potentially an infinite number of edit options <strong>are possible</strong></p>
+</li>
+</ul>
+<h2 id="对负载生成的启发点"><a href="#对负载生成的启发点" class="headerlink" title="对负载生成的启发点"></a>对负载生成的启发点</h2><h3 id="SQL-QUERY-规范化"><a href="#SQL-QUERY-规范化" class="headerlink" title="SQL QUERY 规范化"></a>SQL QUERY 规范化</h3><ul>
+<li><p>B. Chandra, M. Joseph, B. Radhakrishnan, S. Acharya, and S. Sudarshan.</p>
+<p>Partial marking for automated grading of SQL queries. <em>PVLDB (Demo)</em>,</p>
+<p>9(13):1541–1544, 2016.</p>
+</li>
+</ul>
+<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><ul>
+<li><a href="https://www.cse.iitb.ac.in/infolab/xdata" target="_blank" rel="noopener">https://www.cse.iitb.ac.in/infolab/xdata</a></li>
+<li><a href="https://gitlab.com/xdata/xdata-web/-/tree/developer/XDataGrading/src" target="_blank" rel="noopener">https://gitlab.com/xdata/xdata-web/-/tree/developer/XDataGrading/src</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+<div>
+      
+        
+      
+</div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    luyiqu
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/" title="Automated Grading of SQL Queries 论文解读">https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Grade-SQL/" rel="tag"># Grade SQL</a>
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/06/Hadoop分布式文件系统（HDFS）/" rel="next" title="Hadoop分布式文件系统（HDFS）">
+                <i class="fa fa-chevron-left"></i> Hadoop分布式文件系统（HDFS）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/14/Detect-logic-bugs-in-DBMS的三篇论文/" rel="prev" title="Detect logic bugs in DBMS的三篇论文">
+                Detect logic bugs in DBMS的三篇论文 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="luyiqu">
+            
+              <p class="site-author-name" itemprop="name">luyiqu</p>
+              <p class="site-description motion-element" itemprop="description">blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Automated-Grading-of-SQL-Queries-论文解读"><span class="nav-number">1.</span> <span class="nav-text">Automated Grading of SQL Queries 论文解读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要内容"><span class="nav-number">1.1.</span> <span class="nav-text">主要内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#领域"><span class="nav-number">1.2.</span> <span class="nav-text">领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#研究常用的方法"><span class="nav-number">1.3.</span> <span class="nav-text">研究常用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.4.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验部分和讨论部分"><span class="nav-number">1.5.</span> <span class="nav-text">实验部分和讨论部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对负载生成的启发点"><span class="nav-number">1.6.</span> <span class="nav-text">对负载生成的启发点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-QUERY-规范化"><span class="nav-number">1.6.1.</span> <span class="nav-text">SQL QUERY 规范化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Source-Code"><span class="nav-number">1.7.</span> <span class="nav-text">Source Code</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luyiqu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
