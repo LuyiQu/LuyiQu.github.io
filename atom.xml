@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://luyiqu.github.io/"/>
-  <updated>2020-07-13T13:59:37.500Z</updated>
+  <updated>2020-07-13T14:48:38.422Z</updated>
   <id>https://luyiqu.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>The ArtScience and Engineering of Fuzzing: A Survey.md</title>
+    <link href="https://luyiqu.github.io/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-md/"/>
+    <id>https://luyiqu.github.io/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-md/</id>
+    <published>2020-07-13T22:45:48.000Z</published>
+    <updated>2020-07-13T14:48:38.422Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;The-Art-Science-and-Engineering-of-Fuzzing-A-Survey&quot;&gt;&lt;a href=&quot;#The-Art-Science-and-Engineering-of-Fuzzing-A-Survey&quot; class=&quot;headerlin
+      
+    
+    </summary>
+    
+      <category term="Test Case Geneation" scheme="https://luyiqu.github.io/categories/Test-Case-Geneation/"/>
+    
+    
+      <category term="Fuzzing Testing" scheme="https://luyiqu.github.io/tags/Fuzzing-Testing/"/>
+    
+      <category term="Survey" scheme="https://luyiqu.github.io/tags/Survey/"/>
+    
+  </entry>
   
   <entry>
     <title>Detect logic bugs in DBMS的三篇论文</title>
@@ -278,17 +303,18 @@
   </entry>
   
   <entry>
-    <title>文档型数据库</title>
-    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
+    <title>关系模型.md</title>
+    <link href="https://luyiqu.github.io/2018/11/12/%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/"/>
+    <id>https://luyiqu.github.io/2018/11/12/关系模型/</id>
     <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2020-05-05T12:33:19.102Z</updated>
+    <updated>2018-11-16T02:38:29.967Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;文档型数据库&quot;&gt;&lt;a href=&quot;#文档型数据库&quot; class=&quot;headerlink&quot; title=&quot;文档型数据库&quot;&gt;&lt;/a&gt;文档型数据库&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;
+        &lt;h1 id=&quot;关系模型&quot;&gt;&lt;a href=&quot;#关系模型&quot; class=&quot;headerlink&quot; title=&quot;关系模型&quot;&gt;&lt;/a&gt;关系模型&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
+2. 关系模型具有单一的数据结构—— 关系
       
     
     </summary>
@@ -313,6 +339,29 @@
       
         &lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;- Mongodb是以面向对象存储的 ， 做Obj&amp;lt;---&amp;gt;Doc之间的转换，一般用Java去实践
 - ORM工
+      
+    
+    </summary>
+    
+      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>文档型数据库</title>
+    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
+    <published>2018-11-11T22:28:48.000Z</published>
+    <updated>2020-05-05T12:33:19.102Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;文档型数据库&quot;&gt;&lt;a href=&quot;#文档型数据库&quot; class=&quot;headerlink&quot; title=&quot;文档型数据库&quot;&gt;&lt;/a&gt;文档型数据库&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;
       
     
     </summary>
@@ -359,30 +408,6 @@
       
       
         &lt;h1 id=&quot;数据模型&quot;&gt;&lt;a href=&quot;#数据模型&quot; class=&quot;headerlink&quot; title=&quot;数据模型&quot;&gt;&lt;/a&gt;数据模型&lt;/h1&gt;&lt;h2 id=&quot;好系统的标准&quot;&gt;&lt;a href=&quot;#好系统的标准&quot; class=&quot;headerlink&quot; title=&quot;好系统的标
-      
-    
-    </summary>
-    
-      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>关系模型.md</title>
-    <link href="https://luyiqu.github.io/2018/11/12/%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/"/>
-    <id>https://luyiqu.github.io/2018/11/12/关系模型/</id>
-    <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2018-11-16T02:38:29.967Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;关系模型&quot;&gt;&lt;a href=&quot;#关系模型&quot; class=&quot;headerlink&quot; title=&quot;关系模型&quot;&gt;&lt;/a&gt;关系模型&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
-2. 关系模型具有单一的数据结构—— 关系
       
     
     </summary>
@@ -450,20 +475,6 @@
     </summary>
     
       <category term="分布式模型与编程" scheme="https://luyiqu.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>sql</title>
-    <link href="https://luyiqu.github.io/2018/10/31/sql/"/>
-    <id>https://luyiqu.github.io/2018/10/31/sql/</id>
-    <published>2018-10-31T10:59:18.000Z</published>
-    <updated>2018-10-31T03:06:06.351Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
     
     
   </entry>
