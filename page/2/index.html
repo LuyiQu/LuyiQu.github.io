@@ -447,612 +447,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/关系模型/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/关系模型/" itemprop="url">关系模型.md</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h1><pre><code>1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
-2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的
-</code></pre><h2 id="关系数据结构"><a href="#关系数据结构" class="headerlink" title="关系数据结构"></a>关系数据结构</h2><pre><code>1. 域（demain）：一组具有相同数据类型的值的集合（如整数）
-2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）
-    a. 基数：一个域允许的不同取值个数
-    b. 笛卡尔积可表示为一张二维表，表中的每行对应一个元组，表中的每列对应一个域
-
-3. 关系：笛卡尔积的子集
-    a. 关系： R（D1，D2，…，Dn）：R：关系名，n：关系的目或度（Degree）
-    b. 元组：关系中的每个元素是关系中的元组，通常用t表示。
-    c. 属性：表的每一列是一种属性
-    d. 码
-        i. 候选码
-            1) 若关系中的某一属性组的值能唯一地表示一个元组，则称该属性组为候选码
-            注：简单的情况：候选码只包含一个属性
-        ii. 主属性：候选码的诸属性
-        iii. 非主属性：不包含在任何候选码中的属性
-        iv. 全码：关系模式的所有属性组是这个关系模式的候选码
-        v. 主码：若一个关系有多个候选码，则选定其中一个为主码：可以一个组合作为一个主码，或者是定义一个id属性为主码
-    e. 关系的三种类型：基本关系（实际存在的表）、查询表（查询结果对应的表）、视图表（基本表或其他视图表导出的表，是虚表，不对应实际存储的数据）
-    f. 基本关系的性质
-        ① 列是同质的（Homogeneous）
-        ② 不同的列可出自同一个域
-            其中的每一列称为一个属性
-            不同的属性要给予不同的属性名
-        ③ 列的顺序无所谓,，列的次序可以任意交换
-        ④ 任意两个元组的候选码不能相同
-        ⑤ 行的顺序无所谓，行的次序可以任意交换
-            i. 最重要的：关系的每一个分量必须是一个不可分的数据项
-</code></pre><h2 id="关系代数"><a href="#关系代数" class="headerlink" title="关系代数"></a>关系代数</h2><pre><code>1. 关系代数（Relational Algebra)
-    a. 是一种抽象的查询语言，它用对关系的运算来表示查询
-    b. 运算对象是关系、运算结果亦为关系
-    c. 两类运算符：
-        i. 并、差、交、笛卡尔积（传统的集合运算符）
-        ii. 选择、投影、连接、除（专门的关系运算符）
-    d. 传统的集合运算是从关系的“水平”方向即行的角度进行，专门的关系运算不仅涉及行而且涉及列
-
-2. 选择selection（限制）
-    a. 类型一个MongoDB中的find操作
-    b. 将一些不需要的行排除掉
-        i.  σF(R) = {t |t属于R ∧ F (t )= &apos;真&apos;}
-        ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，≥，＜，≤，＝或&lt;&gt;
-
-3. 投影projection
-    a. 从R 中选择出若干属性列组成新的关系    πA(R) = { t [A] | t 属于 R } ， A：R 中的属性列 
-    b. 将一些不需要的列排除，还需要将重复行的合并起来（不然就不符合关系的定义）
-
-4. 连接（两张表连接成一张表）join   (连接也称为θ连接)
-    a. MongoDB中没有连接
-    b. 从两个关系的笛卡尔积中选取属性间满足一定条件的元组
-
-        A和B：分别为R和S上度数相等且可比的属性组
-
-    c. 两种常用的连接:
-        i. 等值连接  ： 有重复的属性列（从关系R与S 的广义笛卡尔积中选取A、B属性值相等的那些元组)   θ为“＝”
-        ii. 自然连接：在等值连接的基础上，并且在结果中把重复的属性列去除掉
-
-注：所有的数据都是关系，在上面可以做运算
-    d. 悬浮元组（Dangling tuple）:
-        两个关系R和S在做自然连接时，关系R中某些元组有可能在S中不存在公共属性上值相等的元组，从而造成R中这些元组在操作时被舍弃了，这些被舍弃的元组称为悬浮元组。
-    e. 外连接（Outer Join）：
-    如果把悬浮元组也保存在结果关系中，而在其他属性上填空值(Null)，就叫做外连接
-    f. 左外连接(LEFT OUTER JOIN或LEFT JOIN)：
-        只保留左边关系R中的悬浮元组
-    g. 右外连接(RIGHT OUTER JOIN或RIGHT JOIN)：
-        只保留右边关系S中的悬浮元组
-</code></pre><h2 id="网状模型-、-文档模型的比较"><a href="#网状模型-、-文档模型的比较" class="headerlink" title="网状模型 、 文档模型的比较"></a>网状模型 、 文档模型的比较</h2><pre><code>a. 关系模型的特点：
-    i. 更强的表达能力（连接MongoDB做不了）
-    ii. 比网状模型简洁
-    iii. 在查询的时候还是有过程性的内容（关系代数）
-</code></pre><h2 id="关系演算（Relational-Calculus"><a href="#关系演算（Relational-Calculus" class="headerlink" title="关系演算（Relational Calculus)"></a>关系演算（Relational Calculus)</h2><pre><code>a. 声明式查询语言
-b. 类似FOL的表达方式
-c. 与关系代数基本等价
-d. 关系演算可以翻译成若干个关系代数，（有些内容的先后顺序不确定）
-e. 关系代数+逻辑表达 ===》 声明式的
-f. 是SQL的基础
-g. 关系模型相当于网状模型，将更多细节藏在了里面，更倾向于声明式语言
-</code></pre><h2 id="表达能力范围比较-不涉及精简度）"><a href="#表达能力范围比较-不涉及精简度）" class="headerlink" title="表达能力范围比较(不涉及精简度）"></a>表达能力范围比较(不涉及精简度）</h2><pre><code>a. Mongodb CRUD &lt; 关系代数/演算 &lt; FOL(一阶代词逻辑） &lt; Turing Machine
-注： 关系代数不能有递归，一阶逻辑可以由递归
-</code></pre><h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><pre><code>注：App和DB独立，将更多的操作推给数据库，只告诉数据库需要什么，接口就会变得很简洁（表达能力强）
-
-初衷：以防两个app同时使用一个DB，引起冲突，因此把操作都放在DB中。
-
-现在：推崇模块化，将DB都放在每个模块中，为了更新一个模块时不会动另一个模块。
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/数据模型/" itemprop="url">数据模型</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><h2 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h2><pre><code>○ 功能通用、完善
-    § 满足尽量多应用的需求
-○ 实现细节对应用透明
-    § 应用开发独立于系统实现
-</code></pre><h2 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h2><pre><code>    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）
-    a. 文档模型（Mongodb   2000s)
-    b. 层次模型（IBM IMS   1960s)
-    c. 网状模型（GE IDS 1960s）
-    d. 关系模型（SQL DB 1970s~80s)
-
-注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性
-</code></pre><h2 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h2><pre><code>a. 对数据库中数据的结构性描述
-    i. 参照schema才能正确书写查询
-b. 一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）
-e.g. 
-Schema
-{
-    Name:string,
-    Manufacturer:string
-    Catalog_numver:num
-}
-c. Data Model相当于Schema的Metadata，即Meta Metadata
-注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema
-</code></pre><h2 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h2><h2 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h2><pre><code>a. 表达能力：
-    i. 数据本身能够表达什么信息？
-        1) 计算机能够理解的信息
-    ii. 查询能够满足哪些信息需求？
-注： 表达能力越强，查询时返回的值越快越准确
-
-b. 表达能力的两个维度
-    i. 范围：能够满足哪些信息需求
-        1) 上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）
-    ii. 精简程度：用户描述需求是是否方便
-        1) Prolog比Java表达更强更精炼，因为Prolog逻辑性强
-注：数据库系统将查询的语言转换成数据库查找的语言
-</code></pre><h2 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h2><pre><code>    a. Charles Bachman     网状模型     Navigational Database Network Model
-    Edgar F.Codd       关系模型    Relational Database Relation Model
-    b. 70年代末更倾向于关系数据库
-
-7. 网状数据库(Navigational DB)
-    a. 查询通过指针访问
-8. Codd坚持的看法
-    a. DBMS应该和应用程序尽可能保持相互独立（模块化）
-        i. 数据的存放顺序与程序无关
-        ii. 数据的使用与程序无关
-        iii. 数据的访问方式与程序无关（网状和层次模型违背了这点）
-</code></pre><h2 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h2><pre><code>    a. 提升数据模型的表达能力
-    b. 声明是程序设计语言(而不是过程式语言）
-        i. Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）
-        ii. 只把需求说出来，不说具体怎么做。
-
-注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理
-</code></pre><h2 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h2><pre><code>a. 声明式程序一定比过程式的更好吗？
-    i. 并不是
-b. 表达能力越高越好吗？
-    i. 不是，度的把握，如单反照相机和傻瓜相机
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/Mongodb数据库设计/" itemprop="url">Mongodb数据库设计</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
-                    <span itemprop="name">数据管理系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><pre><code>- Mongodb是以面向对象存储的 ， 做Obj&lt;---&gt;Doc之间的转换，一般用Java去实践
-- ORM工具：Obj Relation Mapping
-</code></pre><h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><pre><code>- 数据库设计
-    ○ 什么样的数据存在里面
-    ○ 数据怎么样存在里面（组织形式） &amp; 应用如何去访问数据库
-- 数据库设计的基本步骤
-    ○ 需求设计（软件的功能是什么）
-        § 了解用户需求，确定软件的基本功能
-    ○ 概念结构设计（存什么）
-        § 确定数据库需要记录哪些对象
-    ○ 逻辑结构设计设计（抽象怎么存）
-        § 确定对象之间的关系以及文档结构。
-    ○ 物理结构设计 （代码的实现）
-        § 确定数据的存储方式、索引的使用、系统配置等等
-    ○ 数据库实施
-        § 安装数据库管理系统、创建数据、调试、运行。
-    ○ 数据库运行和维护
-        根据需求的扩展与变化，对以上结果进行调整和变更
-</code></pre><h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><pre><code>MVC  (model  -- view -- controller)
-</code></pre><h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><pre><code>1. 对象的确定
-    ○ 软件功能涉及到的概念
-        § 博客：用户、文章、评论、粉丝
-        § 网上书店：图书、用户、购物车、订单、评论
-    ○ 软件开发过程中出现的持久化需求
-        § Java开发中遇到需要序列化的对象
-        § MVC中Model的构建
-
-2. 对象之间的关系(Cardiality)
-    ○ 1：1     ——   企业与CEO  、 配偶关系
-    ○ 1：M    ——  博客与评论、国家与城市
-    ○ M:N      ——  书与作者、用户与粉丝
-</code></pre><h2 id="拇指法则"><a href="#拇指法则" class="headerlink" title="拇指法则"></a>拇指法则</h2><pre><code>赞成嵌入，除非有一个令人信服的理由不这样做。
-需要访问一个对象本身是一个令人信服的理由不嵌入它。
-数组不应该无限制地增长。如果在“多”方面有超过几百个文档，不要嵌入它们;如果“多”方面有几千个文档，不要使用ObjectID引用数组。高基数数组是不嵌入的一个令人信服的理由。
-不要害怕应用程序级连接:如果正确索引并使用了投影说明符，那么应用程序级连接的开销几乎不比关系数据库中的服务器端连接高。
-在反规范化时考虑写/读比。一个通常会被读取但很少被更新的字段是反规范化的一个很好的候选:如果你对一个经常更新的字段进行反规范化，那么查找和更新所有实例的额外工作很可能会超过你从反规范化中获得的节省。
-与MongoDB一样，如何建模数据完全取决于特定应用程序的数据访问模式。您希望构造数据，以匹配应用程序查询和更新数据的方式。
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/文档型数据库/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1354,6 +748,612 @@ d. 更新文档
 address.txt:
     210000 Nanjing
     .........
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/关系模型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/关系模型/" itemprop="url">关系模型.md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
+                2018-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
+                    <span itemprop="name">数据管理系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h1><pre><code>1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
+2. 关系模型具有单一的数据结构—— 关系。关系代数的逻辑结构是一张二维表，是建立在集合代数的基础上的
+</code></pre><h2 id="关系数据结构"><a href="#关系数据结构" class="headerlink" title="关系数据结构"></a>关系数据结构</h2><pre><code>1. 域（demain）：一组具有相同数据类型的值的集合（如整数）
+2. 笛卡尔积：穷尽所有的组合，即所有域的所有取值的一个组合（不能重复）
+    a. 基数：一个域允许的不同取值个数
+    b. 笛卡尔积可表示为一张二维表，表中的每行对应一个元组，表中的每列对应一个域
+
+3. 关系：笛卡尔积的子集
+    a. 关系： R（D1，D2，…，Dn）：R：关系名，n：关系的目或度（Degree）
+    b. 元组：关系中的每个元素是关系中的元组，通常用t表示。
+    c. 属性：表的每一列是一种属性
+    d. 码
+        i. 候选码
+            1) 若关系中的某一属性组的值能唯一地表示一个元组，则称该属性组为候选码
+            注：简单的情况：候选码只包含一个属性
+        ii. 主属性：候选码的诸属性
+        iii. 非主属性：不包含在任何候选码中的属性
+        iv. 全码：关系模式的所有属性组是这个关系模式的候选码
+        v. 主码：若一个关系有多个候选码，则选定其中一个为主码：可以一个组合作为一个主码，或者是定义一个id属性为主码
+    e. 关系的三种类型：基本关系（实际存在的表）、查询表（查询结果对应的表）、视图表（基本表或其他视图表导出的表，是虚表，不对应实际存储的数据）
+    f. 基本关系的性质
+        ① 列是同质的（Homogeneous）
+        ② 不同的列可出自同一个域
+            其中的每一列称为一个属性
+            不同的属性要给予不同的属性名
+        ③ 列的顺序无所谓,，列的次序可以任意交换
+        ④ 任意两个元组的候选码不能相同
+        ⑤ 行的顺序无所谓，行的次序可以任意交换
+            i. 最重要的：关系的每一个分量必须是一个不可分的数据项
+</code></pre><h2 id="关系代数"><a href="#关系代数" class="headerlink" title="关系代数"></a>关系代数</h2><pre><code>1. 关系代数（Relational Algebra)
+    a. 是一种抽象的查询语言，它用对关系的运算来表示查询
+    b. 运算对象是关系、运算结果亦为关系
+    c. 两类运算符：
+        i. 并、差、交、笛卡尔积（传统的集合运算符）
+        ii. 选择、投影、连接、除（专门的关系运算符）
+    d. 传统的集合运算是从关系的“水平”方向即行的角度进行，专门的关系运算不仅涉及行而且涉及列
+
+2. 选择selection（限制）
+    a. 类型一个MongoDB中的find操作
+    b. 将一些不需要的行排除掉
+        i.  σF(R) = {t |t属于R ∧ F (t )= &apos;真&apos;}
+        ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，≥，＜，≤，＝或&lt;&gt;
+
+3. 投影projection
+    a. 从R 中选择出若干属性列组成新的关系    πA(R) = { t [A] | t 属于 R } ， A：R 中的属性列 
+    b. 将一些不需要的列排除，还需要将重复行的合并起来（不然就不符合关系的定义）
+
+4. 连接（两张表连接成一张表）join   (连接也称为θ连接)
+    a. MongoDB中没有连接
+    b. 从两个关系的笛卡尔积中选取属性间满足一定条件的元组
+
+        A和B：分别为R和S上度数相等且可比的属性组
+
+    c. 两种常用的连接:
+        i. 等值连接  ： 有重复的属性列（从关系R与S 的广义笛卡尔积中选取A、B属性值相等的那些元组)   θ为“＝”
+        ii. 自然连接：在等值连接的基础上，并且在结果中把重复的属性列去除掉
+
+注：所有的数据都是关系，在上面可以做运算
+    d. 悬浮元组（Dangling tuple）:
+        两个关系R和S在做自然连接时，关系R中某些元组有可能在S中不存在公共属性上值相等的元组，从而造成R中这些元组在操作时被舍弃了，这些被舍弃的元组称为悬浮元组。
+    e. 外连接（Outer Join）：
+    如果把悬浮元组也保存在结果关系中，而在其他属性上填空值(Null)，就叫做外连接
+    f. 左外连接(LEFT OUTER JOIN或LEFT JOIN)：
+        只保留左边关系R中的悬浮元组
+    g. 右外连接(RIGHT OUTER JOIN或RIGHT JOIN)：
+        只保留右边关系S中的悬浮元组
+</code></pre><h2 id="网状模型-、-文档模型的比较"><a href="#网状模型-、-文档模型的比较" class="headerlink" title="网状模型 、 文档模型的比较"></a>网状模型 、 文档模型的比较</h2><pre><code>a. 关系模型的特点：
+    i. 更强的表达能力（连接MongoDB做不了）
+    ii. 比网状模型简洁
+    iii. 在查询的时候还是有过程性的内容（关系代数）
+</code></pre><h2 id="关系演算（Relational-Calculus"><a href="#关系演算（Relational-Calculus" class="headerlink" title="关系演算（Relational Calculus)"></a>关系演算（Relational Calculus)</h2><pre><code>a. 声明式查询语言
+b. 类似FOL的表达方式
+c. 与关系代数基本等价
+d. 关系演算可以翻译成若干个关系代数，（有些内容的先后顺序不确定）
+e. 关系代数+逻辑表达 ===》 声明式的
+f. 是SQL的基础
+g. 关系模型相当于网状模型，将更多细节藏在了里面，更倾向于声明式语言
+</code></pre><h2 id="表达能力范围比较-不涉及精简度）"><a href="#表达能力范围比较-不涉及精简度）" class="headerlink" title="表达能力范围比较(不涉及精简度）"></a>表达能力范围比较(不涉及精简度）</h2><pre><code>a. Mongodb CRUD &lt; 关系代数/演算 &lt; FOL(一阶代词逻辑） &lt; Turing Machine
+注： 关系代数不能有递归，一阶逻辑可以由递归
+</code></pre><h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><pre><code>注：App和DB独立，将更多的操作推给数据库，只告诉数据库需要什么，接口就会变得很简洁（表达能力强）
+
+初衷：以防两个app同时使用一个DB，引起冲突，因此把操作都放在DB中。
+
+现在：推崇模块化，将DB都放在每个模块中，为了更新一个模块时不会动另一个模块。
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/Mongodb数据库设计/" itemprop="url">Mongodb数据库设计</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
+                2018-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
+                    <span itemprop="name">数据管理系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><pre><code>- Mongodb是以面向对象存储的 ， 做Obj&lt;---&gt;Doc之间的转换，一般用Java去实践
+- ORM工具：Obj Relation Mapping
+</code></pre><h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><pre><code>- 数据库设计
+    ○ 什么样的数据存在里面
+    ○ 数据怎么样存在里面（组织形式） &amp; 应用如何去访问数据库
+- 数据库设计的基本步骤
+    ○ 需求设计（软件的功能是什么）
+        § 了解用户需求，确定软件的基本功能
+    ○ 概念结构设计（存什么）
+        § 确定数据库需要记录哪些对象
+    ○ 逻辑结构设计设计（抽象怎么存）
+        § 确定对象之间的关系以及文档结构。
+    ○ 物理结构设计 （代码的实现）
+        § 确定数据的存储方式、索引的使用、系统配置等等
+    ○ 数据库实施
+        § 安装数据库管理系统、创建数据、调试、运行。
+    ○ 数据库运行和维护
+        根据需求的扩展与变化，对以上结果进行调整和变更
+</code></pre><h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><pre><code>MVC  (model  -- view -- controller)
+</code></pre><h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><pre><code>1. 对象的确定
+    ○ 软件功能涉及到的概念
+        § 博客：用户、文章、评论、粉丝
+        § 网上书店：图书、用户、购物车、订单、评论
+    ○ 软件开发过程中出现的持久化需求
+        § Java开发中遇到需要序列化的对象
+        § MVC中Model的构建
+
+2. 对象之间的关系(Cardiality)
+    ○ 1：1     ——   企业与CEO  、 配偶关系
+    ○ 1：M    ——  博客与评论、国家与城市
+    ○ M:N      ——  书与作者、用户与粉丝
+</code></pre><h2 id="拇指法则"><a href="#拇指法则" class="headerlink" title="拇指法则"></a>拇指法则</h2><pre><code>赞成嵌入，除非有一个令人信服的理由不这样做。
+需要访问一个对象本身是一个令人信服的理由不嵌入它。
+数组不应该无限制地增长。如果在“多”方面有超过几百个文档，不要嵌入它们;如果“多”方面有几千个文档，不要使用ObjectID引用数组。高基数数组是不嵌入的一个令人信服的理由。
+不要害怕应用程序级连接:如果正确索引并使用了投影说明符，那么应用程序级连接的开销几乎不比关系数据库中的服务器端连接高。
+在反规范化时考虑写/读比。一个通常会被读取但很少被更新的字段是反规范化的一个很好的候选:如果你对一个经常更新的字段进行反规范化，那么查找和更新所有实例的额外工作很可能会超过你从反规范化中获得的节省。
+与MongoDB一样，如何建模数据完全取决于特定应用程序的数据访问模式。您希望构造数据，以匹配应用程序查询和更新数据的方式。
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/数据模型/" itemprop="url">数据模型</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
+                2018-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据管理系统/" itemprop="url" rel="index">
+                    <span itemprop="name">数据管理系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><h2 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h2><pre><code>○ 功能通用、完善
+    § 满足尽量多应用的需求
+○ 实现细节对应用透明
+    § 应用开发独立于系统实现
+</code></pre><h2 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h2><pre><code>    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）
+    a. 文档模型（Mongodb   2000s)
+    b. 层次模型（IBM IMS   1960s)
+    c. 网状模型（GE IDS 1960s）
+    d. 关系模型（SQL DB 1970s~80s)
+
+注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性
+</code></pre><h2 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h2><pre><code>a. 对数据库中数据的结构性描述
+    i. 参照schema才能正确书写查询
+b. 一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）
+e.g. 
+Schema
+{
+    Name:string,
+    Manufacturer:string
+    Catalog_numver:num
+}
+c. Data Model相当于Schema的Metadata，即Meta Metadata
+注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema
+</code></pre><h2 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h2><h2 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h2><pre><code>a. 表达能力：
+    i. 数据本身能够表达什么信息？
+        1) 计算机能够理解的信息
+    ii. 查询能够满足哪些信息需求？
+注： 表达能力越强，查询时返回的值越快越准确
+
+b. 表达能力的两个维度
+    i. 范围：能够满足哪些信息需求
+        1) 上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）
+    ii. 精简程度：用户描述需求是是否方便
+        1) Prolog比Java表达更强更精炼，因为Prolog逻辑性强
+注：数据库系统将查询的语言转换成数据库查找的语言
+</code></pre><h2 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h2><pre><code>    a. Charles Bachman     网状模型     Navigational Database Network Model
+    Edgar F.Codd       关系模型    Relational Database Relation Model
+    b. 70年代末更倾向于关系数据库
+
+7. 网状数据库(Navigational DB)
+    a. 查询通过指针访问
+8. Codd坚持的看法
+    a. DBMS应该和应用程序尽可能保持相互独立（模块化）
+        i. 数据的存放顺序与程序无关
+        ii. 数据的使用与程序无关
+        iii. 数据的访问方式与程序无关（网状和层次模型违背了这点）
+</code></pre><h2 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h2><pre><code>    a. 提升数据模型的表达能力
+    b. 声明是程序设计语言(而不是过程式语言）
+        i. Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）
+        ii. 只把需求说出来，不说具体怎么做。
+
+注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理
+</code></pre><h2 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h2><pre><code>a. 声明式程序一定比过程式的更好吗？
+    i. 并不是
+b. 表达能力越高越好吗？
+    i. 不是，度的把握，如单反照相机和傻瓜相机
 </code></pre>
           
         
