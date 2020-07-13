@@ -288,7 +288,356 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-md/" itemprop="url">The ArtScience and Engineering of Fuzzing: A Survey.md</a></h1>
+                <a class="post-title-link" href="/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-md/" itemprop="url">The ArtScience and Engineering of Fuzzing: A Survey</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-13T22:45:48Z">
+                2020-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Test-Case-Geneation/" itemprop="url" rel="index">
+                    <span itemprop="name">Test Case Geneation</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="The-Art-Science-and-Engineering-of-Fuzzing-A-Survey"><a href="#The-Art-Science-and-Engineering-of-Fuzzing-A-Survey" class="headerlink" title="The Art, Science, and Engineering of Fuzzing:A Survey"></a>The Art, Science, and Engineering of Fuzzing:A Survey</h1><p>20200713 15:01 结  </p>
+<ul>
+<li>关键词：自动化软件测试，模糊化，软件安全</li>
+<li>目的：作为一个survey，围绕模糊化，给它<strong>下定义</strong>，总结对软件测试提出的模糊化方面的改进，发掘有哪些创新点</li>
+<li>领域： 软件测试，模糊化</li>
+</ul>
+<h2 id="1-基础知识"><a href="#1-基础知识" class="headerlink" title="1. 基础知识"></a>1. 基础知识</h2><h3 id="1-1-定义"><a href="#1-1-定义" class="headerlink" title="1.1 定义"></a>1.1 定义</h3><ul>
+<li>模糊化是什么？<ul>
+<li>使用生成的输入（输入存在语义和语法错误）重复运行一个项目。</li>
+</ul>
+</li>
+<li>目前模糊化有哪些问题？<ul>
+<li>一些fuzzer工具的源代码和手册实际达不到描述的那样</li>
+<li>不同fuzzer工具使用的术语各大相同</li>
+</ul>
+</li>
+<li>Fuzzing定义<ul>
+<li>从fuzz输入空间生成样例测试Program，并突出<strong>PUT(Program Under Test)</strong>期望的输入空间</li>
+</ul>
+</li>
+<li>Fuzz Testing定义<ul>
+<li>使用fuzzing技术去测试看是否PUT违背安全政策</li>
+<li>目的：找出program中影响安全的bugs</li>
+</ul>
+</li>
+<li>Fuzzer定义<ul>
+<li>在一个PUT上执行fuzzing testing的Program</li>
+</ul>
+</li>
+<li>Fuzz Campaign<ul>
+<li>针对一条特定安全政策，一个fuzzer在PUT上的一个特定的执行，相当于专门针对哪个安全，制作出一些sample去用fuzzer执行。</li>
+</ul>
+</li>
+<li>Bug Oracle<ul>
+<li>作为fuzzer的一部分Program，检测给定的PUT执行是否违反特定安全政策</li>
+</ul>
+</li>
+<li>Fuzz Configuration<ul>
+<li>Fuzz算法的参数配置，依赖于特定的fuzz algorithm</li>
+<li></li>
+</ul>
+</li>
+<li>设计测试工具的时候，一定先熟悉源代码和PUT的相关知识！！！</li>
+</ul>
+<h3 id="1-2-Fuzz-Testing-算法"><a href="#1-2-Fuzz-Testing-算法" class="headerlink" title="1.2 Fuzz Testing 算法"></a>1.2 Fuzz Testing 算法</h3><ul>
+<li>有两个部分：对配置进行预处理；迭代（包括Schedule,InputGen,InputEval,ConfUpdate,Continue）<ul>
+<li>PREPROCESS：执行大量操作，比如插入一些功能性代码到PUTs中，或是检测种子文件（产生测试样例）的执行速度</li>
+<li>第二部分的迭代的流程：先选择一个fuzz配置；根据配置中的参数生成测试样例；用测试样例和oracle bug检测是否违背安全政策（这个应该可以自己规定），这时可以得到execinfos，这大概是为了变动配置，为了之后能选取到更具有代表性的配置去生成测试样例；根据execinfos,改变fuzz配置；最后判断fuzz配置是否进行下一轮的迭代。</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-3-Fuzzer的分类"><a href="#1-3-Fuzzer的分类" class="headerlink" title="1.3 Fuzzer的分类"></a>1.3 Fuzzer的分类</h3><ul>
+<li><p>根据在每次fuzz run的时候fuzzer观察到的东西多少，以下只是安全专家的一致认同，在实际使用的时候，三者的区别不太明显。</p>
+</li>
+<li><p>黑盒fuzzer</p>
+<ul>
+<li>只能看到PUT输入和输出的表现，有一些还考虑输入的结构信息</li>
+</ul>
+</li>
+<li>白盒fuzzer<ul>
+<li>可以观察到PUT的内部信息以及执行过程中的收集到的信息</li>
+</ul>
+</li>
+<li>灰盒fuzzer<ul>
+<li>可以观察到一部分PUT的内部信息和它的执行，但是不能得到PUT完成的语义，且只能对PUT执行轻量级的分析和对执行收集动态信息。即收集一些近似信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-PREPROCESS"><a href="#2-PREPROCESS" class="headerlink" title="2. PREPROCESS"></a>2. PREPROCESS</h2><ul>
+<li>预处理包括对PUT做一些性能监控（灰盒、白盒都能去PUT中获取一些反馈信息）[对PUT进行插桩]，去除冗余的配置（像种子选择），修剪种子，生成驱动应用。</li>
+</ul>
+<h3 id="2-1-Instrumentation"><a href="#2-1-Instrumentation" class="headerlink" title="2.1 Instrumentation"></a>2.1 Instrumentation</h3><ul>
+<li>白盒、灰盒中用来收集最有价值反馈的一种方法，代码插桩（在被测程序中插入完成相应工作的代码，即代码插桩技术，来获取程序中可执行语句被执行（即被覆盖）的情况）</li>
+<li>分为static instrumentation和dynamic instrumentation，前者一般在源代码的编译阶段执行，后者一般在运行阶段执行。</li>
+</ul>
+<h4 id="2-1-1-Execution-Feedback"><a href="#2-1-1-Execution-Feedback" class="headerlink" title="2.1.1 Execution Feedback"></a>2.1.1 Execution Feedback</h4><ul>
+<li>灰盒fuzzers将执行反馈作为输入去优化测试样例，AFL等文章计算分支覆盖率作为反馈内容，但容易发生分支冲突，对此CollAFL提出相应解决方法。</li>
+</ul>
+<h4 id="2-1-2-In-Memory-Fuzzing"><a href="#2-1-2-In-Memory-Fuzzing" class="headerlink" title="2.1.2 In-Memory Fuzzing"></a>2.1.2 In-Memory Fuzzing</h4><ul>
+<li>为了最小化执行开销，每次fuzz迭代只fuzz一部分的PUT,program会保留PUT的快照，下次fuzz新的测试样例时需要恢复memory快照。这种快照可以避免执行不必要的启动代码。</li>
+<li>in-memiry API fuzzing通过一个函数而不是每次迭代恢复PUT的状态，这种方式尽管有效，但是找到的bugs却不完整，因为可能调用不到这种函数（我猜是函数名生成有问题？？）</li>
+</ul>
+<h4 id="2-1-3-Thread-Scheduling"><a href="#2-1-3-Thread-Scheduling" class="headerlink" title="2.1.3 Thread Scheduling"></a>2.1.3 Thread Scheduling</h4><ul>
+<li>随机调度线程对找到race condition bugs很有效。</li>
+</ul>
+<h3 id="2-2-Seed-Selection"><a href="#2-2-Seed-Selection" class="headerlink" title="2.2 Seed Selection"></a>2.2 Seed Selection</h3><ul>
+<li>希望选取最小的种子集合最大化覆盖率（如节点覆盖率）</li>
+<li>覆盖率评价指标：<ul>
+<li>branch coverage（计算分支的执行次数），当测试样例在分支执行次数上的数量级不同时才认为它们是不同的</li>
+<li>the number of executed instructions,executed branches,and unique basic block。希望将最长的执行路径的测试样例增加到minset中。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-Seed-Trimming"><a href="#2-3-Seed-Trimming" class="headerlink" title="2.3 Seed Trimming"></a>2.3 Seed Trimming</h3><ul>
+<li><p>在preprocess中执行，或作为CONFUPDATE的一部分</p>
+</li>
+<li><p>在AFL中只要修改过的seed能够达到和原先种子一样的覆盖率，就修剪掉原先种子。</p>
+</li>
+<li>[177]发现size小的种子没啥用</li>
+</ul>
+<h3 id="2-4-Preparing-a-Driver-Application"><a href="#2-4-Preparing-a-Driver-Application" class="headerlink" title="2.4 Preparing a Driver Application"></a>2.4 Preparing a Driver Application</h3><ul>
+<li>给fuzzer一开始的时候准备一个驱动器（这里不太理解）</li>
+</ul>
+<h2 id="3-SCHEDULING"><a href="#3-SCHEDULING" class="headerlink" title="3. SCHEDULING"></a>3. SCHEDULING</h2><ul>
+<li>选择一个fuzz 配置为下轮fuzz迭代，不同的fuzzer类型具有不同的配置。这里主要的研究点是提出创新性的scheduling算法。</li>
+</ul>
+<h3 id="3-1-The-Fuzz-Cofiguration-Scheduling-FCS-Problem"><a href="#3-1-The-Fuzz-Cofiguration-Scheduling-FCS-Problem" class="headerlink" title="3.1 The Fuzz Cofiguration Scheduling (FCS) Problem"></a>3.1 The Fuzz Cofiguration Scheduling (FCS) Problem</h3><ul>
+<li>挑选一个可能产生最好结果的配置（评判可能依据 find the most number of unique bugs[unique bugs不知道咋翻译], maximize the coverage]。在挑选的时候考虑explore（关于每个配置获取更为准确的信息）和exploit（获取好的结果），做这两者的trade-off。</li>
+</ul>
+<h3 id="3-2-Black-box-FCS-Algorithms"><a href="#3-2-Black-box-FCS-Algorithms" class="headerlink" title="3.2 Black-box FCS Algorithms"></a>3.2 Black-box FCS Algorithms</h3><ul>
+<li>黑盒用到的反馈信息：crashes和bug的数量毕竟执行时间</li>
+<li>[225]提炼数学模型，WCCP/UW，由于反馈信息会随着配置结果变差，因此选择一些配置不会导致反馈decay。为了将crashes或bugs / time来修改反馈信息，目的是为了能更快速地进行配置（感觉是把time因素考虑进去）。</li>
+</ul>
+<h3 id="3-3-Grey-box-FCS-Algorithms"><a href="#3-3-Grey-box-FCS-Algorithms" class="headerlink" title="3.3 Grey-box FCS Algorithms"></a>3.3 Grey-box FCS Algorithms</h3><ul>
+<li>灰盒用到的反馈信息：黑盒能用到的，达到的覆盖率等等</li>
+<li>AFL认为执行最快，input最少的是<strong>fit</strong></li>
+<li><p>AFLFast在AFL基础上做了三点改进</p>
+<ul>
+<li>增加两条重要准则：<ul>
+<li>AFLFast喜欢被选中<strong>最少</strong>的配置</li>
+<li>AFLFast喜欢<strong>最少</strong>选择的路径</li>
+</ul>
+</li>
+<li>AFLFast在AFL增加了优先级，替代AFL中的圆形选择</li>
+<li>AFLFast每个配置被选中次数是动态改变的</li>
+</ul>
+</li>
+<li><p>AFLGo修改了AFLFast优先级的特征，目的是为了找到特定的程序位置。</p>
+</li>
+</ul>
+<h2 id="4-INPUT-GENERATION"><a href="#4-INPUT-GENERATION" class="headerlink" title="4. INPUT GENERATION"></a>4. INPUT GENERATION</h2><ul>
+<li>分为generation-based和mutation-based，前者是基于model的，后者是通过mutate seed。</li>
+</ul>
+<h3 id="4-1-Model-based-Generation-based-Fuzzers"><a href="#4-1-Model-based-Generation-based-Fuzzers" class="headerlink" title="4.1 Model-based (Generation-based) Fuzzers"></a>4.1 <strong>Model-based (Generation-based) Fuzzers</strong></h3><ul>
+<li>预定义或用户提供的模型</li>
+<li>推断模型可能发生在PREPROCESS阶段也可能在CONFUPDATE阶段<ul>
+<li>在PREPROCESS阶段，在PUT中搜找可用的数据（如文字），去预测合适的输出</li>
+<li>在CONFUPDATE阶段，每次迭代更新model</li>
+</ul>
+</li>
+<li>编译器模型（不太能理解这个模型）<ul>
+<li>解析特定的文件格式</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-Model-less-Mutation-based-Fuzzers"><a href="#4-2-Model-less-Mutation-based-Fuzzers" class="headerlink" title="4.2 Model-less (Mutation-based) Fuzzers"></a>4.2 <strong>Model-less (Mutation-based) Fuzzers</strong></h3><ul>
+<li>需要seed-based输入生成和<strong>白盒输入生成</strong>。</li>
+<li>Bit-flipping：翻转固定/不固定数量bit位，用mutation ratio决定翻转多少数量的bit位。因此，找到一个合适的mutation ratio数值至关重要。</li>
+<li><em>Arithmetic Mutation</em>：将选择的字节序列视为一个整数，对整数进行处理（不太能理解）</li>
+<li><em>Block-based Mutation</em>：以block为单位，进行mutation</li>
+<li><em>Dictionary-based Mutation</em>：对具体的字符（数值）进行mutation（不太能理解）</li>
+</ul>
+<h3 id="4-3-White-box-Fuzzers"><a href="#4-3-White-box-Fuzzers" class="headerlink" title="4.3 White-box Fuzzers"></a>4.3 White-box Fuzzers</h3><ul>
+<li><p>先使用白盒程序分析找到PUT的信息，用这信息去进行黑盒or灰盒fuzzing。</p>
+</li>
+<li><p>Dynamic symbolic execution：比灰盒和黑盒慢很多，因为它需要对PUT的每条指令进行插桩和分析，这方面的研究都聚集在如何减少它的代价方面。</p>
+</li>
+<li><p><em>Guided Fuzzing</em>：先对PUT进行分析（静态or动态分析）来获取有用的信息；再利用这个信息去生成test case。这上面的研究一方面需要减少分析产生的代价。</p>
+</li>
+<li><p><em>PUT Mutation</em>：不重要。。</p>
+</li>
+</ul>
+<h2 id="5-INPUT-EVALUATION"><a href="#5-INPUT-EVALUATION" class="headerlink" title="5. INPUT EVALUATION"></a>5. INPUT EVALUATION</h2><h3 id="5-1-Bug-Oracles"><a href="#5-1-Bug-Oracles" class="headerlink" title="5. 1  Bug Oracles"></a>5. 1  <strong>Bug Oracles</strong></h3><ul>
+<li>有三个方面的侦测：内存安全问题（是否访问到不安全的内存、控制流的完整性[啥意思]）、访问到未被定义的行为（如编译器不同，程序猿只考虑了某些编译器情况下可行，但有些不可行却忽略了）、输入的合法性（比如<strong>SQL访问可能对数据库引擎存在一些破坏</strong>）</li>
+</ul>
+<h3 id="5-2-Execution-Optimizations"><a href="#5-2-Execution-Optimizations" class="headerlink" title="5.2 Execution Optimizations"></a>5.2 <strong>Execution Optimizations</strong></h3><ul>
+<li>由于迭代需要每次都初始化PUT进程，需要耗费大量的时间，对此，AFL提供了一个fork-server去让迭代去从进行初始化好的进行进程中fork一下。</li>
+</ul>
+<h3 id="5-3-Triage"><a href="#5-3-Triage" class="headerlink" title="5.3 Triage"></a>5.3 Triage</h3><ul>
+<li>分析和报告导致违反政策（感觉就是不安全的）的进程，分为三步：去重复、优先级、测试样例最小化。</li>
+</ul>
+<h4 id="5-3-1-Deduplication"><a href="#5-3-1-Deduplication" class="headerlink" title="5.3.1  Deduplication"></a>5.3.1  Deduplication</h4><ul>
+<li>去重复：若该test case返回的Bug已经被以前的test case找到了，这个test case就不要了。能得到test case集合，该集合中每个test case都能触发唯一的bug。去重复有三种主要的实现方式：<ul>
+<li>stack backtrace hashing<ul>
+<li>记录了crash时的stack backtrace(如：main → d → c → b → a → foo )，当其他crash时的stack backtrace的后五个也是这个时候，认为他们重复, 这是major hash。而minor hash还考虑到line number（感觉是数量）。但这样做事基于一种假设，即相似的crash是由相似的bugs引起的，但这假设未被验证，且能举出反例。</li>
+</ul>
+</li>
+<li>coverage-based deduplication<ul>
+<li>在PUT中插桩记录PUT每次执行的edge覆盖率，根据这个信息选取seeds，AFL认为当crash覆盖到之前未见到的edge或者未覆盖到之前在所有其他crashes中都覆盖到的edge时，认为该crash是唯一的。</li>
+</ul>
+</li>
+<li>semantics-aware deduplication<ul>
+<li>从每个crash处反向分析，找到那个function，根据function来对crashes进行分类。(怎么那么奇怪)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>### </p>
+<h4 id="5-3-2-Prioritization-and-Exploitability"><a href="#5-3-2-Prioritization-and-Exploitability" class="headerlink" title="5.3.2  Prioritization and Exploitability"></a>5.3.2  Prioritization and Exploitability</h4><ul>
+<li><p>根据一个crash的可利用性来划分优先级。Microsoft’s !exploitable的优先级划分： EXPLOITABLE &gt; PROBABLY_EXPLOITABLE &gt; UNKNOWN &gt;</p>
+<p>NOT_LIKELY_EXPLOITABLE,</p>
+</li>
+</ul>
+<h4 id="5-3-3-Test-case-minimization"><a href="#5-3-3-Test-case-minimization" class="headerlink" title="5.3.3 Test case minimization"></a>5.3.3 Test case minimization</h4><ul>
+<li>利用bug oracle进行test case 最小化。许多fuzzers都针对自己特定的情况选用test case最小化算法。</li>
+</ul>
+<h2 id="6-CONFIGURATION-UPDATING"><a href="#6-CONFIGURATION-UPDATING" class="headerlink" title="6.  CONFIGURATION UPDATING"></a>6.  CONFIGURATION UPDATING</h2><ul>
+<li>可用来区别是白盒fuzzer、黑盒fuzzer、灰盒fuzzer。由于黑盒只能用到Oracle bug(不能得到PUT的内部信息)大部分Conf都不被修改。</li>
+</ul>
+<h3 id="6-1-Evolutionary-Seed-Pool-Update"><a href="#6-1-Evolutionary-Seed-Pool-Update" class="headerlink" title="6.1  Evolutionary Seed Pool Update"></a>6.1  Evolutionary Seed Pool Update</h3><ul>
+<li>灰盒fuzzer大多基于遗传算法进行展开，EA-based fuzzers大多数使用node或者Branch覆盖度作为fitness function.[后面举例没仔细看]</li>
+</ul>
+<h3 id="6-2-Maintaining-a-Minset"><a href="#6-2-Maintaining-a-Minset" class="headerlink" title="6.2 Maintaining a Minset"></a>6.2 Maintaining a Minset</h3><ul>
+<li>赋予favorable fuzzing conf以高的被选择进行fuzzing的权重。思想是：需要少的test case最大化coverage评价指标。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-/" itemprop="url">The ArtScience and Engineering of Fuzzing: A Survey</a></h1>
         
 
         <div class="post-meta">
@@ -2047,178 +2396,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/04/18/Oracle AWR/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/18/Oracle AWR/" itemprop="url">Oracle AWR</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-18T08:59:03Z">
-                2020-04-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/oracle/" itemprop="url" rel="index">
-                    <span itemprop="name">oracle</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Oracle-AWR"><a href="#Oracle-AWR" class="headerlink" title="Oracle AWR"></a>Oracle AWR</h2><pre><code>- 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用
-- 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗)
-- 启动： STATISTICS_LEVEL设为TYPICAL或ALL
-- 总结：只是一个历史性能数据的库，不具备实时的功能
-</code></pre><h2 id="AWR包括的统计信息"><a href="#AWR包括的统计信息" class="headerlink" title="AWR包括的统计信息"></a>AWR包括的统计信息</h2><pre><code>- 对象统计
-- 时间模型统计
-- 系统和会话统计
-- 获取会话历史统计
-</code></pre><h2 id="Snapshot"><a href="#Snapshot" class="headerlink" title="Snapshot"></a>Snapshot</h2><pre><code>- 默认oracle每个小时自动产生一次快照，并保留8天负载统计信息
-- 可通过自动数据库诊断器进行分析（ADDM）
-    - 定期分析AWR数据
-    - 诊断性能问题的起因
-    - 为纠错提供推荐
-    - 定义系统中没问题的部分
-- AWR比较不同快照之间的差异来确定捕获影响系统负载的SQL语句【这个有意思】
-- 可以修改Snapshot设置的单个参数，Retention（保留时间，min=1，max=100 年），Interval（收集的频率 min=10分钟,max=1年）、Topnsql（指定收集的比较占用资源的SQL数量 ,min=30,max=100000000）
-</code></pre><h2 id="Baselines"><a href="#Baselines" class="headerlink" title="Baselines"></a>Baselines</h2><pre><code>- 定义：专门用于比较的基准线，Baseline中包含指定时间点时的性能数据，过期也不会被清除
-- 使用：
-    - 检阅DBA_HIST_SNAPSHOT视图中已存在的快照 
-    - 用CREATE_BASELINE过程来创建期望快照范围基线
-- 类型：
-    - 固定基线
-    - 移动窗口基线
-    - 模板基线
-</code></pre><h2 id="Adaptive-Thresholds"><a href="#Adaptive-Thresholds" class="headerlink" title="Adaptive Thresholds"></a>Adaptive Thresholds</h2><pre><code>- 可以监控和检测性能问题，同时可以最大限度地减少管理开销。
-</code></pre><h2 id="Space-Consumption"><a href="#Space-Consumption" class="headerlink" title="Space Consumption"></a>Space Consumption</h2><pre><code>- AWR中空间消耗由是三个因素导致：
-    - 系统中活动时间的会话数
-    - 快照间隔
-    - 历史数据的保留期
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2271,7 +2448,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
