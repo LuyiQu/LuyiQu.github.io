@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="文档型数据库简介1. MongoDB:文档型数据库，按照文档的形式存储     a. Web App（用的较多） 2. 数据库管理系统（DBMS）     a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明 基础概念：a. 文档（数据模型）   【关系数据库的数据模型是表格】     i. 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式">
+<meta name="description" content="简介 MongoDB:文档型数据库，按照文档的形式存储  Web App（用的较多）   数据库管理系统（DBMS）  需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明    基础概念： 文档（数据模型）   【关系数据库的数据模型是表格】 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式 一个文档里还可以包括子文档 每个文档都有个_id，如果在一个文">
 <meta name="keywords" content="数据管理系统笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文档型数据库">
 <meta property="og:url" content="https://luyiqu.github.io/2018/11/12/文档型数据库/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="文档型数据库简介1. MongoDB:文档型数据库，按照文档的形式存储     a. Web App（用的较多） 2. 数据库管理系统（DBMS）     a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明 基础概念：a. 文档（数据模型）   【关系数据库的数据模型是表格】     i. 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式">
+<meta property="og:description" content="简介 MongoDB:文档型数据库，按照文档的形式存储  Web App（用的较多）   数据库管理系统（DBMS）  需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明    基础概念： 文档（数据模型）   【关系数据库的数据模型是表格】 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式 一个文档里还可以包括子文档 每个文档都有个_id，如果在一个文">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-05T12:33:19.102Z">
+<meta property="og:updated_time" content="2020-07-14T01:57:47.761Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="文档型数据库">
-<meta name="twitter:description" content="文档型数据库简介1. MongoDB:文档型数据库，按照文档的形式存储     a. Web App（用的较多） 2. 数据库管理系统（DBMS）     a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明 基础概念：a. 文档（数据模型）   【关系数据库的数据模型是表格】     i. 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式">
+<meta name="twitter:description" content="简介 MongoDB:文档型数据库，按照文档的形式存储  Web App（用的较多）   数据库管理系统（DBMS）  需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明    基础概念： 文档（数据模型）   【关系数据库的数据模型是表格】 用&amp;lt;key/attribute,value&amp;gt;存放，json的格式 一个文档里还可以包括子文档 每个文档都有个_id，如果在一个文">
 
 
 
@@ -363,65 +363,114 @@
       
 
       
-        <h1 id="文档型数据库"><a href="#文档型数据库" class="headerlink" title="文档型数据库"></a>文档型数据库</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><pre><code>1. MongoDB:文档型数据库，按照文档的形式存储
-    a. Web App（用的较多）
-2. 数据库管理系统（DBMS）
-    a. 需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明
-</code></pre><h2 id="基础概念："><a href="#基础概念：" class="headerlink" title="基础概念："></a>基础概念：</h2><pre><code>a. 文档（数据模型）   【关系数据库的数据模型是表格】
-    i. 用&lt;key/attribute,value&gt;存放，json的格式
-    ii. 一个文档里还可以包括子文档
-    iii. 每个文档都有个_id，如果在一个文档中没有说_id是什么，数据库会自动分配一个，可以通过_id找到数据库的任何一个文档
-    iv. 一个文档可以是做一个对象（json）
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><ul>
+<li><p>MongoDB:文档型数据库，按照文档的形式存储</p>
+<ul>
+<li>Web App（用的较多）</li>
+</ul>
+</li>
+<li><p>数据库管理系统（DBMS）</p>
+<ul>
+<li>需要把具体如何实现的如 增删改查 隐藏在系统软件中，对用户软件透明</li>
+</ul>
+</li>
+</ul>
+<h1 id="基础概念："><a href="#基础概念：" class="headerlink" title="基础概念："></a>基础概念：</h1><ul>
+<li>文档（数据模型）   【关系数据库的数据模型是表格】<ul>
+<li>用&lt;key/attribute,value&gt;存放，json的格式</li>
+<li>一个文档里还可以包括子文档</li>
+<li>每个文档都有个_id，如果在一个文档中没有说_id是什么，数据库会自动分配一个，可以通过_id找到数据库的任何一个文档</li>
+<li>一个文档可以是做一个对象（json）</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>文档集(collection)</p>
+<ul>
+<li>文档的集合（一个文档集可以视为一类对象）</li>
+</ul>
+</li>
+<li><p>数据库(database)</p>
+<ul>
+<li>若干个文档集构成一个数据库</li>
+<li>部署在一个服务器上，【一般】一个数据库对应一个应用</li>
+</ul>
+</li>
+</ul>
+<h1 id="文档的访问接口"><a href="#文档的访问接口" class="headerlink" title="文档的访问接口"></a>文档的访问接口</h1><ul>
+<li>插入文档<ul>
+<li>db.foo.insert({“bar”:”baz”})<ul>
+<li>db:datebase      foo:collection</li>
+</ul>
+</li>
+<li>db.foo.batchinsert() 批量插入</li>
+</ul>
+</li>
+<li>查找文档<ul>
+<li>db.blog.find()    [查blog文档集的所有文档]</li>
+<li>Joe=db.people.findOne({“name”:”joe”,”age”:20});  [查people文档集特定属性的文档]</li>
+<li>db.users.find({},{“username”:1,”email”:1})   [只返回users文档的username,email这两个属性、前面的空括号表明不限定如何查询条件，如果这里去掉后面两个属性就变成查询条件了]</li>
+<li>db.users.find({“age”:{“$gte”:18,”$lte”:30}})  【查年龄在18~30的用户文档】</li>
+<li>db.raffle.find({“ticket_no”}:{“$in”} :{ [725,542,390]}})</li>
+</ul>
+</li>
+<li>删除文档<ul>
+<li>db.foo.remove()</li>
+<li>db.mailing.list.remove({“opt-out”:true})</li>
+</ul>
+</li>
+<li>更新文档<ul>
+<li>db.users.update({“_id” : ObjectId(“28h32j223e92e”)},…{“$set” :  {“favorite book” : “War and Peace”}})     【$set指置换】</li>
+<li>db.games.update({“game” : “pinball”, “user” : “joe”},…{“$inc” : {“score” : 50}})</li>
+</ul>
+</li>
+</ul>
+<h1 id="文档模型的设计思想"><a href="#文档模型的设计思想" class="headerlink" title="文档模型的设计思想"></a>文档模型的设计思想</h1><ul>
+<li>优点：每个元素都被视为对象（储存为json格式）</li>
+</ul>
+<h1 id="存储器件"><a href="#存储器件" class="headerlink" title="存储器件"></a>存储器件</h1><ul>
+<li><p>数据处理性能的宗旨</p>
+<ul>
+<li>提高数据访问的局部性：</li>
+<li>对磁盘/闪存而言<ul>
+<li>减少I/O的次数；</li>
+<li>变随机访问为顺序访问。</li>
+</ul>
+</li>
+<li>对内存而言<ul>
+<li>增加Cache的命中率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>数据库的基本存储架构</p>
+<ul>
+<li>以页为单位存放数据。每一页为512bytes的整数倍，4KB到4MB。</li>
+</ul>
+</li>
+</ul>
+<h1 id="索引："><a href="#索引：" class="headerlink" title="索引："></a>索引：</h1><ul>
+<li>对于非聚集索引，有些查询甚至可以不访问数据页。</li>
+<li><p>聚集索引可以避免数据插入操作集中于表的最后一个数据页。</p>
+</li>
+<li><p>当然，众所周知，虽然索引可以提高查询速度，但是它们也会导致数据库系统更新数据的性能下降，因为大部分数据更新需要同时更新索引。</p>
+</li>
+<li><p>参考 <a href="https://www.cnblogs.com/ccsccs/articles/4243644.html" target="_blank" rel="noopener">https://www.cnblogs.com/ccsccs/articles/4243644.html</a></p>
+</li>
+</ul>
+<h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B-Tree"></a>B-Tree</h2><h3 id="B-Tree的平衡性"><a href="#B-Tree的平衡性" class="headerlink" title="B-Tree的平衡性"></a>B-Tree的平衡性</h3><ul>
+<li>每个节点的大小固定（e.g. 4KB或8KB），因此最多只能容纳n个键和n+1个指针。</li>
+</ul>
+<h3 id="什么决定B-Tree的效率？"><a href="#什么决定B-Tree的效率？" class="headerlink" title="什么决定B-Tree的效率？"></a>什么决定B-Tree的效率？</h3><ul>
+<li>树的高度决定查询需要I/O次数。</li>
+<li>对于同样规模的数据，n越大树的高度越低。</li>
+<li>为了提高B-Tree的效率，我们需要增加n，即增加每个节点容纳键和指针的数量。<ul>
+<li>用简短的数据类型定义键的属性，e.g. smallint.</li>
+<li>对B-Tree进行压缩。</li>
+</ul>
+</li>
+</ul>
 
-b. 文档集(collection)
-    i. 文档的集合（一个文档集可以视为一类对象）
-
-c. 数据库(database)
-    i. 若干个文档集构成一个数据库
-    ii. 部署在一个服务器上，【一般】一个数据库对应一个应用
-</code></pre><h2 id="文档的访问接口"><a href="#文档的访问接口" class="headerlink" title="文档的访问接口"></a>文档的访问接口</h2><pre><code>a. 插入文档
-    i. db.foo.insert({&quot;bar&quot;:&quot;baz&quot;})
-        1) db:datebase      foo:collection
-    ii. db.foo.batchinsert() 批量插入
-b. 查找文档
-    i. db.blog.find()    [查blog文档集的所有文档]
-    ii. Joe=db.people.findOne({&quot;name&quot;:&quot;joe&quot;,&quot;age&quot;:20});  [查people文档集特定属性的文档]
-    iii. db.users.find({},{&quot;username&quot;:1,&quot;email&quot;:1})   [只返回users文档的username,email这两个属性、前面的空括号表明不限定如何查询条件，如果这里去掉后面两个属性就变成查询条件了]
-    iv. db.users.find({&quot;age&quot;:{&quot;$gte&quot;:18,&quot;$lte&quot;:30}})  【查年龄在18~30的用户文档】
-    v. db.raffle.find({&quot;ticket_no&quot;}:{&quot;$in&quot;} :{ [725,542,390]}})
-c. 删除文档
-    i. db.foo.remove()
-    ii. db.mailing.list.remove({&quot;opt-out&quot;:true})
-
-d. 更新文档
-    i. db.users.update({&quot;_id&quot; : ObjectId(&quot;28h32j223e92e&quot;)},…{&quot;$set&quot; :  {&quot;favorite book&quot; : &quot;War and Peace&quot;}})     【$set指置换】
-    ii. db.games.update({&quot;game&quot; : &quot;pinball&quot;, &quot;user&quot; : &quot;joe&quot;},…{&quot;$inc&quot; : {&quot;score&quot; : 50}})
-</code></pre><p>##文档模型的设计思想<br>        a. 优点：每个元素都被视为对象（储存为json格式）</p>
-<h2 id="存储器件"><a href="#存储器件" class="headerlink" title="存储器件"></a>存储器件</h2><pre><code>3. 数据处理性能的宗旨
-    a. 提高数据访问的局部性：
-        i. 对磁盘/闪存而言
-            1) 减少I/O的次数；
-            2) 变随机访问为顺序访问。
-        ii. 对内存而言
-            1) 增加Cache的命中率
-4. 数据库的基本存储架构
-    a. 以页为单位存放数据。每一页为512bytes的整数倍，4KB到4MB。
-</code></pre><h3 id="索引："><a href="#索引：" class="headerlink" title="索引："></a>索引：</h3><pre><code>    a. 对于非聚集索引，有些查询甚至可以不访问数据页。
-    b. 聚集索引可以避免数据插入操作集中于表的最后一个数据页。
-
-当然，众所周知，虽然索引可以提高查询速度，但是它们也会导致数据库系统更新数据的性能下降，因为大部分数据更新需要同时更新索引。
-</code></pre><p>参考 <a href="https://www.cnblogs.com/ccsccs/articles/4243644.html" target="_blank" rel="noopener">https://www.cnblogs.com/ccsccs/articles/4243644.html</a></p>
-<pre><code>B-Tree
-    a. B-Tree的平衡性
-        i. 每个节点的大小固定（e.g. 4KB或8KB），因此最多只能容纳n个键和n+1个指针。
-
-    b. 什么决定B-Tree的效率？
-        i. 树的高度决定查询需要I/O次数。
-        ii. 对于同样规模的数据，n越大树的高度越低。
-        iii. 为了提高B-Tree的效率，我们需要增加n，即增加每个节点容纳键和指针的数量。
-            1) 用简短的数据类型定义键的属性，e.g. smallint.
-            2) 对B-Tree进行压缩。
-</code></pre>
       
     </div>
     
@@ -473,8 +522,8 @@ d. 更新文档
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/12/Spark-实现kmeans算法/" rel="next" title="Spark 实现kmeans算法">
-                <i class="fa fa-chevron-left"></i> Spark 实现kmeans算法
+              <a href="/2018/11/12/关系模型/" rel="next" title="关系模型.md">
+                <i class="fa fa-chevron-left"></i> 关系模型.md
               </a>
             
           </div>
@@ -483,8 +532,8 @@ d. 更新文档
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/12/Spark之join操作/" rel="prev" title="Spark之join操作">
-                Spark之join操作 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/12/数据模型/" rel="prev" title="数据模型">
+                数据模型 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -564,7 +613,7 @@ d. 更新文档
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -575,7 +624,7 @@ d. 更新文档
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -626,7 +675,7 @@ d. 更新文档
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文档型数据库"><span class="nav-number">1.</span> <span class="nav-text">文档型数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础概念："><span class="nav-number">1.2.</span> <span class="nav-text">基础概念：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文档的访问接口"><span class="nav-number">1.3.</span> <span class="nav-text">文档的访问接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储器件"><span class="nav-number">1.4.</span> <span class="nav-text">存储器件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#索引："><span class="nav-number">1.4.1.</span> <span class="nav-text">索引：</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础概念："><span class="nav-number">2.</span> <span class="nav-text">基础概念：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文档的访问接口"><span class="nav-number">3.</span> <span class="nav-text">文档的访问接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文档模型的设计思想"><span class="nav-number">4.</span> <span class="nav-text">文档模型的设计思想</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#存储器件"><span class="nav-number">5.</span> <span class="nav-text">存储器件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引："><span class="nav-number">6.</span> <span class="nav-text">索引：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Tree"><span class="nav-number">6.1.</span> <span class="nav-text">B-Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#B-Tree的平衡性"><span class="nav-number">6.1.1.</span> <span class="nav-text">B-Tree的平衡性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么决定B-Tree的效率？"><span class="nav-number">6.1.2.</span> <span class="nav-text">什么决定B-Tree的效率？</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

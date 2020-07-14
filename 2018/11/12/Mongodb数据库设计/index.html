@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="概念- Mongodb是以面向对象存储的 ， 做Obj&amp;lt;---&amp;gt;Doc之间的转换，一般用Java去实践 - ORM工具：Obj Relation Mapping 数据库设计- 数据库设计     ○ 什么样的数据存在里面     ○ 数据怎么样存在里面（组织形式） &amp;amp; 应用如何去访问数据库 - 数据库设计的基本步骤     ○ 需求设计（软件的功能是什么）         §">
+<meta name="description" content="概念 Mongodb是以面向对象存储的 ， 做ObjDoc之间的转换，一般用Java去实践 ORM工具：Obj Relation Mapping    数据库设计 数据库设计  ○ 什么样的数据存在里面  ○ 数据怎么样存在里面（组织形式） &amp;amp; 应用如何去访问数据库 数据库设计的基本步骤  ○ 需求设计（软件的功能是什么）： 了解用户需求，确定软件的基本功能  ○ 概念结构设计（存什么）：">
 <meta name="keywords" content="数据管理系统笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mongodb数据库设计">
 <meta property="og:url" content="https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="概念- Mongodb是以面向对象存储的 ， 做Obj&amp;lt;---&amp;gt;Doc之间的转换，一般用Java去实践 - ORM工具：Obj Relation Mapping 数据库设计- 数据库设计     ○ 什么样的数据存在里面     ○ 数据怎么样存在里面（组织形式） &amp;amp; 应用如何去访问数据库 - 数据库设计的基本步骤     ○ 需求设计（软件的功能是什么）         §">
+<meta property="og:description" content="概念 Mongodb是以面向对象存储的 ， 做ObjDoc之间的转换，一般用Java去实践 ORM工具：Obj Relation Mapping    数据库设计 数据库设计  ○ 什么样的数据存在里面  ○ 数据怎么样存在里面（组织形式） &amp;amp; 应用如何去访问数据库 数据库设计的基本步骤  ○ 需求设计（软件的功能是什么）： 了解用户需求，确定软件的基本功能  ○ 概念结构设计（存什么）：">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-05T12:44:20.734Z">
+<meta property="og:updated_time" content="2020-07-14T01:34:12.013Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mongodb数据库设计">
-<meta name="twitter:description" content="概念- Mongodb是以面向对象存储的 ， 做Obj&amp;lt;---&amp;gt;Doc之间的转换，一般用Java去实践 - ORM工具：Obj Relation Mapping 数据库设计- 数据库设计     ○ 什么样的数据存在里面     ○ 数据怎么样存在里面（组织形式） &amp;amp; 应用如何去访问数据库 - 数据库设计的基本步骤     ○ 需求设计（软件的功能是什么）         §">
+<meta name="twitter:description" content="概念 Mongodb是以面向对象存储的 ， 做ObjDoc之间的转换，一般用Java去实践 ORM工具：Obj Relation Mapping    数据库设计 数据库设计  ○ 什么样的数据存在里面  ○ 数据怎么样存在里面（组织形式） &amp;amp; 应用如何去访问数据库 数据库设计的基本步骤  ○ 需求设计（软件的功能是什么）： 了解用户需求，确定软件的基本功能  ○ 概念结构设计（存什么）：">
 
 
 
@@ -363,44 +363,38 @@
       
 
       
-        <h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><pre><code>- Mongodb是以面向对象存储的 ， 做Obj&lt;---&gt;Doc之间的转换，一般用Java去实践
-- ORM工具：Obj Relation Mapping
-</code></pre><h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><pre><code>- 数据库设计
-    ○ 什么样的数据存在里面
-    ○ 数据怎么样存在里面（组织形式） &amp; 应用如何去访问数据库
-- 数据库设计的基本步骤
-    ○ 需求设计（软件的功能是什么）
-        § 了解用户需求，确定软件的基本功能
-    ○ 概念结构设计（存什么）
-        § 确定数据库需要记录哪些对象
-    ○ 逻辑结构设计设计（抽象怎么存）
-        § 确定对象之间的关系以及文档结构。
-    ○ 物理结构设计 （代码的实现）
-        § 确定数据的存储方式、索引的使用、系统配置等等
-    ○ 数据库实施
-        § 安装数据库管理系统、创建数据、调试、运行。
-    ○ 数据库运行和维护
-        根据需求的扩展与变化，对以上结果进行调整和变更
-</code></pre><h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><pre><code>MVC  (model  -- view -- controller)
-</code></pre><h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><pre><code>1. 对象的确定
-    ○ 软件功能涉及到的概念
-        § 博客：用户、文章、评论、粉丝
-        § 网上书店：图书、用户、购物车、订单、评论
-    ○ 软件开发过程中出现的持久化需求
-        § Java开发中遇到需要序列化的对象
-        § MVC中Model的构建
+        <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ul>
+<li>Mongodb是以面向对象存储的 ， 做Obj<--->Doc之间的转换，一般用Java去实践<ul>
+<li>ORM工具：Obj Relation Mapping</li>
+</ul>
+</---></li>
+</ul>
+<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h1><ul>
+<li>数据库设计<br>  ○ 什么样的数据存在里面<br>  ○ 数据怎么样存在里面（组织形式） &amp; 应用如何去访问数据库</li>
+<li>数据库设计的基本步骤<br>  ○ 需求设计（软件的功能是什么）： 了解用户需求，确定软件的基本功能<br>  ○ 概念结构设计（存什么）： 确定数据库需要记录哪些对象<br>  ○ 逻辑结构设计设计（抽象怎么存）：确定对象之间的关系以及文档结构。<br>  ○ 物理结构设计 （代码的实现）：确定数据的存储方式、索引的使用、系统配置等等<br>  ○ 数据库实施：安装数据库管理系统、创建数据、调试、运行。<br>  ○ 数据库运行和维护：根据需求的扩展与变化，对以上结果进行调整和变更</li>
+</ul>
+<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><ul>
+<li>MVC  (model  – view – controller)</li>
+</ul>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><h1 id="对象的确定"><a href="#对象的确定" class="headerlink" title="对象的确定"></a>对象的确定</h1><p>○ 软件功能涉及到的概念</p>
+<ul>
+<li>博客：用户、文章、评论、粉丝</li>
+<li>网上书店：图书、用户、购物车、订单、评论</li>
+</ul>
+<p>○ 软件开发过程中出现的持久化需求</p>
+<ul>
+<li>Java开发中遇到需要序列化的对象</li>
+<li>MVC中Model的构建</li>
+</ul>
+<h1 id="对象之间的关系-Cardiality"><a href="#对象之间的关系-Cardiality" class="headerlink" title="对象之间的关系(Cardiality)"></a>对象之间的关系(Cardiality)</h1><p>○ 1：1     ——   企业与CEO  、 配偶关系<br>○ 1：M    ——  博客与评论、国家与城市<br>○ M:N      ——  书与作者、用户与粉丝</p>
+<h1 id="拇指法则"><a href="#拇指法则" class="headerlink" title="拇指法则"></a>拇指法则</h1><ul>
+<li>赞成嵌入，除非有一个令人信服的理由不这样做。</li>
+<li>需要访问一个对象本身是一个令人信服的理由不嵌入它。<br>数组不应该无限制地增长。如果在“多”方面有超过几百个文档，不要嵌入它们;如果“多”方面有几千个文档，不要使用ObjectID引用数组。高基数数组是不嵌入的一个令人信服的理由。</li>
+<li>不要害怕应用程序级连接:如果正确索引并使用了投影说明符，那么应用程序级连接的开销几乎不比关系数据库中的服务器端连接高。</li>
+<li>在反规范化时考虑写/读比。一个通常会被读取但很少被更新的字段是反规范化的一个很好的候选:如果你对一个经常更新的字段进行反规范化，那么查找和更新所有实例的额外工作很可能会超过你从反规范化中获得的节省。</li>
+<li>与MongoDB一样，如何建模数据完全取决于特定应用程序的数据访问模式。您希望构造数据，以匹配应用程序查询和更新数据的方式。</li>
+</ul>
 
-2. 对象之间的关系(Cardiality)
-    ○ 1：1     ——   企业与CEO  、 配偶关系
-    ○ 1：M    ——  博客与评论、国家与城市
-    ○ M:N      ——  书与作者、用户与粉丝
-</code></pre><h2 id="拇指法则"><a href="#拇指法则" class="headerlink" title="拇指法则"></a>拇指法则</h2><pre><code>赞成嵌入，除非有一个令人信服的理由不这样做。
-需要访问一个对象本身是一个令人信服的理由不嵌入它。
-数组不应该无限制地增长。如果在“多”方面有超过几百个文档，不要嵌入它们;如果“多”方面有几千个文档，不要使用ObjectID引用数组。高基数数组是不嵌入的一个令人信服的理由。
-不要害怕应用程序级连接:如果正确索引并使用了投影说明符，那么应用程序级连接的开销几乎不比关系数据库中的服务器端连接高。
-在反规范化时考虑写/读比。一个通常会被读取但很少被更新的字段是反规范化的一个很好的候选:如果你对一个经常更新的字段进行反规范化，那么查找和更新所有实例的额外工作很可能会超过你从反规范化中获得的节省。
-与MongoDB一样，如何建模数据完全取决于特定应用程序的数据访问模式。您希望构造数据，以匹配应用程序查询和更新数据的方式。
-</code></pre>
       
     </div>
     
@@ -543,7 +537,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -554,7 +548,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -605,7 +599,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库设计"><span class="nav-number">2.</span> <span class="nav-text">数据库设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC"><span class="nav-number">3.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象"><span class="nav-number">4.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拇指法则"><span class="nav-number">5.</span> <span class="nav-text">拇指法则</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库设计"><span class="nav-number">2.</span> <span class="nav-text">数据库设计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVC"><span class="nav-number">3.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象"><span class="nav-number">4.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象的确定"><span class="nav-number">5.</span> <span class="nav-text">对象的确定</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象之间的关系-Cardiality"><span class="nav-number">6.</span> <span class="nav-text">对象之间的关系(Cardiality)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拇指法则"><span class="nav-number">7.</span> <span class="nav-text">拇指法则</span></a></li></ol></div>
             
 
           </div>

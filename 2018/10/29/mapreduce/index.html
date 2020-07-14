@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="MapReduce处理系统简介 MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明 使用MPI这样非常成熟的并行计算框架，为什么还需要MapReduce?![Sample Pic][mapreduce1] Hadoop简介  hadoop为用">
+<meta name="description" content="简介 MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明 使用MPI这样非常成熟的并行计算框架，为什么还需要MapReduce?![Sample Pic][mapreduce1] Hadoop简介  hadoop为用户提供了系统底层细节透明的">
 <meta name="keywords" content="个人博客">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MapReduce处理系统">
 <meta property="og:url" content="https://luyiqu.github.io/2018/10/29/mapreduce/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="MapReduce处理系统简介 MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明 使用MPI这样非常成熟的并行计算框架，为什么还需要MapReduce?![Sample Pic][mapreduce1] Hadoop简介  hadoop为用">
+<meta property="og:description" content="简介 MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明 使用MPI这样非常成熟的并行计算框架，为什么还需要MapReduce?![Sample Pic][mapreduce1] Hadoop简介  hadoop为用户提供了系统底层细节透明的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-06T04:42:40.043Z">
+<meta property="og:updated_time" content="2020-07-14T01:26:04.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MapReduce处理系统">
-<meta name="twitter:description" content="MapReduce处理系统简介 MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明 使用MPI这样非常成熟的并行计算框架，为什么还需要MapReduce?![Sample Pic][mapreduce1] Hadoop简介  hadoop为用">
+<meta name="twitter:description" content="简介 MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明 使用MPI这样非常成熟的并行计算框架，为什么还需要MapReduce?![Sample Pic][mapreduce1] Hadoop简介  hadoop为用户提供了系统底层细节透明的">
 
 
 
@@ -363,7 +363,7 @@
       
 
       
-        <h2 id="MapReduce处理系统"><a href="#MapReduce处理系统" class="headerlink" title="MapReduce处理系统"></a>MapReduce处理系统</h2><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ul>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><ul>
 <li>MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明MPI （Message Passing Interface)编程简介：消息传递接口，包括协议和语义说明</li>
 <li>使用MPI这样非常成熟的并行计算框架，为什么还需要MapReduce?<br>![Sample Pic][mapreduce1]</li>
 <li><p>Hadoop简介</p>
@@ -419,7 +419,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="MapReduce工作流程"><a href="#MapReduce工作流程" class="headerlink" title="MapReduce工作流程"></a>MapReduce工作流程</h2><ul>
+<h1 id="MapReduce工作流程"><a href="#MapReduce工作流程" class="headerlink" title="MapReduce工作流程"></a>MapReduce工作流程</h1><ul>
 <li>注意点：<ul>
 <li>不同的Map任务之间不会进行通信<ul>
 <li>不同的Reduce任务之间也不会发生任何信息交换</li>
@@ -444,9 +444,12 @@
 <li>InputFormat：定义了怎样与物理存储（HDFS block) 之间的映射，理想的分区大小是一个HDFS块,会做Map前的预处理，比如验证输入的格式是否符合输入定义。    </li>
 </ul>
 </li>
-<li>Map <ul>
-<li>Map任务的数量：</li>
-<li>Hadoop 为每个split创建一个Map任务。由split的多少决定的map任务的数目。</li>
+<li><p>Map </p>
+<ul>
+<li><p>Map任务的数量：</p>
+</li>
+<li><p>Hadoop 为每个split创建一个Map任务。由split的多少决定的map任务的数目。</p>
+</li>
 </ul>
 </li>
 <li>Shuffle<ul>
@@ -535,7 +538,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="容错机制"><a href="#容错机制" class="headerlink" title="容错机制"></a>容错机制</h2><ul>
+<h1 id="容错机制"><a href="#容错机制" class="headerlink" title="容错机制"></a>容错机制</h1><ul>
 <li><p>MapReduce 运行失败</p>
 <ul>
 <li><p>机器故障：</p>
@@ -568,15 +571,19 @@
 </li>
 </ul>
 </li>
-<li>Hadoop的应用现状<br>![Sample Pic][mapreduce10]    </li>
+<li><p>Hadoop的应用现状<br>![Sample Pic][mapreduce10]    </p>
+<p>​        </p>
+<h1 id="书上知识点"><a href="#书上知识点" class="headerlink" title="书上知识点"></a>书上知识点</h1><ol>
+<li>在一个集群中，只要有可能，MapReduce框架就会将Map程序就近地在HDFS数据所在的节点运行，即将计算节点和存储节点放在一起运行，从而减少了节点间的数据移动开销。<br>2.Reduce函数的任务就是将输入的一系列具有相同键的键值对以某种方式组合起来，输出处理后的键值对，输出结果会合并成一个文件</li>
+<li>Map任务的输入文件、Reduce任务的处理结果都是保存在HDFS中的，而Map任务处理得到的中间结果则保存在本地存储中（如磁盘）。</li>
+<li>只有当Map处理全部结束后，Reduce过程才能开始；只有Map需要考虑数据局部性，实现“计算向数据靠拢”，而Reduce则无需考虑数据局部性</li>
+</ol>
+</li>
 </ul>
 </li>
 </ul>
-<h2 id="书上知识点"><a href="#书上知识点" class="headerlink" title="书上知识点"></a>书上知识点</h2><pre><code>- 在一个集群中，只要有可能，MapReduce框架就会将Map程序就近地在HDFS数据所在的节点运行，即将计算节点和存储节点放在一起运行，从而减少了节点间的数据移动开销。
-- Reduce函数的任务就是将输入的一系列具有相同键的键值对以某种方式组合起来，输出处理后的键值对，输出结果会合并成一个文件
-- Map任务的输入文件、Reduce任务的处理结果都是保存在HDFS中的，而Map任务处理得到的中间结果则保存在本地存储中（如磁盘）。
-- 只有当Map处理全部结束后，Reduce过程才能开始；只有Map需要考虑数据局部性，实现“计算向数据靠拢”，而Reduce则无需考虑数据局部性
-</code></pre>
+<p>​        </p>
+
       
     </div>
     
@@ -628,8 +635,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/29/xgboost/" rel="prev" title="xgboost">
-                xgboost <i class="fa fa-chevron-right"></i>
+              <a href="/2018/11/07/Spark-处理系统/" rel="prev" title="Spark-处理系统">
+                Spark-处理系统 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -709,7 +716,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -720,7 +727,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -771,7 +778,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce处理系统"><span class="nav-number">1.</span> <span class="nav-text">MapReduce处理系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">2.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce工作流程"><span class="nav-number">3.</span> <span class="nav-text">MapReduce工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容错机制"><span class="nav-number">4.</span> <span class="nav-text">容错机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#书上知识点"><span class="nav-number">5.</span> <span class="nav-text">书上知识点</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MapReduce工作流程"><span class="nav-number">2.</span> <span class="nav-text">MapReduce工作流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容错机制"><span class="nav-number">3.</span> <span class="nav-text">容错机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#书上知识点"><span class="nav-number">4.</span> <span class="nav-text">书上知识点</span></a></li></ol></div>
             
 
           </div>

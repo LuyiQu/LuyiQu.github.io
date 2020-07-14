@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="分布式模型与编程,">
+  <meta name="keywords" content="分布式模型与编程 - Java,">
 
 
 
@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="序列化与压缩1. 序列化的基本概念 2. 数据压缩的原理  3. 序列化与压缩     a. 序列化的意义：         i. 编写程序写文件A，另一个程序读取文件A         ii. 进程通信时传输的数据             1) 基本数据类型实例：int，long，double等数值             2) 用户自定义类的实例：对象         iii. 如何完成进程间">
-<meta name="keywords" content="分布式模型与编程">
+<meta name="description" content="#  数据压缩的原理压缩： 通过一些有别于原始编码的特殊编码方式来保存数据，使数据占用的存储空间比较小 压缩可以减少网络传输时间，但是压缩和解压缩需要时间  解压缩： 将被压缩的数据从特殊编码方式还原为原始数据的过程 解压需要时间 压缩算法的评价 时间：压缩速度、解压速度 空间： 压缩比 = 压缩后所占空间/压缩前所占空间 故 压缩时间要短、空间占比要小    序列化与压缩序列化的意义： 编写程序">
+<meta name="keywords" content="分布式模型与编程 - Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="序列化与压缩">
 <meta property="og:url" content="https://luyiqu.github.io/2020/05/06/序列化与压缩/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="序列化与压缩1. 序列化的基本概念 2. 数据压缩的原理  3. 序列化与压缩     a. 序列化的意义：         i. 编写程序写文件A，另一个程序读取文件A         ii. 进程通信时传输的数据             1) 基本数据类型实例：int，long，double等数值             2) 用户自定义类的实例：对象         iii. 如何完成进程间">
+<meta property="og:description" content="#  数据压缩的原理压缩： 通过一些有别于原始编码的特殊编码方式来保存数据，使数据占用的存储空间比较小 压缩可以减少网络传输时间，但是压缩和解压缩需要时间  解压缩： 将被压缩的数据从特殊编码方式还原为原始数据的过程 解压需要时间 压缩算法的评价 时间：压缩速度、解压速度 空间： 压缩比 = 压缩后所占空间/压缩前所占空间 故 压缩时间要短、空间占比要小    序列化与压缩序列化的意义： 编写程序">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-06T04:09:45.527Z">
+<meta property="og:updated_time" content="2020-07-14T01:57:42.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="序列化与压缩">
-<meta name="twitter:description" content="序列化与压缩1. 序列化的基本概念 2. 数据压缩的原理  3. 序列化与压缩     a. 序列化的意义：         i. 编写程序写文件A，另一个程序读取文件A         ii. 进程通信时传输的数据             1) 基本数据类型实例：int，long，double等数值             2) 用户自定义类的实例：对象         iii. 如何完成进程间">
+<meta name="twitter:description" content="#  数据压缩的原理压缩： 通过一些有别于原始编码的特殊编码方式来保存数据，使数据占用的存储空间比较小 压缩可以减少网络传输时间，但是压缩和解压缩需要时间  解压缩： 将被压缩的数据从特殊编码方式还原为原始数据的过程 解压需要时间 压缩算法的评价 时间：压缩速度、解压速度 空间： 压缩比 = 压缩后所占空间/压缩前所占空间 故 压缩时间要短、空间占比要小    序列化与压缩序列化的意义： 编写程序">
 
 
 
@@ -363,39 +363,44 @@
       
 
       
-        <h2 id="序列化与压缩"><a href="#序列化与压缩" class="headerlink" title="序列化与压缩"></a>序列化与压缩</h2><pre><code>1. 序列化的基本概念
-2. 数据压缩的原理
+        <p># </p>
+<h1 id="数据压缩的原理"><a href="#数据压缩的原理" class="headerlink" title="数据压缩的原理"></a>数据压缩的原理</h1><h2 id="压缩："><a href="#压缩：" class="headerlink" title="压缩："></a>压缩：</h2><ul>
+<li>通过一些有别于原始编码的特殊编码方式来保存数据，使数据占用的存储空间比较小</li>
+<li>压缩可以减少网络传输时间，但是压缩和解压缩需要时间</li>
+</ul>
+<h2 id="解压缩："><a href="#解压缩：" class="headerlink" title="解压缩："></a>解压缩：</h2><ul>
+<li>将被压缩的数据从特殊编码方式还原为原始数据的过程</li>
+<li>解压需要时间</li>
+<li>压缩算法的评价<ul>
+<li>时间：压缩速度、解压速度</li>
+<li>空间： 压缩比 = 压缩后所占空间/压缩前所占空间</li>
+<li>故 压缩时间要短、空间占比要小</li>
+</ul>
+</li>
+</ul>
+<h1 id="序列化与压缩"><a href="#序列化与压缩" class="headerlink" title="序列化与压缩"></a>序列化与压缩</h1><h2 id="序列化的意义："><a href="#序列化的意义：" class="headerlink" title="序列化的意义："></a>序列化的意义：</h2><ul>
+<li>编写程序写文件A，另一个程序读取文件A</li>
+<li>进程通信时传输的数据<ul>
+<li>基本数据类型实例：int，long，double等数值</li>
+<li>用户自定义类的实例：对象</li>
+</ul>
+</li>
+<li>如何完成进程间的对象传送？<ul>
+<li>C c = new C(x,x,x)；是在另外一个进程，调用class c 吗</li>
+<li>然后class c是作为进程通信时传输的数据，进行序列化传到C c 所在的进程？</li>
+</ul>
+</li>
+</ul>
+<h2 id="定义："><a href="#定义：" class="headerlink" title="定义："></a>定义：</h2><ul>
+<li>序列化：把对象状态按照一定的格式转换成有序字节流，以便在网络上传输或者保存在本地文件中 </li>
+<li>反序列化：从文件中或网络上获得序列化后的对象字节流后，根据字节流中所保存的对象状态及描述信息，重建对象</li>
+</ul>
+<h2 id="序列化："><a href="#序列化：" class="headerlink" title="序列化："></a>序列化：</h2><ul>
+<li>数据需要序列化以后才能在服务端和客户端之间传输。</li>
+<li>这个服务端和客户端的概念是广义的，可以在网络上，也可以在同一台机器的不同进程中，甚至在同一个进程中进行通信。</li>
+<li>序列化协议：JSON、XML、Thrift、Protobuf…</li>
+</ul>
 
-3. 序列化与压缩
-    a. 序列化的意义：
-        i. 编写程序写文件A，另一个程序读取文件A
-        ii. 进程通信时传输的数据
-            1) 基本数据类型实例：int，long，double等数值
-            2) 用户自定义类的实例：对象
-        iii. 如何完成进程间的对象传送？
-            1) 
-                a) C c = new C(x,x,x)；是在另外一个进程，调用class c 吗
-                b) 然后class c是作为进程通信时传输的数据，进行序列化传到C c 所在的进程？
-
-    b. 定义：
-        i. 序列化：把对象状态按照一定的格式转换成有序字节流，以便在网络上传输或者保存在本地文件中 
-        ii. 反序列化：从文件中或网络上获得序列化后的对象字节流后，根据字节流中所保存的对象状态及描述信息，重建对象
-
-    c. 序列化：
-        i. 数据需要序列化以后才能在服务端和客户端之间传输。
-        ii. 这个服务端和客户端的概念是广义的，可以在网络上，也可以在同一台机器的不同进程中，甚至在同一个进程中进行通信。
-        iii. 序列化协议：JSON、XML、Thrift、Protobuf…
-
-
-    a. 压缩：通过一些有别于原始编码的特殊编码方式来保存数据，使数据占用的存储空间比较小
-        i. 压缩可以减少网络传输时间，但是压缩和解压缩需要时间
-    b. 解压缩：将被压缩的数据从特殊编码方式还原为原始数据的过程
-        i. 解压需要时间
-    c. 压缩算法的评价
-        i. 时间：压缩速度、解压速度
-        ii. 空间： 压缩比 = 压缩后所占空间/压缩前所占空间
-        iii. 故 压缩时间要短、空间占比要小
-</code></pre>
       
     </div>
     
@@ -434,7 +439,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/分布式模型与编程/" rel="tag"># 分布式模型与编程</a>
+            <a href="/tags/分布式模型与编程-Java/" rel="tag"># 分布式模型与编程 - Java</a>
           
         </div>
       
@@ -538,7 +543,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -549,7 +554,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -600,7 +605,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化与压缩"><span class="nav-number">1.</span> <span class="nav-text">序列化与压缩</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据压缩的原理"><span class="nav-number">1.</span> <span class="nav-text">数据压缩的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩："><span class="nav-number">1.1.</span> <span class="nav-text">压缩：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解压缩："><span class="nav-number">1.2.</span> <span class="nav-text">解压缩：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#序列化与压缩"><span class="nav-number">2.</span> <span class="nav-text">序列化与压缩</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化的意义："><span class="nav-number">2.1.</span> <span class="nav-text">序列化的意义：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义："><span class="nav-number">2.2.</span> <span class="nav-text">定义：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化："><span class="nav-number">2.3.</span> <span class="nav-text">序列化：</span></a></li></ol></li></ol></div>
             
 
           </div>

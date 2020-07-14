@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta name="description" content="#  好系统的标准 功能通用、完善 满足尽量多应用的需求   实现细节对应用透明 应用开发独立于系统实现    数据模型定义 数据的逻辑组织方式（数据的基本结构和结构的语义）  文档模型（Mongodb   2000s) 层次模型（IBM IMS   1960s) 网状模型（GE IDS 1960s） 关系模型（SQL DB 1970s~80s)   注：数据模型—决定—&amp;gt; 数据的访问方式">
 <meta name="keywords" content="数据管理系统笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据模型">
 <meta property="og:url" content="https://luyiqu.github.io/2018/11/12/数据模型/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta property="og:description" content="#  好系统的标准 功能通用、完善 满足尽量多应用的需求   实现细节对应用透明 应用开发独立于系统实现    数据模型定义 数据的逻辑组织方式（数据的基本结构和结构的语义）  文档模型（Mongodb   2000s) 层次模型（IBM IMS   1960s) 网状模型（GE IDS 1960s） 关系模型（SQL DB 1970s~80s)   注：数据模型—决定—&amp;gt; 数据的访问方式">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-05T12:33:13.888Z">
+<meta property="og:updated_time" content="2020-07-14T02:01:58.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据模型">
-<meta name="twitter:description" content="数据模型好系统的标准○ 功能通用、完善     § 满足尽量多应用的需求 ○ 实现细节对应用透明     § 应用开发独立于系统实现 数据模型定义    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）     a. 文档模型（Mongodb   2000s)     b. 层次模型（IBM IMS   1960s)     c. 网状模型（GE IDS 1960s）     d. 关系模型">
+<meta name="twitter:description" content="#  好系统的标准 功能通用、完善 满足尽量多应用的需求   实现细节对应用透明 应用开发独立于系统实现    数据模型定义 数据的逻辑组织方式（数据的基本结构和结构的语义）  文档模型（Mongodb   2000s) 层次模型（IBM IMS   1960s) 网状模型（GE IDS 1960s） 关系模型（SQL DB 1970s~80s)   注：数据模型—决定—&amp;gt; 数据的访问方式">
 
 
 
@@ -363,63 +363,100 @@
       
 
       
-        <h1 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h1><h2 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h2><pre><code>○ 功能通用、完善
-    § 满足尽量多应用的需求
-○ 实现细节对应用透明
-    § 应用开发独立于系统实现
-</code></pre><h2 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h2><pre><code>    定义：数据的逻辑组织方式（数据的基本结构和结构的语义）
-    a. 文档模型（Mongodb   2000s)
-    b. 层次模型（IBM IMS   1960s)
-    c. 网状模型（GE IDS 1960s）
-    d. 关系模型（SQL DB 1970s~80s)
+        <p># </p>
+<h1 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h1><ul>
+<li>功能通用、完善<ul>
+<li>满足尽量多应用的需求</li>
+</ul>
+</li>
+<li>实现细节对应用透明<ul>
+<li>应用开发独立于系统实现</li>
+</ul>
+</li>
+</ul>
+<h1 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h1><ul>
+<li><p>数据的逻辑组织方式（数据的基本结构和结构的语义）</p>
+<ul>
+<li>文档模型（Mongodb   2000s)</li>
+<li>层次模型（IBM IMS   1960s)</li>
+<li>网状模型（GE IDS 1960s）</li>
+<li>关系模型（SQL DB 1970s~80s)</li>
+</ul>
+</li>
+<li><p>注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性</p>
+</li>
+</ul>
+<h1 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h1><ul>
+<li><p>对数据库中数据的结构性描述</p>
+<ul>
+<li>参照schema才能正确书写查询</li>
+</ul>
+</li>
+<li><p>一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Schema</span><br><span class="line">&#123;</span><br><span class="line">	Name:string,</span><br><span class="line">	Manufacturer:string</span><br><span class="line">	Catalog_numver:num</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>Data Model相当于Schema的Metadata，即Meta Metadata<br>注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema</li>
+</ul>
+<h1 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h1><h1 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h1><h2 id="表达能力："><a href="#表达能力：" class="headerlink" title="表达能力："></a>表达能力：</h2><ul>
+<li>数据本身能够表达什么信息？<ul>
+<li>计算机能够理解的信息</li>
+</ul>
+</li>
+<li>查询能够满足哪些信息需求？<pre><code>注： 表达能力越强，查询时返回的值越快越准确
+</code></pre></li>
+</ul>
+<h2 id="表达能力的两个维度"><a href="#表达能力的两个维度" class="headerlink" title="表达能力的两个维度"></a>表达能力的两个维度</h2><ul>
+<li>范围：能够满足哪些信息需求<ul>
+<li>上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）</li>
+</ul>
+</li>
+<li>精简程度：用户描述需求是是否方便<ul>
+<li>Prolog比Java表达更强更精炼，因为Prolog逻辑性强<br>注：数据库系统将查询的语言转换成数据库查找的语言</li>
+</ul>
+</li>
+</ul>
+<h1 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h1><ul>
+<li>Charles Bachman     网状模型     Navigational Database Network Model<pre><code>Edgar F.Codd       关系模型    Relational Database Relation Model
+</code></pre></li>
+<li>70年代末更倾向于关系数据库</li>
+</ul>
+<ul>
+<li><p>网状数据库(Navigational DB)<br>a. 查询通过指针访问</p>
+</li>
+<li><p>Codd坚持的看法</p>
+<ul>
+<li>DBMS应该和应用程序尽可能保持相互独立（模块化）<ul>
+<li>数据的存放顺序与程序无关</li>
+<li>数据的使用与程序无关</li>
+<li>数据的访问方式与程序无关（网状和层次模型违背了这点）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h1><ul>
+<li>提升数据模型的表达能力</li>
+<li>声明是程序设计语言(而不是过程式语言）<ul>
+<li>Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）</li>
+<li>只把需求说出来，不说具体怎么做。</li>
+<li>注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理</li>
+</ul>
+</li>
+</ul>
+<h1 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h1><ul>
+<li>声明式程序一定比过程式的更好吗？<ul>
+<li>并不是</li>
+</ul>
+</li>
+<li>表达能力越高越好吗？<ul>
+<li>不是，度的把握，如单反照相机和傻瓜相机</li>
+</ul>
+</li>
+</ul>
+<p>​<br>​        </p>
 
-注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性
-</code></pre><h2 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h2><pre><code>a. 对数据库中数据的结构性描述
-    i. 参照schema才能正确书写查询
-b. 一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）
-e.g. 
-Schema
-{
-    Name:string,
-    Manufacturer:string
-    Catalog_numver:num
-}
-c. Data Model相当于Schema的Metadata，即Meta Metadata
-注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema
-</code></pre><h2 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h2><h2 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h2><pre><code>a. 表达能力：
-    i. 数据本身能够表达什么信息？
-        1) 计算机能够理解的信息
-    ii. 查询能够满足哪些信息需求？
-注： 表达能力越强，查询时返回的值越快越准确
-
-b. 表达能力的两个维度
-    i. 范围：能够满足哪些信息需求
-        1) 上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）
-    ii. 精简程度：用户描述需求是是否方便
-        1) Prolog比Java表达更强更精炼，因为Prolog逻辑性强
-注：数据库系统将查询的语言转换成数据库查找的语言
-</code></pre><h2 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h2><pre><code>    a. Charles Bachman     网状模型     Navigational Database Network Model
-    Edgar F.Codd       关系模型    Relational Database Relation Model
-    b. 70年代末更倾向于关系数据库
-
-7. 网状数据库(Navigational DB)
-    a. 查询通过指针访问
-8. Codd坚持的看法
-    a. DBMS应该和应用程序尽可能保持相互独立（模块化）
-        i. 数据的存放顺序与程序无关
-        ii. 数据的使用与程序无关
-        iii. 数据的访问方式与程序无关（网状和层次模型违背了这点）
-</code></pre><h2 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h2><pre><code>    a. 提升数据模型的表达能力
-    b. 声明是程序设计语言(而不是过程式语言）
-        i. Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）
-        ii. 只把需求说出来，不说具体怎么做。
-
-注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理
-</code></pre><h2 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h2><pre><code>a. 声明式程序一定比过程式的更好吗？
-    i. 并不是
-b. 表达能力越高越好吗？
-    i. 不是，度的把握，如单反照相机和傻瓜相机
-</code></pre>
       
     </div>
     
@@ -471,8 +508,8 @@ b. 表达能力越高越好吗？
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/12/关系模型/" rel="next" title="关系模型.md">
-                <i class="fa fa-chevron-left"></i> 关系模型.md
+              <a href="/2018/11/12/文档型数据库/" rel="next" title="文档型数据库">
+                <i class="fa fa-chevron-left"></i> 文档型数据库
               </a>
             
           </div>
@@ -562,7 +599,7 @@ b. 表达能力越高越好吗？
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -573,7 +610,7 @@ b. 表达能力越高越好吗？
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -624,7 +661,7 @@ b. 表达能力越高越好吗？
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型"><span class="nav-number">1.</span> <span class="nav-text">数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#好系统的标准"><span class="nav-number">1.1.</span> <span class="nav-text">好系统的标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型定义"><span class="nav-number">1.2.</span> <span class="nav-text">数据模型定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库模式（Schema"><span class="nav-number">1.3.</span> <span class="nav-text">数据库模式（Schema)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型：JSON-BSON"><span class="nav-number">1.4.</span> <span class="nav-text">数据模型：JSON/BSON</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何衡量数据模型的能力？"><span class="nav-number">1.5.</span> <span class="nav-text">如何衡量数据模型的能力？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据模型的论战："><span class="nav-number">1.6.</span> <span class="nav-text">数据模型的论战：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何避免依赖性"><span class="nav-number">1.7.</span> <span class="nav-text">如何避免依赖性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问答："><span class="nav-number">1.8.</span> <span class="nav-text">问答：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#好系统的标准"><span class="nav-number">1.</span> <span class="nav-text">好系统的标准</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型定义"><span class="nav-number">2.</span> <span class="nav-text">数据模型定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库模式（Schema"><span class="nav-number">3.</span> <span class="nav-text">数据库模式（Schema)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型：JSON-BSON"><span class="nav-number">4.</span> <span class="nav-text">数据模型：JSON/BSON</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何衡量数据模型的能力？"><span class="nav-number">5.</span> <span class="nav-text">如何衡量数据模型的能力？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#表达能力："><span class="nav-number">5.1.</span> <span class="nav-text">表达能力：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#表达能力的两个维度"><span class="nav-number">5.2.</span> <span class="nav-text">表达能力的两个维度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据模型的论战："><span class="nav-number">6.</span> <span class="nav-text">数据模型的论战：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何避免依赖性"><span class="nav-number">7.</span> <span class="nav-text">如何避免依赖性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问答："><span class="nav-number">8.</span> <span class="nav-text">问答：</span></a></li></ol></div>
             
 
           </div>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://luyiqu.github.io/"/>
-  <updated>2020-07-13T14:57:05.673Z</updated>
+  <updated>2020-07-14T01:43:19.957Z</updated>
   <id>https://luyiqu.github.io/</id>
   
   <author>
@@ -18,41 +18,19 @@
   
   <entry>
     <title>The ArtScience and Engineering of Fuzzing: A Survey</title>
-    <link href="https://luyiqu.github.io/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-md/"/>
-    <id>https://luyiqu.github.io/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-md/</id>
-    <published>2020-07-13T22:45:48.000Z</published>
-    <updated>2020-07-13T14:57:05.673Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;The-Art-Science-and-Engineering-of-Fuzzing-A-Survey&quot;&gt;&lt;a href=&quot;#The-Art-Science-and-Engineering-of-Fuzzing-A-Survey&quot; class=&quot;headerlin
-      
-    
-    </summary>
-    
-      <category term="Test Case Geneation" scheme="https://luyiqu.github.io/categories/Test-Case-Geneation/"/>
-    
-    
-      <category term="Fuzzing Testing" scheme="https://luyiqu.github.io/tags/Fuzzing-Testing/"/>
-    
-      <category term="Survey" scheme="https://luyiqu.github.io/tags/Survey/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>The ArtScience and Engineering of Fuzzing: A Survey</title>
     <link href="https://luyiqu.github.io/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-/"/>
     <id>https://luyiqu.github.io/2020/07/14/The-ArtScience-and-Engineering-of-Fuzzing-A-Survey-/</id>
     <published>2020-07-13T22:45:48.000Z</published>
-    <updated>2020-07-13T14:56:47.400Z</updated>
+    <updated>2020-07-14T01:43:19.957Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;The-Art-Science-and-Engineering-of-Fuzzing-A-Survey&quot;&gt;&lt;a href=&quot;#The-Art-Science-and-Engineering-of-Fuzzing-A-Survey&quot; class=&quot;headerlin
+        &lt;p&gt;20200713 15:01 结  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关键词：自动化软件测试，模糊化，软件安全&lt;/li&gt;
+&lt;li&gt;目的：作为一个survey，围绕模糊化，给它&lt;strong&gt;下定义&lt;/strong&gt;，总结对软件测试提出的模糊化方面的改进，发掘有哪些创新点&lt;/li&gt;
       
     
     </summary>
@@ -92,13 +70,16 @@
     <link href="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries%E8%AE%BA%E6%96%87%E8%A7%A3%E6%9E%90/"/>
     <id>https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/</id>
     <published>2020-06-20T10:50:42.000Z</published>
-    <updated>2020-07-13T12:32:43.094Z</updated>
+    <updated>2020-07-14T01:24:48.908Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;Automated-Grading-of-SQL-Queries-论文解读&quot;&gt;&lt;a href=&quot;#Automated-Grading-of-SQL-Queries-论文解读&quot; class=&quot;headerlink&quot; title=&quot;Automated Grading 
+        &lt;h1 id=&quot;主要内容&quot;&gt;&lt;a href=&quot;#主要内容&quot; class=&quot;headerlink&quot; title=&quot;主要内容&quot;&gt;&lt;/a&gt;主要内容&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;自动给学生的sql query打分，局部打分，通过判断错误严重的程度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;
       
     
     </summary>
@@ -117,19 +98,13 @@
     <link href="https://luyiqu.github.io/2020/05/06/Hadoop%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%EF%BC%88HDFS%EF%BC%89/"/>
     <id>https://luyiqu.github.io/2020/05/06/Hadoop分布式文件系统（HDFS）/</id>
     <published>2020-05-06T12:10:31.000Z</published>
-    <updated>2020-05-06T04:11:12.504Z</updated>
+    <updated>2020-07-14T01:53:15.064Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;p&gt;一、 设计考量&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;1. HDFS设计假设、目标
-    a. 硬件失效
-        i. 硬件的异常比软件的异常更加常见
-    b. 流式数据访问
-        i. Dataflow
-        ii. hdfs是量身定制，并非以通
+        &lt;h1 id=&quot;设计考量&quot;&gt;&lt;a href=&quot;#设计考量&quot; class=&quot;headerlink&quot; title=&quot;设计考量&quot;&gt;&lt;/a&gt;设计考量&lt;/h1&gt;&lt;h2 id=&quot;HDFS设计假设、目标&quot;&gt;&lt;a href=&quot;#HDFS设计假设、目标&quot; class=&quot;headerlink&quot; ti
       
     
     </summary>
@@ -146,17 +121,14 @@
     <link href="https://luyiqu.github.io/2020/05/06/%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8E%8B%E7%BC%A9/"/>
     <id>https://luyiqu.github.io/2020/05/06/序列化与压缩/</id>
     <published>2020-05-06T12:09:14.000Z</published>
-    <updated>2020-05-06T04:09:45.527Z</updated>
+    <updated>2020-07-14T01:57:42.573Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;序列化与压缩&quot;&gt;&lt;a href=&quot;#序列化与压缩&quot; class=&quot;headerlink&quot; title=&quot;序列化与压缩&quot;&gt;&lt;/a&gt;序列化与压缩&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;1. 序列化的基本概念
-2. 数据压缩的原理
-
-3. 序列化与压缩
-    a. 序列化的意
+        &lt;p&gt;# &lt;/p&gt;
+&lt;h1 id=&quot;数据压缩的原理&quot;&gt;&lt;a href=&quot;#数据压缩的原理&quot; class=&quot;headerlink&quot; title=&quot;数据压缩的原理&quot;&gt;&lt;/a&gt;数据压缩的原理&lt;/h1&gt;&lt;h2 id=&quot;压缩：&quot;&gt;&lt;a href=&quot;#压缩：&quot; class=&quot;headerli
       
     
     </summary>
@@ -164,7 +136,7 @@
       <category term="分布式模型与编程" scheme="https://luyiqu.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="分布式模型与编程" scheme="https://luyiqu.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B/"/>
+      <category term="分布式模型与编程 - Java" scheme="https://luyiqu.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B-Java/"/>
     
   </entry>
   
@@ -173,15 +145,13 @@
     <link href="https://luyiqu.github.io/2020/05/06/%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1/"/>
     <id>https://luyiqu.github.io/2020/05/06/进程通信/</id>
     <published>2020-05-06T12:06:03.000Z</published>
-    <updated>2020-05-06T04:08:58.829Z</updated>
+    <updated>2020-07-14T02:02:16.604Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;进程通信&quot;&gt;&lt;a href=&quot;#进程通信&quot; class=&quot;headerlink&quot; title=&quot;进程通信&quot;&gt;&lt;/a&gt;进程通信&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;1. 进程与线程的区别
-    a. 线程是进程的一个实体，是CPU调度和分派的基本单位
-    b. 进程
+        &lt;h1 id=&quot;进程与线程的区别&quot;&gt;&lt;a href=&quot;#进程与线程的区别&quot; class=&quot;headerlink&quot; title=&quot;进程与线程的区别&quot;&gt;&lt;/a&gt;进程与线程的区别&lt;/h1&gt;&lt;p&gt;​    a. 线程是进程的一个实体，是CPU调度和分派的基本单    b. 进程在执行过程
       
     
     </summary>
@@ -198,13 +168,13 @@
     <link href="https://luyiqu.github.io/2020/05/06/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B%E5%A4%A7%E7%BA%B2/"/>
     <id>https://luyiqu.github.io/2020/05/06/分布式模型与编程大纲/</id>
     <published>2020-05-06T12:00:16.000Z</published>
-    <updated>2020-05-06T04:01:31.951Z</updated>
+    <updated>2020-07-14T02:11:17.973Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;大纲&quot;&gt;&lt;a href=&quot;#大纲&quot; class=&quot;headerlink&quot; title=&quot;大纲&quot;&gt;&lt;/a&gt;大纲&lt;/h1&gt;&lt;h2 id=&quot;分布式系统&quot;&gt;&lt;a href=&quot;#分布式系统&quot; class=&quot;headerlink&quot; title=&quot;分布式系统&quot;&gt;&lt;/a&gt;分布式系
+        &lt;h1 id=&quot;分布式系统&quot;&gt;&lt;a href=&quot;#分布式系统&quot; class=&quot;headerlink&quot; title=&quot;分布式系统&quot;&gt;&lt;/a&gt;分布式系统&lt;/h1&gt;&lt;h2 id=&quot;分布式系统应用&quot;&gt;&lt;a href=&quot;#分布式系统应用&quot; class=&quot;headerlink&quot; title=
       
     
     </summary>
@@ -240,7 +210,7 @@
     <link href="https://luyiqu.github.io/2020/04/27/MongoDB-Architecture-Guide-Overview/"/>
     <id>https://luyiqu.github.io/2020/04/27/MongoDB-Architecture-Guide-Overview/</id>
     <published>2020-04-27T10:50:42.000Z</published>
-    <updated>2020-04-27T02:50:42.200Z</updated>
+    <updated>2020-07-14T01:43:58.424Z</updated>
     
     <summary type="html">
     
@@ -254,13 +224,14 @@
     <link href="https://luyiqu.github.io/2020/04/18/Oracle%20AWR/"/>
     <id>https://luyiqu.github.io/2020/04/18/Oracle AWR/</id>
     <published>2020-04-18T08:59:03.000Z</published>
-    <updated>2020-05-06T03:48:01.739Z</updated>
+    <updated>2020-07-14T01:35:10.646Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;Oracle-AWR&quot;&gt;&lt;a href=&quot;#Oracle-AWR&quot; class=&quot;headerlink&quot; title=&quot;Oracle AWR&quot;&gt;&lt;/a&gt;Oracle AWR&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;- 目的：想知道oracle Automatic Wordl
+        &lt;h1 id=&quot;总结&quot;&gt;&lt;a href=&quot;#总结&quot; class=&quot;headerlink&quot; title=&quot;总结&quot;&gt;&lt;/a&gt;总结&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用&lt;/l
       
     
     </summary>
@@ -332,14 +303,15 @@
     <link href="https://luyiqu.github.io/2018/11/12/Mongodb%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/"/>
     <id>https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/</id>
     <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2020-05-05T12:44:20.734Z</updated>
+    <updated>2020-07-14T01:34:12.013Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h2&gt;&lt;pre&gt;&lt;code&gt;- Mongodb是以面向对象存储的 ， 做Obj&amp;lt;---&amp;gt;Doc之间的转换，一般用Java去实践
-- ORM工
+        &lt;h1 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Mongodb是以面向对象存储的 ， 做Obj&lt;---&gt;Doc之间的转换，一般用Java去实践&lt;ul&gt;
+&lt;li&gt;ORM工具：Ob
       
     
     </summary>
@@ -356,13 +328,45 @@
     <link href="https://luyiqu.github.io/2018/11/12/%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B/"/>
     <id>https://luyiqu.github.io/2018/11/12/数据模型/</id>
     <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2020-05-05T12:33:13.888Z</updated>
+    <updated>2020-07-14T02:01:58.975Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;数据模型&quot;&gt;&lt;a href=&quot;#数据模型&quot; class=&quot;headerlink&quot; title=&quot;数据模型&quot;&gt;&lt;/a&gt;数据模型&lt;/h1&gt;&lt;h2 id=&quot;好系统的标准&quot;&gt;&lt;a href=&quot;#好系统的标准&quot; class=&quot;headerlink&quot; title=&quot;好系统的标
+        &lt;p&gt;# &lt;/p&gt;
+&lt;h1 id=&quot;好系统的标准&quot;&gt;&lt;a href=&quot;#好系统的标准&quot; class=&quot;headerlink&quot; title=&quot;好系统的标准&quot;&gt;&lt;/a&gt;好系统的标准&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;功能通用、完善&lt;ul&gt;
+&lt;li&gt;满足尽量多应用的需求&lt;/li&gt;
+&lt;/ul&gt;
+
+      
+    
+    </summary>
+    
+      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>文档型数据库</title>
+    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
+    <published>2018-11-11T22:28:48.000Z</published>
+    <updated>2020-07-14T01:57:47.761Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;MongoDB:文档型数据库，按照文档的形式存储&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Web App（用的较多）&lt;/li&gt;
+&lt;/ul
       
     
     </summary>
@@ -379,14 +383,15 @@
     <link href="https://luyiqu.github.io/2018/11/12/%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/"/>
     <id>https://luyiqu.github.io/2018/11/12/关系模型/</id>
     <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2018-11-16T02:38:29.967Z</updated>
+    <updated>2020-07-14T02:06:06.893Z</updated>
     
     <summary type="html">
     
       
       
-        &lt;h1 id=&quot;关系模型&quot;&gt;&lt;a href=&quot;#关系模型&quot; class=&quot;headerlink&quot; title=&quot;关系模型&quot;&gt;&lt;/a&gt;关系模型&lt;/h1&gt;&lt;pre&gt;&lt;code&gt;1.关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束
-2. 关系模型具有单一的数据结构—— 关系
+        &lt;h1 id=&quot;关系模型&quot;&gt;&lt;a href=&quot;#关系模型&quot; class=&quot;headerlink&quot; title=&quot;关系模型&quot;&gt;&lt;/a&gt;关系模型&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;关系模型的组成： 关系数据结构、关系操作集合、关系完整性约束&lt;/li&gt;
+&lt;li&gt;关系模型具有单一的数据结构—— 
       
     
     </summary>
@@ -422,29 +427,6 @@
   </entry>
   
   <entry>
-    <title>文档型数据库</title>
-    <link href="https://luyiqu.github.io/2018/11/12/%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    <id>https://luyiqu.github.io/2018/11/12/文档型数据库/</id>
-    <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2020-05-05T12:33:19.102Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;文档型数据库&quot;&gt;&lt;a href=&quot;#文档型数据库&quot; class=&quot;headerlink&quot; title=&quot;文档型数据库&quot;&gt;&lt;/a&gt;文档型数据库&lt;/h1&gt;&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;
-      
-    
-    </summary>
-    
-      <category term="数据管理系统" scheme="https://luyiqu.github.io/categories/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-      <category term="数据管理系统笔记" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Spark 实现kmeans算法</title>
     <link href="https://luyiqu.github.io/2018/11/12/Spark-%E5%AE%9E%E7%8E%B0kmeans%E7%AE%97%E6%B3%95/"/>
     <id>https://luyiqu.github.io/2018/11/12/Spark-实现kmeans算法/</id>
@@ -472,9 +454,30 @@
     <link href="https://luyiqu.github.io/2018/11/07/Spark-%E7%BC%96%E7%A8%8B/"/>
     <id>https://luyiqu.github.io/2018/11/07/Spark-编程/</id>
     <published>2018-11-07T13:58:47.000Z</published>
-    <updated>2018-11-07T07:35:50.736Z</updated>
+    <updated>2020-07-14T01:43:46.176Z</updated>
     
     <summary type="html">
+    
+    </summary>
+    
+      <category term="分布式模型与编程" scheme="https://luyiqu.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Spark-处理系统</title>
+    <link href="https://luyiqu.github.io/2018/11/07/Spark-%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
+    <id>https://luyiqu.github.io/2018/11/07/Spark-处理系统/</id>
+    <published>2018-11-06T21:58:25.000Z</published>
+    <updated>2020-05-06T04:41:31.695Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Spark-vs-MapReduce&quot;&gt;&lt;a href=&quot;#Spark-vs-MapReduce&quot; class=&quot;headerlink&quot; title=&quot;Spark vs. MapReduce&quot;&gt;&lt;/a&gt;Spark vs. MapReduce&lt;/h1&gt;&lt;pre&gt;&lt;c
+      
     
     </summary>
     

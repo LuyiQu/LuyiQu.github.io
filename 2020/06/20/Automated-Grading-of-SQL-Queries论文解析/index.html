@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="Automated Grading of SQL Queries 论文解读主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;g">
+<meta name="description" content="主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;gt;B) 替换为A&amp;lt;=B; 将操作构建一棵flattened tre">
 <meta name="keywords" content="Grade SQL,SQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Automated Grading of SQL Queries 论文解读">
 <meta property="og:url" content="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="Automated Grading of SQL Queries 论文解读主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;g">
+<meta property="og:description" content="主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;gt;B) 替换为A&amp;lt;=B; 将操作构建一棵flattened tre">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/image-20200620103146416.png">
-<meta property="og:updated_time" content="2020-07-13T12:32:43.094Z">
+<meta property="og:updated_time" content="2020-07-14T01:24:48.908Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Automated Grading of SQL Queries 论文解读">
-<meta name="twitter:description" content="Automated Grading of SQL Queries 论文解读主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;g">
+<meta name="twitter:description" content="主要内容 自动给学生的sql query打分，局部打分，通过判断错误严重的程度。  采用 weighted equivalence edit distance metric，找到最小的编辑序列，能将原始错误的sql query转为正确的query。  使用query规范化规则针对语法和语义进行规划  语法，如将Not(A&amp;gt;B) 替换为A&amp;lt;=B; 将操作构建一棵flattened tre">
 <meta name="twitter:image" content="https://luyiqu.github.io/2020/06/20/Automated-Grading-of-SQL-Queries论文解析/image-20200620103146416.png">
 
 
@@ -365,7 +365,7 @@
       
 
       
-        <h1 id="Automated-Grading-of-SQL-Queries-论文解读"><a href="#Automated-Grading-of-SQL-Queries-论文解读" class="headerlink" title="Automated Grading of SQL Queries 论文解读"></a>Automated Grading of SQL Queries 论文解读</h1><h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><ul>
+        <h1 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h1><ul>
 <li><p>自动给学生的sql query打分，局部打分，通过判断错误严重的程度。</p>
 </li>
 <li><p>采用 <strong>weighted equivalence edit distance metric</strong>，找到最小的编辑序列，能将原始错误的sql query转为正确的query。</p>
@@ -391,30 +391,30 @@
 <li><p>根据编辑距离给分</p>
 </li>
 </ul>
-<h2 id="领域"><a href="#领域" class="headerlink" title="领域"></a>领域</h2><ul>
+<h1 id="领域"><a href="#领域" class="headerlink" title="领域"></a>领域</h1><ul>
 <li>指出错误sql query错在那个部分，也就是做最小的改动，能让sql query变成正确的。</li>
 </ul>
-<h2 id="研究常用的方法"><a href="#研究常用的方法" class="headerlink" title="研究常用的方法"></a>研究常用的方法</h2><ul>
+<h1 id="研究常用的方法"><a href="#研究常用的方法" class="headerlink" title="研究常用的方法"></a>研究常用的方法</h1><ul>
 <li>XData通过比较正确query和学生query得到的结果，对学生 sql query进行二分类，即判别正确or错误，但太简单了，想得到更细致的。</li>
 <li>根据正确query和学生query返回结果交集所占正确结果的比例，但有可能因为一个很小的错误得出的结果很差，导致分数低。</li>
 <li>学生的sql query需要做<strong>多少个变化</strong>才能和正确的sql等价，但许多具有语义差异的sql在返回的结果却没什么差异。<strong>（本文）</strong>针对此，使用大量query规范化技巧移除学生和正确的queries的不相关的语法和语义差别。但是需要给出多个正确的queries，将学生query与其相比较，选出匹配度最高的query。这个问题可以抽象为图中找最短路径，提出一个贪心启发性技巧。</li>
 </ul>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><ul>
 <li>基于规范化编辑距离的给分有可能是不公平的，在规范化部分还存在一些问题。</li>
 </ul>
-<h2 id="实验部分和讨论部分"><a href="#实验部分和讨论部分" class="headerlink" title="实验部分和讨论部分"></a>实验部分和讨论部分</h2><ul>
+<h1 id="实验部分和讨论部分"><a href="#实验部分和讨论部分" class="headerlink" title="实验部分和讨论部分"></a>实验部分和讨论部分</h1><ul>
 <li><p>随机创建一对不正确的学生queries，a和b，让两个志愿者对每对queries分类，第一类是a queriy的分高，第二类是b query的分高，第三类是a,b query的分数一样高。</p>
 </li>
 <li><p>potentially an infinite number of edit options <strong>are possible</strong></p>
 </li>
 </ul>
-<h2 id="对负载生成的启发点"><a href="#对负载生成的启发点" class="headerlink" title="对负载生成的启发点"></a>对负载生成的启发点</h2><h3 id="SQL-QUERY-规范化"><a href="#SQL-QUERY-规范化" class="headerlink" title="SQL QUERY 规范化"></a>SQL QUERY 规范化</h3><ul>
+<h1 id="对负载生成的启发点"><a href="#对负载生成的启发点" class="headerlink" title="对负载生成的启发点"></a>对负载生成的启发点</h1><h2 id="SQL-QUERY-规范化"><a href="#SQL-QUERY-规范化" class="headerlink" title="SQL QUERY 规范化"></a>SQL QUERY 规范化</h2><ul>
 <li><p>B. Chandra, M. Joseph, B. Radhakrishnan, S. Acharya, and S. Sudarshan.</p>
 <p>Partial marking for automated grading of SQL queries. <em>PVLDB (Demo)</em>,</p>
 <p>9(13):1541–1544, 2016.</p>
 </li>
 </ul>
-<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><ul>
+<h1 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h1><ul>
 <li><a href="https://www.cse.iitb.ac.in/infolab/xdata" target="_blank" rel="noopener">https://www.cse.iitb.ac.in/infolab/xdata</a></li>
 <li><a href="https://gitlab.com/xdata/xdata-web/-/tree/developer/XDataGrading/src" target="_blank" rel="noopener">https://gitlab.com/xdata/xdata-web/-/tree/developer/XDataGrading/src</a></li>
 </ul>
@@ -563,7 +563,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -574,7 +574,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -625,7 +625,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Automated-Grading-of-SQL-Queries-论文解读"><span class="nav-number">1.</span> <span class="nav-text">Automated Grading of SQL Queries 论文解读</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要内容"><span class="nav-number">1.1.</span> <span class="nav-text">主要内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#领域"><span class="nav-number">1.2.</span> <span class="nav-text">领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#研究常用的方法"><span class="nav-number">1.3.</span> <span class="nav-text">研究常用的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.4.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验部分和讨论部分"><span class="nav-number">1.5.</span> <span class="nav-text">实验部分和讨论部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对负载生成的启发点"><span class="nav-number">1.6.</span> <span class="nav-text">对负载生成的启发点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL-QUERY-规范化"><span class="nav-number">1.6.1.</span> <span class="nav-text">SQL QUERY 规范化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Source-Code"><span class="nav-number">1.7.</span> <span class="nav-text">Source Code</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主要内容"><span class="nav-number">1.</span> <span class="nav-text">主要内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#领域"><span class="nav-number">2.</span> <span class="nav-text">领域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#研究常用的方法"><span class="nav-number">3.</span> <span class="nav-text">研究常用的方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">4.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验部分和讨论部分"><span class="nav-number">5.</span> <span class="nav-text">实验部分和讨论部分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对负载生成的启发点"><span class="nav-number">6.</span> <span class="nav-text">对负载生成的启发点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL-QUERY-规范化"><span class="nav-number">6.1.</span> <span class="nav-text">SQL QUERY 规范化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Source-Code"><span class="nav-number">7.</span> <span class="nav-text">Source Code</span></a></li></ol></div>
             
 
           </div>

@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="Oracle AWR- 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用 - 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗) - 启动： STATISTICS_LEVEL设为TYPICAL或ALL - 总结：只">
+<meta name="description" content="总结 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗) 启动： STATISTICS_LEVEL设为TYPICAL或ALL 总结：只是一个历史性能数据的库，不具备">
 <meta name="keywords" content="oracle">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle AWR">
 <meta property="og:url" content="https://luyiqu.github.io/2020/04/18/Oracle AWR/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="Oracle AWR- 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用 - 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗) - 启动： STATISTICS_LEVEL设为TYPICAL或ALL - 总结：只">
+<meta property="og:description" content="总结 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗) 启动： STATISTICS_LEVEL设为TYPICAL或ALL 总结：只是一个历史性能数据的库，不具备">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-06T03:48:01.739Z">
+<meta property="og:updated_time" content="2020-07-14T01:35:10.646Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle AWR">
-<meta name="twitter:description" content="Oracle AWR- 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用 - 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗) - 启动： STATISTICS_LEVEL设为TYPICAL或ALL - 总结：只">
+<meta name="twitter:description" content="总结 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗) 启动： STATISTICS_LEVEL设为TYPICAL或ALL 总结：只是一个历史性能数据的库，不具备">
 
 
 
@@ -363,36 +363,59 @@
       
 
       
-        <h2 id="Oracle-AWR"><a href="#Oracle-AWR" class="headerlink" title="Oracle AWR"></a>Oracle AWR</h2><pre><code>- 目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用
-- 关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗)
-- 启动： STATISTICS_LEVEL设为TYPICAL或ALL
-- 总结：只是一个历史性能数据的库，不具备实时的功能
-</code></pre><h2 id="AWR包括的统计信息"><a href="#AWR包括的统计信息" class="headerlink" title="AWR包括的统计信息"></a>AWR包括的统计信息</h2><pre><code>- 对象统计
-- 时间模型统计
-- 系统和会话统计
-- 获取会话历史统计
-</code></pre><h2 id="Snapshot"><a href="#Snapshot" class="headerlink" title="Snapshot"></a>Snapshot</h2><pre><code>- 默认oracle每个小时自动产生一次快照，并保留8天负载统计信息
-- 可通过自动数据库诊断器进行分析（ADDM）
-    - 定期分析AWR数据
-    - 诊断性能问题的起因
-    - 为纠错提供推荐
-    - 定义系统中没问题的部分
-- AWR比较不同快照之间的差异来确定捕获影响系统负载的SQL语句【这个有意思】
-- 可以修改Snapshot设置的单个参数，Retention（保留时间，min=1，max=100 年），Interval（收集的频率 min=10分钟,max=1年）、Topnsql（指定收集的比较占用资源的SQL数量 ,min=30,max=100000000）
-</code></pre><h2 id="Baselines"><a href="#Baselines" class="headerlink" title="Baselines"></a>Baselines</h2><pre><code>- 定义：专门用于比较的基准线，Baseline中包含指定时间点时的性能数据，过期也不会被清除
-- 使用：
-    - 检阅DBA_HIST_SNAPSHOT视图中已存在的快照 
-    - 用CREATE_BASELINE过程来创建期望快照范围基线
-- 类型：
-    - 固定基线
-    - 移动窗口基线
-    - 模板基线
-</code></pre><h2 id="Adaptive-Thresholds"><a href="#Adaptive-Thresholds" class="headerlink" title="Adaptive Thresholds"></a>Adaptive Thresholds</h2><pre><code>- 可以监控和检测性能问题，同时可以最大限度地减少管理开销。
-</code></pre><h2 id="Space-Consumption"><a href="#Space-Consumption" class="headerlink" title="Space Consumption"></a>Space Consumption</h2><pre><code>- AWR中空间消耗由是三个因素导致：
-    - 系统中活动时间的会话数
-    - 快照间隔
-    - 历史数据的保留期
-</code></pre>
+        <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>目的：想知道oracle Automatic Wordload Repository（AWR）中有哪些我们可以获取得以利用</li>
+<li>关键字：snapshot(快照)、baselines（基线）、Adaptive Thresholds(自适应阀值)、Space Consumption(空间消耗)</li>
+<li>启动： STATISTICS_LEVEL设为TYPICAL或ALL</li>
+<li>总结：只是一个历史性能数据的库，不具备实时的功能</li>
+</ul>
+<p>​    </p>
+<h1 id="AWR包括的统计信息"><a href="#AWR包括的统计信息" class="headerlink" title="AWR包括的统计信息"></a>AWR包括的统计信息</h1><ul>
+<li>对象统计</li>
+<li>时间模型统计</li>
+<li>系统和会话统计</li>
+<li>获取会话历史统计</li>
+</ul>
+<p>​    </p>
+<h1 id="Snapshot"><a href="#Snapshot" class="headerlink" title="Snapshot"></a>Snapshot</h1><ul>
+<li>默认oracle每个小时自动产生一次快照，并保留8天负载统计信息</li>
+<li>可通过自动数据库诊断器进行分析（ADDM）<ul>
+<li>定期分析AWR数据</li>
+<li>诊断性能问题的起因</li>
+<li>为纠错提供推荐</li>
+<li>定义系统中没问题的部分</li>
+</ul>
+</li>
+<li>AWR比较不同快照之间的差异来确定捕获影响系统负载的SQL语句【这个有意思】</li>
+<li>可以修改Snapshot设置的单个参数，Retention（保留时间，min=1，max=100 年），Interval（收集的频率 min=10分钟,max=1年）、Topnsql（指定收集的比较占用资源的SQL数量 ,min=30,max=100000000）</li>
+</ul>
+<p>​    </p>
+<h1 id="Baselines"><a href="#Baselines" class="headerlink" title="Baselines"></a>Baselines</h1><ul>
+<li>定义：专门用于比较的基准线，Baseline中包含指定时间点时的性能数据，过期也不会被清除</li>
+<li>使用：<ul>
+<li>检阅DBA_HIST_SNAPSHOT视图中已存在的快照 </li>
+<li>用CREATE_BASELINE过程来创建期望快照范围基线</li>
+</ul>
+</li>
+<li>类型：<ul>
+<li>固定基线</li>
+<li>移动窗口基线</li>
+<li>模板基线</li>
+</ul>
+</li>
+</ul>
+<h1 id="Adaptive-Thresholds"><a href="#Adaptive-Thresholds" class="headerlink" title="Adaptive Thresholds"></a>Adaptive Thresholds</h1><ul>
+<li>可以监控和检测性能问题，同时可以最大限度地减少管理开销。</li>
+</ul>
+<h1 id="Space-Consumption"><a href="#Space-Consumption" class="headerlink" title="Space Consumption"></a>Space Consumption</h1><ul>
+<li>AWR中空间消耗由是三个因素导致：<ul>
+<li>系统中活动时间的会话数</li>
+<li>快照间隔</li>
+<li>历史数据的保留期</li>
+</ul>
+</li>
+</ul>
+
       
     </div>
     
@@ -535,7 +558,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -546,7 +569,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -597,7 +620,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Oracle-AWR"><span class="nav-number">1.</span> <span class="nav-text">Oracle AWR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AWR包括的统计信息"><span class="nav-number">2.</span> <span class="nav-text">AWR包括的统计信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Snapshot"><span class="nav-number">3.</span> <span class="nav-text">Snapshot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Baselines"><span class="nav-number">4.</span> <span class="nav-text">Baselines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adaptive-Thresholds"><span class="nav-number">5.</span> <span class="nav-text">Adaptive Thresholds</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Space-Consumption"><span class="nav-number">6.</span> <span class="nav-text">Space Consumption</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AWR包括的统计信息"><span class="nav-number">2.</span> <span class="nav-text">AWR包括的统计信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Snapshot"><span class="nav-number">3.</span> <span class="nav-text">Snapshot</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Baselines"><span class="nav-number">4.</span> <span class="nav-text">Baselines</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Adaptive-Thresholds"><span class="nav-number">5.</span> <span class="nav-text">Adaptive Thresholds</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Space-Consumption"><span class="nav-number">6.</span> <span class="nav-text">Space Consumption</span></a></li></ol></div>
             
 
           </div>
