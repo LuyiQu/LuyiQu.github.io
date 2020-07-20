@@ -269,6 +269,158 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Spark-实现kmeans算法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/Spark-实现kmeans算法/" itemprop="url">Spark 实现kmeans算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T21:55:21Z">
+                2018-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="spark-实现K-means算法"><a href="#spark-实现K-means算法" class="headerlink" title="spark 实现K-means算法"></a>spark 实现K-means算法</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> kmeans;</span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.FileNotFoundException;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;.</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">kmeans</span></span>&#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">double</span>[][] center = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>][<span class="number">2</span>];  <span class="comment">//这里有4个中心点，为2维</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">int</span>[] number = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">4</span>];           <span class="comment">//记录属于当前中心点的数据的个数，方便做除法</span></span><br><span class="line">  <span class="keyword">static</span> <span class="keyword">double</span>[][] new_center = <span class="keyword">new</span> <span class="keyword">double</span>[<span class="number">4</span>][<span class="number">2</span>];    <span class="comment">//计算出来的新中心点</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从文件中读出中心点，并且放入center数组中</span></span><br><span class="line">    ArrayList&lt;String&gt; arrayList = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      File file = <span class="keyword">new</span> File(<span class="string">"/usr/local/hadoop-2.7.3/centers.txt"</span>);</span><br><span class="line">      InputStreamReader input = <span class="keyword">new</span> InputStreamReader(<span class="keyword">new</span> FileInputStream(file));</span><br><span class="line">      BufferedReader bf = <span class="keyword">new</span> BufferedReader(input);</span><br><span class="line">      <span class="comment">// 按行读取字符串</span></span><br><span class="line">      String str;</span><br><span class="line">      <span class="keyword">while</span> ((str = bf.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        arrayList.add(str);</span><br><span class="line">      &#125;</span><br><span class="line">      bf.close();</span><br><span class="line">      input.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 对ArrayList中存储的字符串进行处理 </span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">2</span>; j++) &#123;</span><br><span class="line">        String s = arrayList.get(i).split(<span class="string">","</span>)[j];</span><br><span class="line">        center[i][j] = Double.parseDouble(s);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//System.out.println("center+++" + center[3][1]);</span></span><br><span class="line">    SparkConf conf = <span class="keyword">new</span> SparkConf().setAppName(<span class="string">"kmeans"</span>).setMaster(<span class="string">"local[*]"</span>);</span><br><span class="line">    JavaSparkContext jsc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br><span class="line">    JavaRDD&lt;String&gt; datas = jsc.textFile(<span class="string">"spark/input4/k-means.dat"</span>);     <span class="comment">//从hdfs上读取data</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt; <span class="number">4</span>;i++)           <span class="comment">//注意每次循环都需要将number[i]变为0</span></span><br><span class="line">      &#123;</span><br><span class="line">        number[i]=<span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//将data分开，得到key: 属于某个中心点的序号（0/1/2/3），value: 与该中心点的距离</span></span><br><span class="line">      JavaPairRDD&lt;Integer, Tuple2&lt;Double, Double&gt;&gt; data = datas.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, Integer,Tuple2&lt;Double, Double&gt;&gt;() &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Tuple2&lt;Integer,Tuple2&lt;Double, Double&gt;&gt; call(String str) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">double</span>[][] loc = center;  </span><br><span class="line">            String[] datasplit = str.split(<span class="string">","</span>);    </span><br><span class="line">            <span class="keyword">double</span> x = Double.parseDouble(datasplit[<span class="number">0</span>]);</span><br><span class="line">            <span class="keyword">double</span> y = Double.parseDouble(datasplit[<span class="number">1</span>]);</span><br><span class="line">            <span class="keyword">double</span> minDistance = <span class="number">99999999</span>;</span><br><span class="line">                  <span class="keyword">int</span> centerIndex = <span class="number">0</span>;  </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; <span class="number">4</span>;i++)&#123;</span><br><span class="line">              <span class="keyword">double</span> itsDistance = (x-loc[i][<span class="number">0</span>])*(x-loc[i][<span class="number">0</span>])+(y-loc[i][<span class="number">1</span>])*(y-loc[i][<span class="number">1</span>]);</span><br><span class="line">              <span class="keyword">if</span>(itsDistance &lt; minDistance)&#123;</span><br><span class="line">                minDistance = itsDistance;</span><br><span class="line">                centerIndex = i; </span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            number[centerIndex]++;        <span class="comment">//得到属于4个中心点的个数</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;Integer,Tuple2&lt;Double, Double&gt;&gt;(centerIndex, <span class="keyword">new</span> Tuple2&lt;Double,Double&gt;(x,y));</span><br><span class="line">             <span class="comment">// the center's number &amp; data</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">          <span class="comment">//得到key: 属于某个中心点的序号， value:新中心点的坐标</span></span><br><span class="line">          JavaPairRDD&lt;Integer, Iterable&lt;Tuple2&lt;Double, Double&gt;&gt;&gt; sum_center = data.groupByKey();</span><br><span class="line">          <span class="comment">//System.out.println(sum_center.collect());</span></span><br><span class="line"></span><br><span class="line">           JavaPairRDD&lt;Integer,Tuple2&lt;Double, Double&gt;&gt; Ncenter = sum_center.mapToPair(<span class="keyword">new</span> PairFunction&lt;Tuple2&lt;Integer, Iterable&lt;Tuple2&lt;Double, Double&gt;&gt;&gt;,Integer,Tuple2&lt;Double, Double&gt;&gt;() &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Tuple2&lt;Integer, Tuple2&lt;Double, Double&gt;&gt; call(Tuple2&lt;Integer, Iterable&lt;Tuple2&lt;Double, Double&gt;&gt;&gt; a)<span class="keyword">throws</span> Exception &#123;</span><br><span class="line">          <span class="comment">//System.out.println("i am here**********new center******");</span></span><br><span class="line">          <span class="keyword">int</span> sum_x = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">int</span> sum_y = <span class="number">0</span>;</span><br><span class="line">          Iterable&lt;Tuple2&lt;Double, Double&gt;&gt; it = a._2;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">for</span>(Tuple2&lt;Double, Double&gt; i : it) &#123;</span><br><span class="line">            sum_x += i._1;</span><br><span class="line">            sum_y +=i._2;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">double</span> average_x = sum_x / number[a._1];</span><br><span class="line">          <span class="keyword">double</span> average_y = sum_y/number[a._1];</span><br><span class="line">          <span class="comment">//System.out.println("**********new center******"+a._1+" "+average_x+","+average_y);</span></span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;Integer,Tuple2&lt;Double,Double&gt;&gt;(a._1,<span class="keyword">new</span> Tuple2&lt;Double,Double&gt;(average_x,average_y));</span><br><span class="line">        &#125; </span><br><span class="line">      &#125;);     </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//将中心点输出  </span></span><br><span class="line">        Ncenter.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;Integer,Tuple2&lt;Double,Double&gt;&gt;&gt;() &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;Integer,Tuple2&lt;Double,Double&gt;&gt; t)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">          new_center[t._1][<span class="number">0</span>] = t._2()._1;</span><br><span class="line">          new_center[t._1][<span class="number">1</span>] = t._2()._2;</span><br><span class="line">          System.out.println(<span class="string">"the new center: "</span>+ t._1+<span class="string">"  "</span>+t._2()._1+<span class="string">" , "</span>+t._2()._2);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断新的中心点和原来的中心点是否一样，一样的话退出循环得到结果，不一样的话继续循环（这里可以设置一个迭代次数）</span></span><br><span class="line">          <span class="keyword">double</span> distance = <span class="number">0</span>;</span><br><span class="line">          <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++) &#123;      </span><br><span class="line">              distance += (center[i][<span class="number">0</span>]-new_center[i][<span class="number">0</span>])*(center[i][<span class="number">0</span>]-new_center[i][<span class="number">0</span>]) + (center[i][<span class="number">1</span>]-new_center[i][<span class="number">1</span>])*(center[i][<span class="number">1</span>]-new_center[i][<span class="number">1</span>]);    </span><br><span class="line">          &#125;</span><br><span class="line">          </span><br><span class="line">          <span class="keyword">if</span>(distance == <span class="number">0.0</span>) &#123;</span><br><span class="line">            <span class="comment">//finished</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;<span class="number">4</span>;j++) &#123;</span><br><span class="line">              System.out.println(<span class="string">"the final center: "</span>+<span class="string">"  "</span>+center[j][<span class="number">0</span>]+<span class="string">" , "</span>+center[j][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;<span class="number">4</span>;i++) &#123;</span><br><span class="line">              center[i][<span class="number">0</span>] = new_center[i][<span class="number">0</span>];</span><br><span class="line">              center[i][<span class="number">1</span>] = new_center[i][<span class="number">1</span>];</span><br><span class="line">              new_center[i][<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">              new_center[i][<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">              System.out.println(<span class="string">"the new center: "</span>+<span class="string">"  "</span>+center[i][<span class="number">0</span>]+<span class="string">" , "</span>+center[i][<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;   </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="输入："><a href="#输入：" class="headerlink" title="输入："></a>输入：</h2><pre><code>1. centers.txt ：
+    96,826
+    606,776    
+    474,866
+    400,768
+</code></pre><ol start="2">
+<li>data.dat:<br>  存放所有点的坐标存放所有点的坐标。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/07/Spark-编程/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1080,7 +1232,7 @@ Spark的改进
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1091,7 +1243,7 @@ Spark的改进
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -1102,7 +1254,7 @@ Spark的改进
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

@@ -269,6 +269,332 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/" itemprop="url">SQLCheck: Automated Detection and Diagnosis of SQL Anti-Patterns</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T21:50:50+08:00">
+                2020-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文/" itemprop="url" rel="index">
+                    <span itemprop="name">论文</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
+<li>数据库即服务（DBaaS)目前很流行，云计算的出现，让很多开发人员都直接使用云上数据库而不用自己去搭建一个数据库，这扩展了数据库的使用，但很多开发人员没有数据库相关知识，可能写出来的sql语句存在APs（Anti-Patterns)，而APs会影响访问数据库时的性能，进而对应用产生影响。因此，这篇文章站在这个角度，去检测sql语句是否存在APs，并且将sql中存在的APs进行排序（这里主要是为了修复主要影响性能的APs，因为修复APs可能修改数据库schema等等，会对其他的sql产生一定影响），最后对主要的APs进行自动修复（实质上这篇文章是按照现有的规则进行修复）。</li>
+</ul>
+<h1 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h1><ul>
+<li>AP可能违反基本数据库设计原则（如，参照一致性等等）</li>
+</ul>
+<h1 id="Contribution"><a href="#Contribution" class="headerlink" title="Contribution"></a>Contribution</h1><ul>
+<li><p>讲述了如今其他识别APs的工具的局限性</p>
+</li>
+<li><p>注意：detection是有按照一定的rule进行匹配来将AP侦测出来</p>
+</li>
+<li><p>Detection：将query和data分析相结合进行AP侦测。</p>
+</li>
+<li><p>Rank：针对APs上的<strong>性能数据进行建模</strong>，获取rank model。</p>
+</li>
+<li><p>Fix：基于规则query重构技术提出fix APs的建议。</p>
+</li>
+</ul>
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Classification-of-Anti-Patterns"><a href="#Classification-of-Anti-Patterns" class="headerlink" title="Classification of Anti-Patterns"></a><strong>Classification of Anti-Patterns</strong></h2><p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200717144713076.png" alt="image-20200717144713076"></p>
+<h2 id="Impact-of-Anti-Patterns"><a href="#Impact-of-Anti-Patterns" class="headerlink" title="Impact of Anti-Patterns"></a><strong>Impact of Anti-Patterns</strong></h2><ul>
+<li><strong>Performance</strong>：性能，如吞吐和延迟</li>
+<li><strong>Maintainability:</strong>当业务发生了改变，应用设计和组件被修改的容易程度（这里指sql和schema）</li>
+<li><strong>Accuracy:</strong>存进去的数据和读出来的时候是否还是一致的（如，浮点数的精度是否丢失了，考虑数据库schema的column类型定义的如何）</li>
+</ul>
+<h1 id="System-Overview"><a href="#System-Overview" class="headerlink" title="System Overview"></a>System Overview</h1><p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200717175237267.png" alt="image-20200717175237267"></p>
+<ul>
+<li>ap-detect:静态分析queries，分析数据库中的数据和元数据</li>
+<li>ap-rank：根据detect出来的AP对各类评价指标的影响排序（文中设置user-study,由于可以根据自己的应用需求调整不同评价指标的权重，如读事务多的应用场景对读性能更为看重）</li>
+<li>ap-fix：根据定义好的rule来对AP进行fix（也就是说rule是有限的，无法cover到全部，<strong>这里detect从后面的实验来看也应该是有限的AP，就是定义的AP越多识别出来的也越多…</strong>）</li>
+</ul>
+<h1 id="Finding-Anti-Patterns"><a href="#Finding-Anti-Patterns" class="headerlink" title="Finding Anti-Patterns"></a>Finding Anti-Patterns</h1><ul>
+<li>Query-Analyser：获取query的column name、table names、predicates、constraints和indexes等等（就是一些logical feature)</li>
+<li>Data-Analyser：获取数据库中表的每个Column的数据分布和format（类型？）等</li>
+<li>Query-Rules：根据建立好的rules识别APs判别query是否存在APs</li>
+<li>Data-Rules：根据建立好的rules识别APs判别data是否存在APs</li>
+</ul>
+<p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200717180220192.png" alt="image-20200717180220192"></p>
+<h2 id="Query-Analysis"><a href="#Query-Analysis" class="headerlink" title="Query Analysis"></a><strong>Query Analysis</strong></h2><ul>
+<li><strong>intra-query detection：</strong>从单条sql获取context，使用预定好的rule（rule里由一系列函数组成）去detect，使用<strong>no-validating parsing logic</strong>来支持不同数据库的查询，返回<strong>annotating the parse tree</strong>(ap-detect和ap-fix使用这个去找到APS)</li>
+<li>inter-query detection：从sql和sql之间获取context，利用整个应用的context，不一定是相邻的,在 Intra-query上多包涵了两个组件：<strong>schama和与应用相关的queries</strong></li>
+</ul>
+<h2 id="Data-Analysis"><a href="#Data-Analysis" class="headerlink" title="Data Analysis"></a>Data Analysis</h2><ul>
+<li>首先scan<strong>数据库</strong>收集【收集代价大，定期执行】：<ul>
+<li>tables的schemata</li>
+<li>数据在相关column上的分布（<em>e.g.</em>, unique values,mean, median等等）</li>
+</ul>
+</li>
+<li>还是根据相应的规则去check构建好的context中是否存在APs</li>
+</ul>
+<h1 id="Ranking-Anti-Patterns"><a href="#Ranking-Anti-Patterns" class="headerlink" title="Ranking Anti-Patterns"></a>Ranking Anti-Patterns</h1><h2 id="Metrics-for-Ranking-Anti-Patterns"><a href="#Metrics-for-Ranking-Anti-Patterns" class="headerlink" title="Metrics for Ranking Anti-Patterns"></a>Metrics for Ranking Anti-Patterns</h2><ul>
+<li><strong>Read and Write Performance (RP, WP)：</strong>读写性能。通过如果修复好这个AP能获取多少倍的加速。这个指标作为rank依据。</li>
+<li><strong>Maintainability (M)</strong>：可维护性 是根据支持新的task时，数据库 在存在这个AP和不存在这个AP需要重构时改变的Number的差异,当number高度依赖于应用中的queries数时，这个AP优先级就会很高。</li>
+<li><strong>Data Amplification (DA)</strong>：冗余的列，如age和出生年月；各种冗余不必要的信息。</li>
+<li><strong>Data Integrity (DI):</strong> 更新是否保证数据库中保存的是想要的数据</li>
+<li><strong>Accuracy (A):</strong> 如是否满足参照一致性</li>
+</ul>
+<h2 id="Model-for-Ranking-Anti-Patterns"><a href="#Model-for-Ranking-Anti-Patterns" class="headerlink" title="Model for Ranking Anti-Patterns"></a>Model for Ranking Anti-Patterns</h2><ul>
+<li>运用开发人员根据自己的开发需求去设置上方metrics的权重。（实际上开发人员也很难去做到这个，这里可以做一个权重自动化设置工具）</li>
+<li>当APs之间发生冲突时，即修复一个AP会影响恶化另外一个AP，那就选择优先级高的AP进行修复</li>
+</ul>
+<h1 id="Fixing-Anti-Patterns"><a href="#Fixing-Anti-Patterns" class="headerlink" title="Fixing Anti-Patterns"></a>Fixing Anti-Patterns</h1><ul>
+<li>自动推荐合适应用场景的数据库设计和queries。</li>
+</ul>
+<p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200720130345206.png" alt="image-20200720130345206"></p>
+<ul>
+<li>两部分的query需要transform: 1. 具有APs的部分 2. 修改APsquery会影响的部分query</li>
+<li>如果产生模糊的转换，那就返回一个textual fix，就是说这个工具不足够帮你fix…那它告诉你啥textual fix呢，让开发人员自己看着做</li>
+<li>绿色部分解析： 如果query transformation清晰，那就把它解析成语法树，之后转换成sql语句。（数据库的语法树解析感觉有时间可以看看）</li>
+</ul>
+<h2 id="Query-Repair-Engine"><a href="#Query-Repair-Engine" class="headerlink" title="Query Repair Engine"></a>Query Repair Engine</h2><ul>
+<li>rule system是可扩展的，开发人员可以自己把rule按照一定的要求加进去。</li>
+<li>首先，规则系统范式使得ap-fix很容易利用修复规则之间复杂的触发交互，从而避免了显式布局流的需要 规则之间的控制（这里没看懂，就直接有道翻译了一下）</li>
+</ul>
+<h3 id="Rule-Representation"><a href="#Rule-Representation" class="headerlink" title="Rule Representation:"></a>Rule Representation:</h3><ul>
+<li>每条规则都包含一个detection function和一个action function</li>
+</ul>
+<h1 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h1><ul>
+<li><p>提供了三个接口：</p>
+<ul>
+<li><p>Interactive Shell:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Import the anti-pattern finder method</span></span><br><span class="line"><span class="keyword">from</span> sqlcheck.finder <span class="keyword">import</span> find_anti_patterns</span><br><span class="line">query = `INSERT INTO Users VALUES (<span class="number">1</span>, <span class="string">'foo'</span>)`</span><br><span class="line">results = find_anti_patterns(query)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>REST Interface</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HTTP POST /api/check</span><br><span class="line"><span class="attribute">Body</span>: &#123;"query":"INSERT INTO Users VALUES (1,'foo')"&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>GUI Interface</li>
+</ul>
+<ul>
+<li><p>扩展性</p>
+<ul>
+<li>通用的规则接口（name, type, detection rule, ranking metrics, and repair rule）</li>
+<li>context builder：增加应用的context来支持复杂rules</li>
+<li>用DBMS-specific解析器代替no-validating解析器</li>
+</ul>
+</li>
+</ul>
+<h1 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h1><ul>
+<li><p>与DBDEO进行比较（Digital Equipment Corporation. 1992. SQL-92 Standard.</p>
+<p><a href="https://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt.）" target="_blank" rel="noopener">https://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt.）</a></p>
+</li>
+</ul>
+<h2 id="Detection-of-Anti-Patterns"><a href="#Detection-of-Anti-Patterns" class="headerlink" title="Detection of Anti-Patterns"></a>Detection of Anti-Patterns</h2><ul>
+<li>AP-coverage</li>
+<li>accuary</li>
+<li>Dialect-Coverage：可以适用哪些DBMS</li>
+</ul>
+<h2 id="Ranking-and-Repair-of-Antipatterns"><a href="#Ranking-and-Repair-of-Antipatterns" class="headerlink" title="Ranking and Repair of Antipatterns"></a>Ranking and Repair of Antipatterns</h2><ul>
+<li>针对几个类型的AP进行讨论<ul>
+<li>索引过度使用</li>
+<li>索引使用不足</li>
+<li>不存在外键</li>
+<li>枚举类型（只有那几个数值）</li>
+</ul>
+</li>
+</ul>
+<h2 id="User-Study"><a href="#User-Study" class="headerlink" title="User Study"></a><strong>User Study</strong></h2><ul>
+<li>招募23个学生去<ul>
+<li>construst SQL queries</li>
+</ul>
+</li>
+<li>使用GUI 界面追踪这些信息：<ul>
+<li>the original SQL queries</li>
+<li>the fixes suggested by sqlcheck for the APs detected in the original queries</li>
+<li>the re-formulated SQL queries developed by the user that incorporate these fixes.</li>
+</ul>
+</li>
+<li>Web Applications &amp; Databases<ul>
+<li>收集github上的sql query，检测人家的应用的query是否存在APs，若存在就在别人的issues中提建议或是给别人发邮件，看看 别人的回馈意见。</li>
+</ul>
+</li>
+<li>Limitations And Future Work<ul>
+<li>都是根据定好的rules来发现APs的，对于新的不在规则中的APs不能后发现</li>
+</ul>
+</li>
+</ul>
+<h1 id="TOREAD"><a href="#TOREAD" class="headerlink" title="TOREAD"></a>TOREAD</h1><ul>
+<li>Tushar Sharma, Marios Fragkoulis, Stamatia Rizou, Magiel Bruntink,and Diomidis Spinellis. 2018. Smelly relations: measuring and understanding database schema quality. In <em>Proc. of ICSE</em>. ACM, 55–64.</li>
+<li>[21] Cunningham &amp; Cunningham Inc. 2014. C2 Wiki. <a href="http://wiki.c2.com/?AntiPatternsCatalog" target="_blank" rel="noopener">http://wiki.c2.com/?AntiPatternsCatalog</a></li>
+</ul>
+<h1 id="对负载生成的启发点"><a href="#对负载生成的启发点" class="headerlink" title="对负载生成的启发点"></a>对负载生成的启发点</h1><ul>
+<li>分析数据特征的时候，获取data在相关列上的分布情况，如Unique values,mean,median等（这里lauca貌似没有使用这些特征）</li>
+</ul>
+<h1 id="研究的主要方向"><a href="#研究的主要方向" class="headerlink" title="研究的主要方向"></a>研究的主要方向</h1><ul>
+<li>与SQL Anti-pattern有关，找到、排序（该APs对性能产生影响的大小）、修复APs</li>
+</ul>
+<h1 id="各项性能指标"><a href="#各项性能指标" class="headerlink" title="各项性能指标"></a>各项性能指标</h1><ul>
+<li><strong>Read and Write Performance (RP, WP)</strong></li>
+<li><strong>Maintainability (M)</strong></li>
+<li><strong>Data Amplification (DA)</strong></li>
+<li><strong>Data Integrity (DI)</strong> </li>
+<li><strong>Accuracy (A)</strong> </li>
+</ul>
+<h1 id="基本知识"><a href="#基本知识" class="headerlink" title="基本知识"></a>基本知识</h1><h2 id="数据库即服务"><a href="#数据库即服务" class="headerlink" title="数据库即服务"></a>数据库即服务</h2><ul>
+<li>DBaaS是一种云计算服务模型，用户只需要访问数据库即可，无需设置物理硬件，安装软件或配置性能。</li>
+<li>Schemate即schema的复数形式，包括table、column、data type、view、stored procedures、relationships、primary key、foreign key等</li>
+</ul>
+<h2 id="Adjacency-List"><a href="#Adjacency-List" class="headerlink" title="Adjacency List"></a>Adjacency List</h2><ul>
+<li><p>具有层次结构的数据</p>
+</li>
+<li><p>解决方法：邻接表、路径枚举(Path Enumeration)、嵌套集(Nested Sets)、闭包表(Closure Table)</p>
+<ul>
+<li>邻接表：在树中检索指定节点的祖先节点是很昂贵的</li>
+<li>路径枚举：将祖先存储成字符串(以路径的形式)，缺点：数据库不能强制规定路径是正确形成的，或者路径中的值对应于存在的节点。维护路径字符串取决于应用程序代码，并验证它的开销是非常昂贵的。</li>
+</ul>
+<p><img src="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222612709-755258849.png" alt="img"></p>
+<ul>
+<li><p>嵌套集：根据深度优先额外维护nsleft和nsright，便于寻找节点的所有祖先节点和所有的孩子结点，但插入和移动节点很复杂，需要重复编号nsleft和nsright，当树的使用设计频繁的插入，嵌套集不是最佳选择。</p>
+<p><img src="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222742363-381067227.png" alt="img"></p>
+</li>
+</ul>
+<p><img src="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222746488-1903425778.png" alt="img"></p>
+<ul>
+<li>闭包表：多增加一个表结构，专门用来存所有的祖孙信息，不只是父子信息，更便于查询。</li>
+</ul>
+<p><img src="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222757572-1586364911.png" alt="img"></p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/07/16/MYSQL-必知必会/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -300,7 +626,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-16T00:23:07+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-15T16:23:07Z">
                 2020-07-15
               </time>
             
@@ -577,7 +903,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-16T00:17:54+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-15T16:17:54Z">
                 2020-07-15
               </time>
             
@@ -2284,132 +2610,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/04/27/第十三章-索引结构/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/27/第十三章-索引结构/" itemprop="url">第十三章 索引结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-27T12:11:13Z">
-                2020-04-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="第十三章-索引结构"><a href="#第十三章-索引结构" class="headerlink" title="第十三章 索引结构"></a>第十三章 索引结构</h1><h2 id="13-1-顺序文件上的索引"><a href="#13-1-顺序文件上的索引" class="headerlink" title="13.1 顺序文件上的索引"></a>13.1 顺序文件上的索引</h2><ul>
-<li>稠密索引：一个索引对应一个元组</li>
-<li>稀疏索引：一个索引对应一个数据块</li>
-<li>多级索引：在索引上建立索引，高级索引量少可以放于内存，减少在磁盘中查找索引的I/O开销</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2462,7 +2662,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2473,7 +2673,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2484,7 +2684,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
