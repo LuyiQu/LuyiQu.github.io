@@ -89,19 +89,19 @@
 <meta property="og:site_name" content="瞿璐祎的博客">
 <meta property="og:description" content="Motivation 数据库即服务（DBaaS)目前很流行，云计算的出现，让很多开发人员都直接使用云上数据库而不用自己去搭建一个数据库，这扩展了数据库的使用，但很多开发人员没有数据库相关知识，可能写出来的sql语句存在APs（Anti-Patterns)，而APs会影响访问数据库时的性能，进而对应用产生影响。因此，这篇文章站在这个角度，去检测sql语句是否存在APs，并且将sql中存在的APs进行">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users/asus/AppData/Roaming/Typora/typora-user-images/image-20200717144713076.png">
-<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users/asus/AppData/Roaming/Typora/typora-user-images/image-20200717175237267.png">
-<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users/asus/AppData/Roaming/Typora/typora-user-images/image-20200717180220192.png">
-<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users/asus/AppData/Roaming/Typora/typora-user-images/image-20200720130345206.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200717144713076.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200717175237267.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200717180220192.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200720130345206.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222612709-755258849.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222742363-381067227.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222746488-1903425778.png">
 <meta property="og:image" content="https://images2018.cnblogs.com/blog/1013949/201804/1013949-20180415222757572-1586364911.png">
-<meta property="og:updated_time" content="2020-07-20T05:52:41.509Z">
+<meta property="og:updated_time" content="2020-07-20T05:57:36.249Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQLCheck: Automated Detection and Diagnosis of SQL Anti-Patterns">
 <meta name="twitter:description" content="Motivation 数据库即服务（DBaaS)目前很流行，云计算的出现，让很多开发人员都直接使用云上数据库而不用自己去搭建一个数据库，这扩展了数据库的使用，但很多开发人员没有数据库相关知识，可能写出来的sql语句存在APs（Anti-Patterns)，而APs会影响访问数据库时的性能，进而对应用产生影响。因此，这篇文章站在这个角度，去检测sql语句是否存在APs，并且将sql中存在的APs进行">
-<meta name="twitter:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users/asus/AppData/Roaming/Typora/typora-user-images/image-20200717144713076.png">
+<meta name="twitter:image" content="https://luyiqu.github.io/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200717144713076.png">
 
 
 
@@ -307,7 +307,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T13:50:50Z">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-20T21:50:50+08:00">
                 2020-07-20
               </time>
             
@@ -390,13 +390,13 @@
 <li><p>Fix：基于规则query重构技术提出fix APs的建议。</p>
 </li>
 </ul>
-<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Classification-of-Anti-Patterns"><a href="#Classification-of-Anti-Patterns" class="headerlink" title="Classification of Anti-Patterns"></a><strong>Classification of Anti-Patterns</strong></h2><p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200717144713076.png" alt="image-20200717144713076"></p>
+<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><h2 id="Classification-of-Anti-Patterns"><a href="#Classification-of-Anti-Patterns" class="headerlink" title="Classification of Anti-Patterns"></a><strong>Classification of Anti-Patterns</strong></h2><p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200717144713076.png" alt="image-20200717144713076"></p>
 <h2 id="Impact-of-Anti-Patterns"><a href="#Impact-of-Anti-Patterns" class="headerlink" title="Impact of Anti-Patterns"></a><strong>Impact of Anti-Patterns</strong></h2><ul>
 <li><strong>Performance</strong>：性能，如吞吐和延迟</li>
 <li><strong>Maintainability:</strong>当业务发生了改变，应用设计和组件被修改的容易程度（这里指sql和schema）</li>
 <li><strong>Accuracy:</strong>存进去的数据和读出来的时候是否还是一致的（如，浮点数的精度是否丢失了，考虑数据库schema的column类型定义的如何）</li>
 </ul>
-<h1 id="System-Overview"><a href="#System-Overview" class="headerlink" title="System Overview"></a>System Overview</h1><p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200717175237267.png" alt="image-20200717175237267"></p>
+<h1 id="System-Overview"><a href="#System-Overview" class="headerlink" title="System Overview"></a>System Overview</h1><p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200717175237267.png" alt="image-20200717175237267"></p>
 <ul>
 <li>ap-detect:静态分析queries，分析数据库中的数据和元数据</li>
 <li>ap-rank：根据detect出来的AP对各类评价指标的影响排序（文中设置user-study,由于可以根据自己的应用需求调整不同评价指标的权重，如读事务多的应用场景对读性能更为看重）</li>
@@ -408,7 +408,7 @@
 <li>Query-Rules：根据建立好的rules识别APs判别query是否存在APs</li>
 <li>Data-Rules：根据建立好的rules识别APs判别data是否存在APs</li>
 </ul>
-<p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200717180220192.png" alt="image-20200717180220192"></p>
+<p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200717180220192.png" alt="image-20200717180220192"></p>
 <h2 id="Query-Analysis"><a href="#Query-Analysis" class="headerlink" title="Query Analysis"></a><strong>Query Analysis</strong></h2><ul>
 <li><strong>intra-query detection：</strong>从单条sql获取context，使用预定好的rule（rule里由一系列函数组成）去detect，使用<strong>no-validating parsing logic</strong>来支持不同数据库的查询，返回<strong>annotating the parse tree</strong>(ap-detect和ap-fix使用这个去找到APS)</li>
 <li>inter-query detection：从sql和sql之间获取context，利用整个应用的context，不一定是相邻的,在 Intra-query上多包涵了两个组件：<strong>schama和与应用相关的queries</strong></li>
@@ -435,7 +435,7 @@
 <h1 id="Fixing-Anti-Patterns"><a href="#Fixing-Anti-Patterns" class="headerlink" title="Fixing Anti-Patterns"></a>Fixing Anti-Patterns</h1><ul>
 <li>自动推荐合适应用场景的数据库设计和queries。</li>
 </ul>
-<p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/Users\asus\AppData\Roaming\Typora\typora-user-images\image-20200720130345206.png" alt="image-20200720130345206"></p>
+<p><img src="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/image-20200720130345206.png" alt="image-20200720130345206"></p>
 <ul>
 <li>两部分的query需要transform: 1. 具有APs的部分 2. 修改APsquery会影响的部分query</li>
 <li>如果产生模糊的转换，那就返回一个textual fix，就是说这个工具不足够帮你fix…那它告诉你啥textual fix呢，让开发人员自己看着做</li>

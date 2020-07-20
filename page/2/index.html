@@ -1042,7 +1042,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Spark之join操作/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -1061,7 +1061,157 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/12/数据模型/" itemprop="url">数据模型</a></h1>
+                <a class="post-title-link" href="/2018/11/12/Spark之join操作/" itemprop="url">Spark之join操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
+                2018-11-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Spark之join操作-md"><a href="#Spark之join操作-md" class="headerlink" title="Spark之join操作.md"></a>Spark之join操作.md</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">join</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SparkConf conf = <span class="keyword">new</span> SparkConf().setAppName(<span class="string">"join"</span>).setMaster(<span class="string">"local[*]"</span>);</span><br><span class="line">		JavaSparkContext jsc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br><span class="line">		JavaRDD&lt;String&gt; persons = jsc.textFile(<span class="string">"spark/input3/person.txt"</span>);</span><br><span class="line">		JavaRDD&lt;String&gt; addresses = jsc.textFile(<span class="string">"spark/input3/address.txt"</span>);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">		<span class="comment">//得到 key: 邮编号，value:学号和名字</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; personkv = persons.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				</span><br><span class="line">					String[] personsplit = str.split(<span class="string">" |\t"</span>);     <span class="comment">// notice maybe \t</span></span><br><span class="line">					<span class="comment">//System.out.println("length"+personsplit.length);</span></span><br><span class="line">					<span class="comment">//处理缺省数据</span></span><br><span class="line">					<span class="keyword">if</span> (personsplit.length == <span class="number">3</span>)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="comment">//System.out.println("i am not null");</span></span><br><span class="line">						String code=personsplit[<span class="number">2</span>];</span><br><span class="line">						String value = personsplit[<span class="number">0</span>] +<span class="string">" "</span>+ personsplit[<span class="number">1</span>];		<span class="comment">//number + name</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span> &#123;</span><br><span class="line">						</span><br><span class="line">						<span class="comment">//System.out.println("null null null ++++++++="+personsplit.length);	</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String,String&gt;(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">						&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);  <span class="comment">// to split the person and get the form &lt;210000,1 Aaron&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//得到key: 邮编号 value:城市</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; addresskv = addresses.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				String[] addresssplit = str.split(<span class="string">" |\t"</span>);</span><br><span class="line">				String code=addresssplit[<span class="number">0</span>];</span><br><span class="line">				String value = addresssplit[<span class="number">1</span>];		<span class="comment">//city</span></span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);				<span class="comment">//to split the address and get the  form &lt;210000,Nanjing&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进行join操作</span></span><br><span class="line">		JavaPairRDD&lt;String, Tuple2&lt;String, String&gt;&gt; joinres=personkv.join(addresskv);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//遍历输出</span></span><br><span class="line">		joinres.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt;&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt; t)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				System.out.println(t._2()._1+<span class="string">" "</span>+t._1+ <span class="string">" "</span>+t._2()._2);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		joinres.saveAsTextFile(<span class="string">"./spark/output3/"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="输入"><a href="#输入" class="headerlink" title="输入:"></a>输入:</h2><pre><code>person.txt:
+    1 Aaron 210000
+    .....
+address.txt:
+    210000 Nanjing
+    .........
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/12/Mongodb数据库设计/" itemprop="url">Mongodb数据库设计</a></h1>
         
 
         <div class="post-meta">
@@ -1135,99 +1285,37 @@
       
         
           
-            <p># </p>
-<h1 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h1><ul>
-<li>功能通用、完善<ul>
-<li>满足尽量多应用的需求</li>
+            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ul>
+<li>Mongodb是以面向对象存储的 ， 做Obj<--->Doc之间的转换，一般用Java去实践<ul>
+<li>ORM工具：Obj Relation Mapping</li>
 </ul>
-</li>
-<li>实现细节对应用透明<ul>
-<li>应用开发独立于系统实现</li>
+</---></li>
 </ul>
-</li>
+<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h1><ul>
+<li>数据库设计<br>  ○ 什么样的数据存在里面<br>  ○ 数据怎么样存在里面（组织形式） &amp; 应用如何去访问数据库</li>
+<li>数据库设计的基本步骤<br>  ○ 需求设计（软件的功能是什么）： 了解用户需求，确定软件的基本功能<br>  ○ 概念结构设计（存什么）： 确定数据库需要记录哪些对象<br>  ○ 逻辑结构设计设计（抽象怎么存）：确定对象之间的关系以及文档结构。<br>  ○ 物理结构设计 （代码的实现）：确定数据的存储方式、索引的使用、系统配置等等<br>  ○ 数据库实施：安装数据库管理系统、创建数据、调试、运行。<br>  ○ 数据库运行和维护：根据需求的扩展与变化，对以上结果进行调整和变更</li>
 </ul>
-<h1 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h1><ul>
-<li><p>数据的逻辑组织方式（数据的基本结构和结构的语义）</p>
+<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><ul>
+<li>MVC  (model  – view – controller)</li>
+</ul>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><h1 id="对象的确定"><a href="#对象的确定" class="headerlink" title="对象的确定"></a>对象的确定</h1><p>○ 软件功能涉及到的概念</p>
 <ul>
-<li>文档模型（Mongodb   2000s)</li>
-<li>层次模型（IBM IMS   1960s)</li>
-<li>网状模型（GE IDS 1960s）</li>
-<li>关系模型（SQL DB 1970s~80s)</li>
+<li>博客：用户、文章、评论、粉丝</li>
+<li>网上书店：图书、用户、购物车、订单、评论</li>
 </ul>
-</li>
-<li><p>注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性</p>
-</li>
-</ul>
-<h1 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h1><ul>
-<li><p>对数据库中数据的结构性描述</p>
+<p>○ 软件开发过程中出现的持久化需求</p>
 <ul>
-<li>参照schema才能正确书写查询</li>
+<li>Java开发中遇到需要序列化的对象</li>
+<li>MVC中Model的构建</li>
 </ul>
-</li>
-<li><p>一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Schema</span><br><span class="line">&#123;</span><br><span class="line">	Name:string,</span><br><span class="line">	Manufacturer:string</span><br><span class="line">	Catalog_numver:num</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<h1 id="对象之间的关系-Cardiality"><a href="#对象之间的关系-Cardiality" class="headerlink" title="对象之间的关系(Cardiality)"></a>对象之间的关系(Cardiality)</h1><p>○ 1：1     ——   企业与CEO  、 配偶关系<br>○ 1：M    ——  博客与评论、国家与城市<br>○ M:N      ——  书与作者、用户与粉丝</p>
+<h1 id="拇指法则"><a href="#拇指法则" class="headerlink" title="拇指法则"></a>拇指法则</h1><ul>
+<li>赞成嵌入，除非有一个令人信服的理由不这样做。</li>
+<li>需要访问一个对象本身是一个令人信服的理由不嵌入它。<br>数组不应该无限制地增长。如果在“多”方面有超过几百个文档，不要嵌入它们;如果“多”方面有几千个文档，不要使用ObjectID引用数组。高基数数组是不嵌入的一个令人信服的理由。</li>
+<li>不要害怕应用程序级连接:如果正确索引并使用了投影说明符，那么应用程序级连接的开销几乎不比关系数据库中的服务器端连接高。</li>
+<li>在反规范化时考虑写/读比。一个通常会被读取但很少被更新的字段是反规范化的一个很好的候选:如果你对一个经常更新的字段进行反规范化，那么查找和更新所有实例的额外工作很可能会超过你从反规范化中获得的节省。</li>
+<li>与MongoDB一样，如何建模数据完全取决于特定应用程序的数据访问模式。您希望构造数据，以匹配应用程序查询和更新数据的方式。</li>
 </ul>
-<ul>
-<li>Data Model相当于Schema的Metadata，即Meta Metadata<br>注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema</li>
-</ul>
-<h1 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h1><h1 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h1><h2 id="表达能力："><a href="#表达能力：" class="headerlink" title="表达能力："></a>表达能力：</h2><ul>
-<li>数据本身能够表达什么信息？<ul>
-<li>计算机能够理解的信息</li>
-</ul>
-</li>
-<li>查询能够满足哪些信息需求？<pre><code>注： 表达能力越强，查询时返回的值越快越准确
-</code></pre></li>
-</ul>
-<h2 id="表达能力的两个维度"><a href="#表达能力的两个维度" class="headerlink" title="表达能力的两个维度"></a>表达能力的两个维度</h2><ul>
-<li>范围：能够满足哪些信息需求<ul>
-<li>上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）</li>
-</ul>
-</li>
-<li>精简程度：用户描述需求是是否方便<ul>
-<li>Prolog比Java表达更强更精炼，因为Prolog逻辑性强<br>注：数据库系统将查询的语言转换成数据库查找的语言</li>
-</ul>
-</li>
-</ul>
-<h1 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h1><ul>
-<li>Charles Bachman     网状模型     Navigational Database Network Model<pre><code>Edgar F.Codd       关系模型    Relational Database Relation Model
-</code></pre></li>
-<li>70年代末更倾向于关系数据库</li>
-</ul>
-<ul>
-<li><p>网状数据库(Navigational DB)<br>a. 查询通过指针访问</p>
-</li>
-<li><p>Codd坚持的看法</p>
-<ul>
-<li>DBMS应该和应用程序尽可能保持相互独立（模块化）<ul>
-<li>数据的存放顺序与程序无关</li>
-<li>数据的使用与程序无关</li>
-<li>数据的访问方式与程序无关（网状和层次模型违背了这点）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h1><ul>
-<li>提升数据模型的表达能力</li>
-<li>声明是程序设计语言(而不是过程式语言）<ul>
-<li>Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）</li>
-<li>只把需求说出来，不说具体怎么做。</li>
-<li>注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理</li>
-</ul>
-</li>
-</ul>
-<h1 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h1><ul>
-<li>声明式程序一定比过程式的更好吗？<ul>
-<li>并不是</li>
-</ul>
-</li>
-<li>表达能力越高越好吗？<ul>
-<li>不是，度的把握，如单反照相机和傻瓜相机</li>
-</ul>
-</li>
-</ul>
-<p>​<br>​        </p>
 
           
         
@@ -1774,7 +1862,7 @@ ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Mongodb数据库设计/">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="luyiqu">
@@ -1793,7 +1881,7 @@ ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/11/12/Mongodb数据库设计/" itemprop="url">Mongodb数据库设计</a></h1>
+                <a class="post-title-link" href="/2018/11/12/数据模型/" itemprop="url">数据模型</a></h1>
         
 
         <div class="post-meta">
@@ -1867,188 +1955,100 @@ ii. F的基本形式为：X1θY1，θ表示比较运算符，它可以是＞，�
       
         
           
-            <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><ul>
-<li>Mongodb是以面向对象存储的 ， 做Obj<--->Doc之间的转换，一般用Java去实践<ul>
-<li>ORM工具：Obj Relation Mapping</li>
+            <p># </p>
+<h1 id="好系统的标准"><a href="#好系统的标准" class="headerlink" title="好系统的标准"></a>好系统的标准</h1><ul>
+<li>功能通用、完善<ul>
+<li>满足尽量多应用的需求</li>
 </ul>
-</---></li>
+</li>
+<li>实现细节对应用透明<ul>
+<li>应用开发独立于系统实现</li>
 </ul>
-<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h1><ul>
-<li>数据库设计<br>  ○ 什么样的数据存在里面<br>  ○ 数据怎么样存在里面（组织形式） &amp; 应用如何去访问数据库</li>
-<li>数据库设计的基本步骤<br>  ○ 需求设计（软件的功能是什么）： 了解用户需求，确定软件的基本功能<br>  ○ 概念结构设计（存什么）： 确定数据库需要记录哪些对象<br>  ○ 逻辑结构设计设计（抽象怎么存）：确定对象之间的关系以及文档结构。<br>  ○ 物理结构设计 （代码的实现）：确定数据的存储方式、索引的使用、系统配置等等<br>  ○ 数据库实施：安装数据库管理系统、创建数据、调试、运行。<br>  ○ 数据库运行和维护：根据需求的扩展与变化，对以上结果进行调整和变更</li>
+</li>
 </ul>
-<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><ul>
-<li>MVC  (model  – view – controller)</li>
-</ul>
-<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><h1 id="对象的确定"><a href="#对象的确定" class="headerlink" title="对象的确定"></a>对象的确定</h1><p>○ 软件功能涉及到的概念</p>
+<h1 id="数据模型定义"><a href="#数据模型定义" class="headerlink" title="数据模型定义"></a>数据模型定义</h1><ul>
+<li><p>数据的逻辑组织方式（数据的基本结构和结构的语义）</p>
 <ul>
-<li>博客：用户、文章、评论、粉丝</li>
-<li>网上书店：图书、用户、购物车、订单、评论</li>
+<li>文档模型（Mongodb   2000s)</li>
+<li>层次模型（IBM IMS   1960s)</li>
+<li>网状模型（GE IDS 1960s）</li>
+<li>关系模型（SQL DB 1970s~80s)</li>
 </ul>
-<p>○ 软件开发过程中出现的持久化需求</p>
+</li>
+<li><p>注：数据模型—决定—&gt; 数据的访问方式 / DBMS的访问接口——&gt; 系统的功能性、性能、易用性</p>
+</li>
+</ul>
+<h1 id="数据库模式（Schema"><a href="#数据库模式（Schema" class="headerlink" title="数据库模式（Schema)"></a>数据库模式（Schema)</h1><ul>
+<li><p>对数据库中数据的结构性描述</p>
 <ul>
-<li>Java开发中遇到需要序列化的对象</li>
-<li>MVC中Model的构建</li>
+<li>参照schema才能正确书写查询</li>
 </ul>
-<h1 id="对象之间的关系-Cardiality"><a href="#对象之间的关系-Cardiality" class="headerlink" title="对象之间的关系(Cardiality)"></a>对象之间的关系(Cardiality)</h1><p>○ 1：1     ——   企业与CEO  、 配偶关系<br>○ 1：M    ——  博客与评论、国家与城市<br>○ M:N      ——  书与作者、用户与粉丝</p>
-<h1 id="拇指法则"><a href="#拇指法则" class="headerlink" title="拇指法则"></a>拇指法则</h1><ul>
-<li>赞成嵌入，除非有一个令人信服的理由不这样做。</li>
-<li>需要访问一个对象本身是一个令人信服的理由不嵌入它。<br>数组不应该无限制地增长。如果在“多”方面有超过几百个文档，不要嵌入它们;如果“多”方面有几千个文档，不要使用ObjectID引用数组。高基数数组是不嵌入的一个令人信服的理由。</li>
-<li>不要害怕应用程序级连接:如果正确索引并使用了投影说明符，那么应用程序级连接的开销几乎不比关系数据库中的服务器端连接高。</li>
-<li>在反规范化时考虑写/读比。一个通常会被读取但很少被更新的字段是反规范化的一个很好的候选:如果你对一个经常更新的字段进行反规范化，那么查找和更新所有实例的额外工作很可能会超过你从反规范化中获得的节省。</li>
-<li>与MongoDB一样，如何建模数据完全取决于特定应用程序的数据访问模式。您希望构造数据，以匹配应用程序查询和更新数据的方式。</li>
+</li>
+<li><p>一种数据库元数据（Metadata），描述数据长什么样子（相当于一个模板）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Schema</span><br><span class="line">&#123;</span><br><span class="line">	Name:string,</span><br><span class="line">	Manufacturer:string</span><br><span class="line">	Catalog_numver:num</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
+<ul>
+<li>Data Model相当于Schema的Metadata，即Meta Metadata<br>注：Mongodb没有一个特定的schema的过程，只是程序猿在存数据的时候脑子里有这个schema</li>
+</ul>
+<h1 id="数据模型：JSON-BSON"><a href="#数据模型：JSON-BSON" class="headerlink" title="数据模型：JSON/BSON"></a>数据模型：JSON/BSON</h1><h1 id="如何衡量数据模型的能力？"><a href="#如何衡量数据模型的能力？" class="headerlink" title="如何衡量数据模型的能力？"></a>如何衡量数据模型的能力？</h1><h2 id="表达能力："><a href="#表达能力：" class="headerlink" title="表达能力："></a>表达能力：</h2><ul>
+<li>数据本身能够表达什么信息？<ul>
+<li>计算机能够理解的信息</li>
+</ul>
+</li>
+<li>查询能够满足哪些信息需求？<pre><code>注： 表达能力越强，查询时返回的值越快越准确
+</code></pre></li>
+</ul>
+<h2 id="表达能力的两个维度"><a href="#表达能力的两个维度" class="headerlink" title="表达能力的两个维度"></a>表达能力的两个维度</h2><ul>
+<li>范围：能够满足哪些信息需求<ul>
+<li>上限为Turing Completeness（程序设计语言能做到的范围）（数据库的查询做不到Turing Completeness）</li>
+</ul>
+</li>
+<li>精简程度：用户描述需求是是否方便<ul>
+<li>Prolog比Java表达更强更精炼，因为Prolog逻辑性强<br>注：数据库系统将查询的语言转换成数据库查找的语言</li>
+</ul>
+</li>
+</ul>
+<h1 id="数据模型的论战："><a href="#数据模型的论战：" class="headerlink" title="数据模型的论战："></a>数据模型的论战：</h1><ul>
+<li>Charles Bachman     网状模型     Navigational Database Network Model<pre><code>Edgar F.Codd       关系模型    Relational Database Relation Model
+</code></pre></li>
+<li>70年代末更倾向于关系数据库</li>
+</ul>
+<ul>
+<li><p>网状数据库(Navigational DB)<br>a. 查询通过指针访问</p>
+</li>
+<li><p>Codd坚持的看法</p>
+<ul>
+<li>DBMS应该和应用程序尽可能保持相互独立（模块化）<ul>
+<li>数据的存放顺序与程序无关</li>
+<li>数据的使用与程序无关</li>
+<li>数据的访问方式与程序无关（网状和层次模型违背了这点）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="如何避免依赖性"><a href="#如何避免依赖性" class="headerlink" title="如何避免依赖性"></a>如何避免依赖性</h1><ul>
+<li>提升数据模型的表达能力</li>
+<li>声明是程序设计语言(而不是过程式语言）<ul>
+<li>Prolog 、 SQL 、 First Order Logic（一阶逻辑语言）</li>
+<li>只把需求说出来，不说具体怎么做。</li>
+<li>注：关系型数据库就着重声明式语言,Mongodb是声明式语言，但是拿到数据之后，还是得通过java等过程式语言进行处理</li>
+</ul>
+</li>
+</ul>
+<h1 id="问答："><a href="#问答：" class="headerlink" title="问答："></a>问答：</h1><ul>
+<li>声明式程序一定比过程式的更好吗？<ul>
+<li>并不是</li>
+</ul>
+</li>
+<li>表达能力越高越好吗？<ul>
+<li>不是，度的把握，如单反照相机和傻瓜相机</li>
+</ul>
+</li>
+</ul>
+<p>​<br>​        </p>
 
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Spark之join操作/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/Spark之join操作/" itemprop="url">Spark之join操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式模型与编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Spark之join操作-md"><a href="#Spark之join操作-md" class="headerlink" title="Spark之join操作.md"></a>Spark之join操作.md</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">join</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SparkConf conf = <span class="keyword">new</span> SparkConf().setAppName(<span class="string">"join"</span>).setMaster(<span class="string">"local[*]"</span>);</span><br><span class="line">		JavaSparkContext jsc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br><span class="line">		JavaRDD&lt;String&gt; persons = jsc.textFile(<span class="string">"spark/input3/person.txt"</span>);</span><br><span class="line">		JavaRDD&lt;String&gt; addresses = jsc.textFile(<span class="string">"spark/input3/address.txt"</span>);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">		<span class="comment">//得到 key: 邮编号，value:学号和名字</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; personkv = persons.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				</span><br><span class="line">					String[] personsplit = str.split(<span class="string">" |\t"</span>);     <span class="comment">// notice maybe \t</span></span><br><span class="line">					<span class="comment">//System.out.println("length"+personsplit.length);</span></span><br><span class="line">					<span class="comment">//处理缺省数据</span></span><br><span class="line">					<span class="keyword">if</span> (personsplit.length == <span class="number">3</span>)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="comment">//System.out.println("i am not null");</span></span><br><span class="line">						String code=personsplit[<span class="number">2</span>];</span><br><span class="line">						String value = personsplit[<span class="number">0</span>] +<span class="string">" "</span>+ personsplit[<span class="number">1</span>];		<span class="comment">//number + name</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span> &#123;</span><br><span class="line">						</span><br><span class="line">						<span class="comment">//System.out.println("null null null ++++++++="+personsplit.length);	</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String,String&gt;(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">						&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);  <span class="comment">// to split the person and get the form &lt;210000,1 Aaron&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//得到key: 邮编号 value:城市</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; addresskv = addresses.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				String[] addresssplit = str.split(<span class="string">" |\t"</span>);</span><br><span class="line">				String code=addresssplit[<span class="number">0</span>];</span><br><span class="line">				String value = addresssplit[<span class="number">1</span>];		<span class="comment">//city</span></span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);				<span class="comment">//to split the address and get the  form &lt;210000,Nanjing&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进行join操作</span></span><br><span class="line">		JavaPairRDD&lt;String, Tuple2&lt;String, String&gt;&gt; joinres=personkv.join(addresskv);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//遍历输出</span></span><br><span class="line">		joinres.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt;&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt; t)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				System.out.println(t._2()._1+<span class="string">" "</span>+t._1+ <span class="string">" "</span>+t._2()._2);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		joinres.saveAsTextFile(<span class="string">"./spark/output3/"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="输入"><a href="#输入" class="headerlink" title="输入:"></a>输入:</h2><pre><code>person.txt:
-    1 Aaron 210000
-    .....
-address.txt:
-    210000 Nanjing
-    .........
-</code></pre>
           
         
       
