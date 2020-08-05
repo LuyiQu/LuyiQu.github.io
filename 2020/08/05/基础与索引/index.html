@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="基础书本,数据库系统实现,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="瞿璐祎的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="包括数据库系统实现第一章、第二章、第三章（索引）  数据库管理系统成分  分为两大块主要模块：查询响应和事务处理  查询响应 先由查询编译器对查询进行分析和优化（如检查语义和语法是否正确、构建语法分析树），选择物理逻辑计划 得到查询计划后，传给执行引擎 执行引擎向资源管理器请求记录or关系的元组 资源管理器掌握着存放关系的数据文件、文件中的数据格式和记录大小，以及支持对于数据文件中的元素进行快速">
+<meta name="keywords" content="基础书本,数据库系统实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基础与索引">
+<meta property="og:url" content="https://luyiqu.github.io/2020/08/05/基础与索引/index.html">
+<meta property="og:site_name" content="瞿璐祎的博客">
+<meta property="og:description" content="包括数据库系统实现第一章、第二章、第三章（索引）  数据库管理系统成分  分为两大块主要模块：查询响应和事务处理  查询响应 先由查询编译器对查询进行分析和优化（如检查语义和语法是否正确、构建语法分析树），选择物理逻辑计划 得到查询计划后，传给执行引擎 执行引擎向资源管理器请求记录or关系的元组 资源管理器掌握着存放关系的数据文件、文件中的数据格式和记录大小，以及支持对于数据文件中的元素进行快速">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724142035493.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724143448491.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724150344115.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724150409109.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724153804351.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724154305211.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724154657714.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724155032593.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724155045741.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724155711393.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724162909062.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724164311442.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200725220045067.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726143152340.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200725221051780.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726151506740.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726152253294.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726153509875.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726161359875.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726162116830.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726162746159.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726162909353.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726163747603.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200726164316027.png">
+<meta property="og:updated_time" content="2020-08-05T07:19:42.521Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基础与索引">
+<meta name="twitter:description" content="包括数据库系统实现第一章、第二章、第三章（索引）  数据库管理系统成分  分为两大块主要模块：查询响应和事务处理  查询响应 先由查询编译器对查询进行分析和优化（如检查语义和语法是否正确、构建语法分析树），选择物理逻辑计划 得到查询计划后，传给执行引擎 执行引擎向资源管理器请求记录or关系的元组 资源管理器掌握着存放关系的数据文件、文件中的数据格式和记录大小，以及支持对于数据文件中的元素进行快速">
+<meta name="twitter:image" content="https://luyiqu.github.io/2020/08/05/基础与索引/image-20200724142035493.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://luyiqu.github.io/2020/08/05/基础与索引/">
+
+
+
+
+
+  <title>基础与索引 | 瞿璐祎的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">瞿璐祎的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">try something new</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/08/05/基础与索引/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基础与索引</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-05T23:12:50+08:00">
+                2020-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库系统实现/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库系统实现</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>包括数据库系统实现第一章、第二章、第三章（索引）</li>
+</ul>
+<h1 id="数据库管理系统成分"><a href="#数据库管理系统成分" class="headerlink" title="数据库管理系统成分"></a>数据库管理系统成分</h1><p><img src="/2020/08/05/基础与索引/image-20200724142035493.png" alt="image-20200724142035493"></p>
+<ul>
+<li>分为两大块主要模块：查询响应和事务处理</li>
+</ul>
+<h2 id="查询响应"><a href="#查询响应" class="headerlink" title="查询响应"></a>查询响应</h2><ul>
+<li>先由查询编译器对查询进行分析和优化（如检查语义和语法是否正确、构建语法分析树），选择物理逻辑计划</li>
+<li>得到查询计划后，传给执行引擎</li>
+<li>执行引擎向资源管理器请求记录or关系的元组</li>
+<li>资源管理器掌握着存放关系的数据文件、文件中的数据格式和记录大小，以及支持对于数据文件中的元素进行快速查找的索引文件。查找数据的请求被传送给缓冲区管理器</li>
+<li>缓冲区管理器与磁盘交互（以磁盘块 单位）</li>
+</ul>
+<h2 id="事务处理"><a href="#事务处理" class="headerlink" title="事务处理"></a>事务处理</h2><ul>
+<li>分为两个主要部分</li>
+</ul>
+<h3 id="并发控制管理器"><a href="#并发控制管理器" class="headerlink" title="并发控制管理器"></a>并发控制管理器</h3><ul>
+<li>负责保证事务的原子性和孤立性</li>
+</ul>
+<h3 id="日志和恢复管理器"><a href="#日志和恢复管理器" class="headerlink" title="日志和恢复管理器"></a>日志和恢复管理器</h3><ul>
+<li>负责事务的持久性</li>
+</ul>
+<h1 id="辅助存储管理"><a href="#辅助存储管理" class="headerlink" title="辅助存储管理"></a>辅助存储管理</h1><h2 id="存储器层次"><a href="#存储器层次" class="headerlink" title="存储器层次"></a>存储器层次</h2><p><img src="/2020/08/05/基础与索引/image-20200724143448491.png" alt="image-20200724143448491"></p>
+<h2 id="组织磁盘上的数据"><a href="#组织磁盘上的数据" class="headerlink" title="组织磁盘上的数据"></a>组织磁盘上的数据</h2><ul>
+<li>一般，一个磁盘块中仅存放<strong>一个关系的元素</strong></li>
+</ul>
+<h3 id="定长记录"><a href="#定长记录" class="headerlink" title="定长记录"></a>定长记录</h3><ul>
+<li>下图假定所有字段必须以一个4的倍数的字节开始</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724150344115.png" alt="image-20200724150344115"></p>
+<p><img src="/2020/08/05/基础与索引/image-20200724150409109.png" alt="image-20200724150409109"></p>
+<ul>
+<li>当存取或修改记录时，记录（与整个块一起）就被移进主存</li>
+<li>块首部包含：<ul>
+<li>与一个或多个其他块的链接</li>
+<li>关于这个块在这样一个网络中所扮演的角色的信息</li>
+<li>关于这个块的元组属于哪个关系的信息</li>
+<li>一个给出每一条记录在块内偏移量的“目录”</li>
+<li>指明块最后一次修改和/或存取时间的时间戳</li>
+</ul>
+</li>
+<li>记录长度为316字节，假定4096字节的块，会有292字节的浪费</li>
+</ul>
+<h2 id="块和记录地址的表示"><a href="#块和记录地址的表示" class="headerlink" title="块和记录地址的表示"></a>块和记录地址的表示</h2><ul>
+<li>内存中：与虚拟内存地址相关</li>
+<li>二级存储器中：与磁盘的设备ID，柱面号等等相关</li>
+</ul>
+<h3 id="客户机-服务器系统中的地址"><a href="#客户机-服务器系统中的地址" class="headerlink" title="客户机-服务器系统中的地址"></a>客户机-服务器系统中的地址</h3><ul>
+<li>服务器：为客户端进程提供二级存储器数据，数据处于数据库地址空间，表示地址的方法有：<ul>
+<li>物理地址（字符串）：<ul>
+<li>存储所连接的主机</li>
+<li>块所在的磁盘或其它设备的标识符</li>
+<li>柱面号</li>
+<li>磁道号</li>
+<li>块号</li>
+<li>块内偏移量</li>
+</ul>
+</li>
+<li>逻辑地址</li>
+</ul>
+</li>
+<li>客户端：其地址空间看作主存本身</li>
+</ul>
+<h2 id="指针混写"><a href="#指针混写" class="headerlink" title="指针混写"></a>指针混写</h2><ul>
+<li>把块从二级存储器移到主存储器中，块内指针可以“混写”，即从数据库地址空间转换为虚拟地址空间</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724153804351.png" alt="image-20200724153804351"></p>
+<h3 id="被钉住的记录和块"><a href="#被钉住的记录和块" class="headerlink" title="被钉住的记录和块"></a>被钉住的记录和块</h3><ul>
+<li>即内存中一个块当前不能安全地被写回磁盘</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724154305211.png" alt="image-20200724154305211"></p>
+<h2 id="变长数据和记录"><a href="#变长数据和记录" class="headerlink" title="变长数据和记录"></a>变长数据和记录</h2><h3 id="变长字段的记录"><a href="#变长字段的记录" class="headerlink" title="变长字段的记录"></a>变长字段的记录</h3><ul>
+<li>当address地址为NULL时，直接在指向的指针空间处放一个空指针，进一步减少空间。</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724154657714.png" alt="image-20200724154657714"></p>
+<h3 id="具有重复字段的记录"><a href="#具有重复字段的记录" class="headerlink" title="具有重复字段的记录"></a>具有重复字段的记录</h3><ul>
+<li>法一：</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724155032593.png" alt="image-20200724155032593"></p>
+<ul>
+<li>法二：<ul>
+<li>保证记录定长，有效对记录进行搜索，但增加 磁盘I/O数目</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724155045741.png" alt="image-20200724155045741"></p>
+<ul>
+<li><h3 id="不能装入一个块中的记录"><a href="#不能装入一个块中的记录" class="headerlink" title="不能装入一个块中的记录"></a>不能装入一个块中的记录</h3></li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724155711393.png" alt="image-20200724155711393"></p>
+<ul>
+<li>BOLB(二进制大对象)</li>
+</ul>
+<h3 id="列存储"><a href="#列存储" class="headerlink" title="列存储"></a>列存储</h3><ul>
+<li>适用于：大多数查询请求是<strong>针对所有数据</strong>或者<strong>列的大部分数据</strong>。（常用于“分析型”查询）</li>
+<li>可以与值一起保存元组ID号~</li>
+</ul>
+<h2 id="记录的修改"><a href="#记录的修改" class="headerlink" title="记录的修改"></a>记录的修改</h2><h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><ul>
+<li>元组以某个固定次序存储（如按主键顺序存储）</li>
+<li>插入的两种方法：（使用偏移量加速找到插入的位置）<img src="/2020/08/05/基础与索引/image-20200724162909062.png" alt="image-20200724162909062"><ul>
+<li>在“邻近块”中找空间</li>
+<li>创建一个溢出块</li>
+</ul>
+</li>
+</ul>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><ul>
+<li><p>在记录处放删除标志</p>
+<ul>
+<li>可以是偏移量表中的空指针</li>
+<li>可以用删除标记代替记录,只用到第一个字节，后续的字节可用于另一个记录~</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200724164311442.png" alt="image-20200724164311442"></p>
+</li>
+</ul>
+<p>### </p>
+<h1 id="索引结构"><a href="#索引结构" class="headerlink" title="索引结构"></a>索引结构</h1><h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
+<li><p><strong>主索引&amp;辅助索引</strong>：主索引（主键）能确定记录在数据文件中的位置，而辅助索引不能</p>
+</li>
+<li><p>索引类型：顺序文件（稠密索引、稀疏索引）、B树索引、散列表索引。</p>
+</li>
+<li><p>稠密索引：为数据文件中的每条记录设一个键-指针对。其中所索引快保持键的顺序与文件中的排序顺序一致。（记录时排好序的）</p>
+</li>
+<li><p>稀疏索引：为数据文件中的每个存储块设一个键-指针对。（假定数据文件排好序）【只会是主索引】</p>
+</li>
+<li><p>多级索引：索引文件占据多个存储块，可采用多级索引【主索引】</p>
+</li>
+<li><p>辅助索引：总是稠密索引，因为不是主键索引（如果该column也不是unique的)，那就存在多个相同的索引内容，索引数据跨越多个块。<strong>使用辅助索引比使用主索引可能需要多得多的磁盘I/O，但无法解决！</strong></p>
+<ul>
+<li>避免键值重复：使用桶的间接层</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200725220045067.png" alt="image-20200725220045067"></p>
+<p><img src="/2020/08/05/基础与索引/image-20200726143152340.png" alt="image-20200726143152340"></p>
+</li>
+<li><p>辅助索引的运用：</p>
+<ul>
+<li><p>被组织成顺序文件的关系（如上都是）</p>
+</li>
+<li><p>作为“堆”结构的主键索引（不太能理解）</p>
+</li>
+<li><p>聚集文件</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Movie(title,year,length,genre,studioName,producerC<span class="comment">#)</span></span><br><span class="line">Studio(name,address,presC<span class="comment">#)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Select</span> title,<span class="keyword">year</span></span><br><span class="line"><span class="keyword">From</span> Movie,Studio</span><br><span class="line"><span class="keyword">WHERE</span> presC<span class="comment"># = zzz AND Movie.studioName = Studio.name;(假定这是该应用场景典型的查询)</span></span><br><span class="line"></span><br><span class="line">为这个两个关系建立一个聚集文件结构，在查询键presC<span class="comment">#上建立索引。</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/08/05/基础与索引/image-20200725221051780.png" alt="image-20200725221051780"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="B树索引"><a href="#B树索引" class="headerlink" title="B树索引"></a>B树索引</h2><ul>
+<li>B-树根结点块是永久地缓冲在主存中的绝佳选择。</li>
+</ul>
+<h2 id="散列表"><a href="#散列表" class="headerlink" title="散列表"></a>散列表</h2><ul>
+<li><p>插入时，若没有位置，就存储到该块链上的某个溢出块中。</p>
+</li>
+<li><p>删除时，若块中前一条记录被删除，就一条记录需移动到前面。</p>
+<p><img src="/2020/08/05/基础与索引/image-20200726151506740.png" alt="image-20200726151506740"></p>
+</li>
+</ul>
+<h3 id="可扩展散列表"><a href="#可扩展散列表" class="headerlink" title="可扩展散列表"></a>可扩展散列表</h3><ul>
+<li><p>动态散列表之一</p>
+</li>
+<li><p>引入间接层，用一个指向块的指针数组来表示桶，而不是用数据块本身组成的数组来表示桶。</p>
+</li>
+<li><p>指针数组能增长，长度总是2的幂。</p>
+<p><img src="/2020/08/05/基础与索引/image-20200726152253294.png" alt="image-20200726152253294"></p>
+</li>
+<li><p>通过判断i和j（右上角小块中的）的大小，不断加倍桶数组，且分裂数据块。</p>
+</li>
+<li><p>优点：若桶数组小到可以存放在内存中，那么访问桶数组就不需要进行磁盘I/O。</p>
+</li>
+</ul>
+<h3 id="线性散列表"><a href="#线性散列表" class="headerlink" title="线性散列表"></a>线性散列表</h3><p><img src="/2020/08/05/基础与索引/image-20200726153509875.png" alt="image-20200726153509875"></p>
+<ul>
+<li>i(当前被使用的散列函数值的位数)、n（当前的桶数）、r（当前散列表中的记录总数）</li>
+<li>（没怎么看懂）</li>
+<li>优点：桶的增长较为缓慢</li>
+</ul>
+<h2 id="多维索引"><a href="#多维索引" class="headerlink" title="多维索引"></a>多维索引</h2><ul>
+<li>数据结构：类散列表方法，类树方法</li>
+</ul>
+<h4 id="多维数据的散列结构"><a href="#多维数据的散列结构" class="headerlink" title="多维数据的散列结构"></a>多维数据的散列结构</h4><ul>
+<li>网格文件：通过排序该维的值来划分该维</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200726161359875.png" alt="image-20200726161359875"></p>
+<ul>
+<li><p>当数据分布性很好，且数据文件本身又不太大，那么可以选择网格线。</p>
+</li>
+<li><p>分段散列：为每个二进制位设定一个属性</p>
+<p><img src="/2020/08/05/基础与索引/image-20200726162116830.png" alt="image-20200726162116830" style="zoom:50%;"></p>
+<ul>
+<li>对最近邻查询或范围查询实际上没有什么用，因为点之间的物理距离并没有通过桶号的接近反映出来。</li>
+<li>如果只需要支持部分匹配查询，只需要指定某属性的值而不指定其他属性，那么分段散列函数可能会比网格文件好。</li>
+</ul>
+</li>
+</ul>
+<h4 id="多维数据的树结构"><a href="#多维数据的树结构" class="headerlink" title="多维数据的树结构"></a>多维数据的树结构</h4><ul>
+<li><p>多键索引</p>
+<p><img src="/2020/08/05/基础与索引/image-20200726162746159.png" alt="image-20200726162746159" style="zoom:50%;"></p>
+</li>
+<li><p>kd-树</p>
+<p><img src="/2020/08/05/基础与索引/image-20200726162909353.png" alt="image-20200726162909353" style="zoom:50%;"></p>
+</li>
+<li><p>四叉树：根据象限来划分</p>
+<p><img src="/2020/08/05/基础与索引/image-20200726163747603.png" alt="image-20200726163747603" style="zoom:50%;"></p>
+</li>
+<li><p>R-树（内部结点对应于某个内部区域）</p>
+<ul>
+<li>对于”where-am-I”这类典型查询，R树是有用的。</li>
+</ul>
+<p><img src="/2020/08/05/基础与索引/image-20200726164316027.png" alt="image-20200726164316027" style="zoom:33%;"></p>
+</li>
+</ul>
+<h2 id="位图索引"><a href="#位图索引" class="headerlink" title="位图索引"></a>位图索引</h2><ul>
+<li>每条记录作为二进制位，针对年龄这个字段，如18岁，假定有6条记录可能在第1,2,3条记录的年龄为18岁，则位图表示为111000</li>
+<li>压缩位图：采用分段长度编码</li>
+</ul>
+<p>注： 一般做删除操作，都直接在数据文件中采用“删除标记”</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+      
+        
+      
+</div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    luyiqu
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://luyiqu.github.io/2020/08/05/基础与索引/" title="基础与索引">https://luyiqu.github.io/2020/08/05/基础与索引/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/基础书本/" rel="tag"># 基础书本</a>
+          
+            <a href="/tags/数据库系统实现/" rel="tag"># 数据库系统实现</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/05/skywalking适配mysql/" rel="next" title="skywalking适配mysql">
+                <i class="fa fa-chevron-left"></i> skywalking适配mysql
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/05/查询优化/" rel="prev" title="查询优化">
+                查询优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="luyiqu">
+            
+              <p class="site-author-name" itemprop="name">luyiqu</p>
+              <p class="site-description motion-element" itemprop="description">blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库管理系统成分"><span class="nav-number">1.</span> <span class="nav-text">数据库管理系统成分</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查询响应"><span class="nav-number">1.1.</span> <span class="nav-text">查询响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务处理"><span class="nav-number">1.2.</span> <span class="nav-text">事务处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发控制管理器"><span class="nav-number">1.2.1.</span> <span class="nav-text">并发控制管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志和恢复管理器"><span class="nav-number">1.2.2.</span> <span class="nav-text">日志和恢复管理器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#辅助存储管理"><span class="nav-number">2.</span> <span class="nav-text">辅助存储管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#存储器层次"><span class="nav-number">2.1.</span> <span class="nav-text">存储器层次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组织磁盘上的数据"><span class="nav-number">2.2.</span> <span class="nav-text">组织磁盘上的数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定长记录"><span class="nav-number">2.2.1.</span> <span class="nav-text">定长记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#块和记录地址的表示"><span class="nav-number">2.3.</span> <span class="nav-text">块和记录地址的表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户机-服务器系统中的地址"><span class="nav-number">2.3.1.</span> <span class="nav-text">客户机-服务器系统中的地址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指针混写"><span class="nav-number">2.4.</span> <span class="nav-text">指针混写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#被钉住的记录和块"><span class="nav-number">2.4.1.</span> <span class="nav-text">被钉住的记录和块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变长数据和记录"><span class="nav-number">2.5.</span> <span class="nav-text">变长数据和记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变长字段的记录"><span class="nav-number">2.5.1.</span> <span class="nav-text">变长字段的记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具有重复字段的记录"><span class="nav-number">2.5.2.</span> <span class="nav-text">具有重复字段的记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能装入一个块中的记录"><span class="nav-number">2.5.3.</span> <span class="nav-text">不能装入一个块中的记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列存储"><span class="nav-number">2.5.4.</span> <span class="nav-text">列存储</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录的修改"><span class="nav-number">2.6.</span> <span class="nav-text">记录的修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">2.6.1.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">2.6.2.</span> <span class="nav-text">删除</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引结构"><span class="nav-number">3.</span> <span class="nav-text">索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础"><span class="nav-number">3.1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B树索引"><span class="nav-number">3.2.</span> <span class="nav-text">B树索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#散列表"><span class="nav-number">3.3.</span> <span class="nav-text">散列表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可扩展散列表"><span class="nav-number">3.3.1.</span> <span class="nav-text">可扩展散列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线性散列表"><span class="nav-number">3.3.2.</span> <span class="nav-text">线性散列表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多维索引"><span class="nav-number">3.4.</span> <span class="nav-text">多维索引</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多维数据的散列结构"><span class="nav-number">3.4.0.1.</span> <span class="nav-text">多维数据的散列结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多维数据的树结构"><span class="nav-number">3.4.0.2.</span> <span class="nav-text">多维数据的树结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#位图索引"><span class="nav-number">3.5.</span> <span class="nav-text">位图索引</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luyiqu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

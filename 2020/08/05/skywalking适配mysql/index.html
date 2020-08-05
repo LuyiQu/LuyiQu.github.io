@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="skywalking,mysql,项目总结,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="瞿璐祎的博客" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="背景 为了去抓取应用端发来的负载信息，比如sql,timestamp,sql中的para,和select语句的result集合，通过分析这些负载，来模拟负载，主要用于抓取应用端的负载，相当于数据挖掘中获取数据的来源把~~  这篇主要是总结我在适配skywalking获取mysql应用端的负载遇到的问题和感受。   先行 利用skywalking在以mysql为数据库的应用程序中抓取负载，在实验中，">
+<meta name="keywords" content="skywalking,mysql,项目总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="skywalking适配mysql">
+<meta property="og:url" content="https://luyiqu.github.io/2020/08/05/skywalking适配mysql/index.html">
+<meta property="og:site_name" content="瞿璐祎的博客">
+<meta property="og:description" content="背景 为了去抓取应用端发来的负载信息，比如sql,timestamp,sql中的para,和select语句的result集合，通过分析这些负载，来模拟负载，主要用于抓取应用端的负载，相当于数据挖掘中获取数据的来源把~~  这篇主要是总结我在适配skywalking获取mysql应用端的负载遇到的问题和感受。   先行 利用skywalking在以mysql为数据库的应用程序中抓取负载，在实验中，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-08-05T07:11:33.089Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="skywalking适配mysql">
+<meta name="twitter:description" content="背景 为了去抓取应用端发来的负载信息，比如sql,timestamp,sql中的para,和select语句的result集合，通过分析这些负载，来模拟负载，主要用于抓取应用端的负载，相当于数据挖掘中获取数据的来源把~~  这篇主要是总结我在适配skywalking获取mysql应用端的负载遇到的问题和感受。   先行 利用skywalking在以mysql为数据库的应用程序中抓取负载，在实验中，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://luyiqu.github.io/2020/08/05/skywalking适配mysql/">
+
+
+
+
+
+  <title>skywalking适配mysql | 瞿璐祎的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">瞿璐祎的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">try something new</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
+            
+            Schedule
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/08/05/skywalking适配mysql/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">skywalking适配mysql</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-05T23:10:23+08:00">
+                2020-08-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/skywalking/" itemprop="url" rel="index">
+                    <span itemprop="name">skywalking</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><ul>
+<li><p>为了去抓取应用端发来的负载信息，比如sql,timestamp,sql中的para,和select语句的result集合，通过分析这些负载，来模拟负载，主要用于抓取应用端的负载，相当于数据挖掘中获取数据的来源把~~</p>
+</li>
+<li><p>这篇主要是总结我在适配skywalking获取mysql应用端的负载遇到的问题和感受。</p>
+</li>
+</ul>
+<h1 id="先行"><a href="#先行" class="headerlink" title="先行"></a>先行</h1><ul>
+<li><p>利用skywalking在以mysql为数据库的应用程序中抓取负载，在实验中，以oltpbench为应用端。大致的配置是，在<a href="https://github.com/apache/skywalking拉去skywalking源代码，利用说明文档进行编译" target="_blank" rel="noopener">https://github.com/apache/skywalking拉去skywalking源代码，利用说明文档进行编译</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/apache/skywalking.git</span><br><span class="line">cd skywalking/</span><br><span class="line">git submodule init</span><br><span class="line">git submodule update</span><br><span class="line">./mvnw clean package -DskipTests</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译好的在dist目录下，如果没有别的需求，可直接在启动应用端的脚本或命令行中加入-javaagent /skywalking/agent/skywalking-agent.jar。</p>
+</li>
+<li>由于项目中需要按照一定的形式将抓取到的日志输入固定的文件中，因此主要对skywalking的三个包进行修改，分别是mysql-common,mysql-5.x,jdbc-commons，这三个都在./apm-sniffer/apm-sdk-plugins中。</li>
+</ul>
+<h1 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h1><h2 id="mysql-commons"><a href="#mysql-commons" class="headerlink" title="mysql-commons"></a>mysql-commons</h2><ul>
+<li>里面都是一些截流器，有针对预编译sql的PreparadStatementExeucute，还有PreparadStatementBatchExeucute，和普通的StateExecute。这些截流器都被注册了，与mysql-5.x中的注册器对应，注册器指明mysql中哪里函数利用那些截流器去捕获。如”add batch”函数就利用PreparadStatementBatchExeucute去抓取。”executeUpdate”利用PreparadStatementExeucute和StateExecute去抓取（根据不同的sql类型）</li>
+</ul>
+<h2 id="mysql-5-x"><a href="#mysql-5-x" class="headerlink" title="mysql-5.x"></a>mysql-5.x</h2><ul>
+<li>一些注册器，与拦截器对应即可</li>
+</ul>
+<h2 id="jdbc-commons"><a href="#jdbc-commons" class="headerlink" title="jdbc-commons"></a>jdbc-commons</h2><ul>
+<li>主要是加了connId，还有与commit,rollback有关的拦截器，在这个包中，也进行了修改。</li>
+</ul>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><h2 id="mysql-的-jdbc重复调用问题"><a href="#mysql-的-jdbc重复调用问题" class="headerlink" title="mysql 的 jdbc重复调用问题"></a>mysql 的 jdbc重复调用问题</h2><ul>
+<li><p>查看Mysql的jdbc的包（可利用反编译软件进行查看），发现add batch又调用了executeUpdate函数，导致skywalking抓包的时候重复捕获一条语句，导致重复。此外，还有executeUpdate自调用三次，导致一条日志被打印出三次。这类问题的处理方式，利用查看调用栈，分析它的调用过程，来忽略一些日志的输出。</p>
+</li>
+<li><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Exception ex = <span class="keyword">new</span> Exception();</span><br><span class="line">StackTraceElement[] ste = ex.getStackTrace();</span><br><span class="line"><span class="keyword">boolean</span> fromExecuteBatch = <span class="keyword">false</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ste.length; ++i) &#123;</span><br><span class="line">    <span class="keyword">if</span>(ste[i].getMethodName().contains(<span class="string">"executeBatch"</span>)||ste[i].getMethodName().contains(<span class="string">"executeUpdate$Original"</span>))&#123;</span><br><span class="line">        fromExecuteBatch = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="mysql中以一个host为一个connId"><a href="#mysql中以一个host为一个connId" class="headerlink" title="mysql中以一个host为一个connId"></a>mysql中以一个host为一个connId</h2><ul>
+<li>由于项目的需要，我们需要得到connId，在jdbc-commons的相应位置加上与connId相关的代码。</li>
+<li>但是发现createstatement有个问题，就是无论多少个线程，以及无论多少个连接，但输出总是一个相同的。但从mysql端捕获到的connectionInfo都是不同的，后来发现是skywalking中是根据host和Port来存储connectionInfo的，若从相同的host和port发送数据库请求，那skywalking（mysql部分，oracle应该不是这样的)就认为是用一条connectionInfo信息，导致出错。</li>
+<li>这个问题的解决方法：就不用host和port进行存储..换了另一种方式。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>skywalking适配mysql耗时达1周左右，发现自己还是畏惧源码的阅读，无论是skywalking还是mysql-jdbc还是不能有效的进行阅读，希望下次能改进。</li>
+<li>自己对于问题的解决不能深入，抱着懒散的心态~，要加油呀！</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+<div>
+      
+        
+      
+</div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    luyiqu
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://luyiqu.github.io/2020/08/05/skywalking适配mysql/" title="skywalking适配mysql">https://luyiqu.github.io/2020/08/05/skywalking适配mysql/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/skywalking/" rel="tag"># skywalking</a>
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+            <a href="/tags/项目总结/" rel="tag"># 项目总结</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/20/SQLCheck-Automated-Detection-and-Diagnosis-of-SQL-Anti-Patterns/" rel="next" title="SQLCheck: Automated Detection and Diagnosis of SQL Anti-Patterns">
+                <i class="fa fa-chevron-left"></i> SQLCheck: Automated Detection and Diagnosis of SQL Anti-Patterns
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/05/基础与索引/" rel="prev" title="基础与索引">
+                基础与索引 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="luyiqu">
+            
+              <p class="site-author-name" itemprop="name">luyiqu</p>
+              <p class="site-description motion-element" itemprop="description">blog</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#先行"><span class="nav-number">2.</span> <span class="nav-text">先行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作"><span class="nav-number">3.</span> <span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql-commons"><span class="nav-number">3.1.</span> <span class="nav-text">mysql-commons</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql-5-x"><span class="nav-number">3.2.</span> <span class="nav-text">mysql-5.x</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jdbc-commons"><span class="nav-number">3.3.</span> <span class="nav-text">jdbc-commons</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">4.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql-的-jdbc重复调用问题"><span class="nav-number">4.1.</span> <span class="nav-text">mysql 的 jdbc重复调用问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql中以一个host为一个connId"><span class="nav-number">4.2.</span> <span class="nav-text">mysql中以一个host为一个connId</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">luyiqu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
