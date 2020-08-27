@@ -269,6 +269,455 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/08/28/NewSQL/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/08/28/NewSQL/" itemprop="url">What’s Really New with NewSQL</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-27T16:06:22Z">
+                2020-08-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Paper/" itemprop="url" rel="index">
+                    <span itemprop="name">Paper</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<hr>
+<h1 id="先导"><a href="#先导" class="headerlink" title="先导"></a>先导</h1><h2 id="为什么需要NewSQL"><a href="#为什么需要NewSQL" class="headerlink" title="为什么需要NewSQL?"></a>为什么需要NewSQL?</h2><ul>
+<li>数据的急速扩增，需要数据库具有很强的扩展性，往往有两种扩展方式：<ul>
+<li>垂直扩展：scale-up</li>
+<li>水平扩展: scale-out，采用中间件，做sharding的方式，即分库分表的方式</li>
+</ul>
+</li>
+</ul>
+<h2 id="NoSQL"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</h2><h3 id="代表性的DB"><a href="#代表性的DB" class="headerlink" title="代表性的DB"></a>代表性的DB</h3><ul>
+<li>Google’s BigTable — HBASE（开源版）</li>
+<li>Amazon’s Dynamo — Cassandra（开源版）</li>
+<li>MongoDB</li>
+<li>Redis(键值型数据库)</li>
+</ul>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>不保证强一致性（故不适用金融服务），需要在应用逻辑里处理最终一致性的问题</li>
+<li>不支持事务</li>
+<li>数据模型：键值对、图形、文档</li>
+</ul>
+<h2 id="NewSQL"><a href="#NewSQL" class="headerlink" title="NewSQL"></a>NewSQL</h2><h3 id="特性-1"><a href="#特性-1" class="headerlink" title="特性"></a>特性</h3><ul>
+<li>可扩展性</li>
+<li>针对读写事务需要满足：<ul>
+<li>执行时间短</li>
+<li>一般只查询一小部分数据，通过使用索引来达到高效查询的目的，即避免全表扫描或者大规模的分布式join</li>
+<li>一般执行相同的命令，<strong>使用不同的输入参数</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="数据库的历史"><a href="#数据库的历史" class="headerlink" title="数据库的历史"></a>数据库的历史</h1><h2 id="early-1970s"><a href="#early-1970s" class="headerlink" title="early 1970s"></a>early 1970s</h2><ul>
+<li>IBM’s SystemR</li>
+<li>the University of California’s INGRES</li>
+<li>Oracle(和系统R的设计很像)  </li>
+<li>DB2 1983</li>
+</ul>
+<h2 id="late-1980s-and-early-1990s"><a href="#late-1980s-and-early-1990s" class="headerlink" title="late 1980s and early 1990s"></a>late 1980s and early 1990s</h2><ul>
+<li>出现面向对象的数据库（但夭折了），不过他的思想延续了，如加入对象和XML</li>
+<li>MYSQL 1995</li>
+<li>PostgreSQL 1994</li>
+</ul>
+<h2 id="2000s"><a href="#2000s" class="headerlink" title="2000s"></a>2000s</h2><ul>
+<li>2000s，随着互联网的应用越来越多，对数据库的要求也高起立了，针对这个，有一部分人提出将数据库<strong>scale-up</strong>，一直更新数据库的硬件资源，不断升级。</li>
+<li>另一部分提出了使用一个定制的<strong>中间件</strong>，在一组便宜的机器上构建单节点的DBMS，主要是中间件的功劳！！（感觉这个接近现在newsql的概念），中间件需要做的事情可多了，对应用端不偏于访问数据库的queries进行重写，之后再发给底下的机器上，让它们执行完返回，之后中间件再结合它们的合并他们的返回结果给应用端。能力大了，担子也就自然大了，因此导致中间件这个节点负载过大，产生性能瓶颈（这是我自己的想法）<ul>
+<li>中间件的典型：<ul>
+<li>Google’s MySQL-based cluster（这方法被Facebook采取，至今仍在使用）</li>
+<li>eBay’s Oracle-based cluster（join贼不方便。ebay要求开发人员在应用层自己去实现Join)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>最终，提出分布式DBMSs，因为传统数据库关注一致性和正确性的同时，忽视了可用性和性能，但这种trade-off对于如今的互联网应用来说却是不合适的。而且使用full-featured DBMS(像MySQL)开销很大（限制太多）</li>
+</ul>
+<h2 id="mid-to-late-2000s"><a href="#mid-to-late-2000s" class="headerlink" title="mid to late 2000s"></a>mid to late 2000s</h2><ul>
+<li>NoSQL出现了，他们放弃了<strong>强事务保证</strong>和传统数据库中的<strong>关系模型</strong>，选择了<strong>最终一致性</strong>和<strong>可选择的数据模型</strong>（key/value,graphs,documents)</li>
+<li>代表：<ul>
+<li>Google’s BigTable（未开源）</li>
+<li>Amazon’s Dynamo（未开源）</li>
+<li>Facebook’s Cassandra(基于BigTable &amp; Dynamo)</li>
+<li>PowerSet’s Hbase(基于BigTable)</li>
+<li>MongoDB</li>
+</ul>
+</li>
+<li>NoSQL的好处是开发人员会更关注他们的应用场景而并非如何去扩展数据库</li>
+<li>但一些机构（如Google）发现NoSQL会导致他们的开发人员耗费太长时间去处理数据一致性和事务。这些机构职能要么去scale-up机器，要么使用他们自己的定制化的中间层去支持事务。</li>
+</ul>
+<h2 id="NEWSQL"><a href="#NEWSQL" class="headerlink" title="NEWSQL"></a>NEWSQL</h2><ul>
+<li>既想拥有NoSQL一样的<strong>可扩展性</strong>，又想保持传统数据库中的<strong>关系模型</strong>和<strong>事务支持</strong></li>
+<li>NewSQL DBMSs 读写事务的特点：<ul>
+<li>short-lived</li>
+<li>只用到少部分的数据集（使用索引）</li>
+<li>事务模板重复（只修改输入参数值）</li>
+</ul>
+</li>
+<li>NewSQL 有更狭窄的定义：<ul>
+<li>a lock-free concurrency control schema</li>
+<li>a shared-nothing distributed architecture</li>
+</ul>
+</li>
+</ul>
+<h1 id="NewSQL的分类"><a href="#NewSQL的分类" class="headerlink" title="NewSQL的分类"></a>NewSQL的分类</h1><ul>
+<li>使用新架构的新系统</li>
+<li>重新实现2000s由Google等开发的中间层基础设施</li>
+<li>由云计算提供的数据库即服务</li>
+</ul>
+<p>注：以上的这些之前都提出新的存储引起去取代mysql默认的innoDB，只改变引擎的话就不需要改变API，但是作者认为mysql的InnoDB可靠且性能好，如果改变InnoDB的存储引擎是为了将行存换成列存，如OLAP的话是可以接受的（如Infobright,InfiniDB)。但还是OLTP事务的话换掉InnoDB引擎是没有什么意义的。</p>
+<h2 id="新的架构"><a href="#新的架构" class="headerlink" title="新的架构"></a>新的架构</h2><ul>
+<li>都有以下几个特征：<ul>
+<li>基于分布式架构在shared-nothing resources，且包括以下组件：支持多节点并发控制、冗余容错、流控制、分布式查询处理，且包括节点之间的查询优化和交流协议（如节点和节点之间直接send intra-query data，不需要经过统一的中间层）</li>
+<li>DBMSs都自己管理他们的主要存储（无论是在内存还是在磁盘上），不依赖HDFS等系统，这个特性是为了实现query落在数据节点，减少传送代价。</li>
+<li>当然也有缺点，新的架构想必采用了新的技术，但对于这些技术大多人都不熟悉，那对应的管理数据库和报告工具也就还没有啦~针对此，Clstrix和MemSOL和MYSQL wire protocol维持兼容性。</li>
+</ul>
+</li>
+<li>本类案例：Clustrix, Cockroach, Google Spanner, H-Store, HyPer, MemSQL, NuoDB, SAP HANA, VoltDB.</li>
+</ul>
+<h2 id="透明的分表中间件"><a href="#透明的分表中间件" class="headerlink" title="透明的分表中间件"></a>透明的分表中间件</h2><ul>
+<li>分表的特性：<ul>
+<li>每个节点都跑同一个数据库</li>
+<li>每个节点仅是数据库的一部分</li>
+<li>每个节点都不能被应用独立访问</li>
+</ul>
+</li>
+<li>中间件组织查询，安排事务，管理每个节点的数据分布、复制、分割。</li>
+<li>有个shim layer装在每个数据库节点上和中间层交流，它主要负责代表中间件去执行本地的查询并返回给中间件结果。</li>
+<li>中间件的优点：使用人员都感觉使用的是同一个节点的数据库。</li>
+<li>mysql就使用中间件去扩展，因此中间件需要支持mysql wire protocol</li>
+<li>很多组织的确是使用了中间件，但每个节点都使用传统的数据库（如mysq），这样他们都不能使用存储管理器或者并发控制schema。而且中间件不得不先去优化一下查询计划再分发给不同的数据库节点。（每个节点自己也会优化中间件派发给自己的查询）</li>
+<li>本类案例：AgilData Scalable Cluster, MariaDB MaxScale, ScaleArc, ScaleBase.</li>
+</ul>
+<h2 id="数据库即服务"><a href="#数据库即服务" class="headerlink" title="数据库即服务"></a>数据库即服务</h2><ul>
+<li>如今，很多云计算都提供NewSQL 数据库即服务，也就是开发人员不需要自己去配置资源等等啥的，只要会使用就好了。交付给用户的只是一个连接DBMS的URL，以及一个用于监控的仪表盘页面或者一组用于系统控制的API。</li>
+<li><p>本文只认为在2016年止只有两款可以认为是NewSQL，分别是Amazon’s Aurora（利用日志结构存储管理来优化I/O并发度）和ClearDB提供定制化的DBaaS部署在主要的云平台上。<strong>【不太清楚ClearDB】</strong></p>
+</li>
+<li><p>本类案例：Amazon Aurora，ClearDB</p>
+</li>
+</ul>
+<h1 id="NewSQL的新技术"><a href="#NewSQL的新技术" class="headerlink" title="NewSQL的新技术"></a>NewSQL的新技术</h1><h2 id="主存存储器"><a href="#主存存储器" class="headerlink" title="主存存储器"></a>主存存储器</h2><ul>
+<li>基于内存存储的NewSQL DBMS有学术的（H-Store,HyPer）也有商用的（MemSQL,SAP HAHA,VoltDB)</li>
+<li>将数据库全部存储在内存上实质在1980s就被提出来了，那个时候，PRISMA/DB（首个分布式内存DBMS也被开发出来了），Altibase,Oracle’s TimesTen,AT&amp;T’s DataBlitz是其组件。</li>
+<li>基于内存存储器的NewSQL新就新在它可以将数据库的一部分（比如冷数据）驱逐到磁盘中，也就是说基于内存存储器的NewSQL也可以支持比内存大的数据库了。<ul>
+<li>实现这个通用方法是使用一个<strong>数据库内部的internal tracking mechanism</strong>来挑选出冷数据。</li>
+<li>此外，还有一个方法是EPFL中使用VoltDB的<strong>OS虚拟内存页</strong>。</li>
+<li>MemSQL,管理器手动创建数据库去以列存的方式存储table。它以log-structured storage方式去减少update的开销。</li>
+</ul>
+</li>
+</ul>
+<h2 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h2><ul>
+<li>最早的分布式数据库是SSD-1 project 1970，在1980s system R和INGRES也创建了各自的分布式版本，前者是一个shared-nothing，基于磁盘的分布式数据库，后者由于它的动态查询优化算法得以出名，它把分布式查询切割成小块。</li>
+<li>但以上分布式数据库都没有啥进展有以下两点原因<ul>
+<li>机器太贵了，分布式机器代价大</li>
+<li>那个时候由于应用都很简单，对分布式高性能的数据库没什么追求。</li>
+</ul>
+</li>
+<li>partition怎么做？<ul>
+<li>将数据库的table水平分到几个节点中，可以根据数据的columns，或者具体的values（如根据一个customer的id，做个range or hash partitioning分在节点中，然后对应的order啥的也根据id进行划分，这样尽可能保证一个事务在一个节点上进行查询，避免分布式事务），但是Amazon Aurora，ClearDB去不支持这样的partition【为啥呢】</li>
+<li>据库schema可以转换为树状结构，树的后代与根具有外键关系。然后依据这些关系关联的属性对表进行分区，使得单个实体的所有数据都能位于同一分区。例子：一个树的根节点可能是一个客户表，数据库将会根据每一个客户进行分区，将每个人的订单记录和账户信息存放在一起。</li>
+</ul>
+</li>
+<li>有两种cluster node架构，分别是同质的和异质的<ul>
+<li>同质：数据和执行都放在一个节点上。</li>
+<li>异质：数据和执行节点分离</li>
+</ul>
+</li>
+</ul>
+<h3 id="异质节点架构"><a href="#异质节点架构" class="headerlink" title="异质节点架构"></a>异质节点架构</h3><h4 id="NuoDB"><a href="#NuoDB" class="headerlink" title="NuoDB"></a>NuoDB</h4><ul>
+<li><p>存储节点（SM）：将数据库分为多个blocks(atoms)</p>
+</li>
+<li><p>事务引擎节点（TEs）：作为atoms的内存缓冲</p>
+<ul>
+<li>需要write-locks on tuples，然后对tuples的修改都会去广播给其他的TEs和SM</li>
+<li>为避免nodes之间的来回，NuoDB公开负载均衡schema确保使用的数据会驻留在同一个TE中</li>
+<li>和其他的分布式数据库一样都需要partitioning schema，但不需要pre-partition数据库以及定义table之间的关系（为啥不需要？）</li>
+</ul>
+</li>
+</ul>
+<h4 id="MemSQL"><a href="#MemSQL" class="headerlink" title="MemSQL"></a>MemSQL</h4><ul>
+<li><p>只具备<strong>执行功能的聚合器节点</strong>和<strong>存储实际数据的叶节点</strong></p>
+</li>
+<li><p>execution-only aggregator nodes：不缓冲任务数据</p>
+</li>
+<li>存储真实数据的叶子节点：会执行部分queries，从而也减少返回给aggregator节点的数据。而在NuoDB中SM就只是存储数据的节点。</li>
+</ul>
+<h3 id="实时迁移"><a href="#实时迁移" class="headerlink" title="实时迁移"></a>实时迁移</h3><ul>
+<li>物理资源会迁移数据，和NoSQL中的re-balancing很像，但在迁移的过程中NewSQL会确保事务的ACID。有两个方法保证实现这点。<ul>
+<li>以粗粒度的虚拟(逻辑)分区来组成数据库 分布在不同的物理节点上。当DBMS需要re-balance的时候，就移动节点之间的这些虚拟分区。<ul>
+<li>Clustrix(NewSQL)，AgilData(NewSQL),Cassandra(NoSQL),DynamoDB(NoSQL)就使用这个方法。</li>
+</ul>
+</li>
+<li>执行细粒度的re-balancing通过range partitioning重新分配tuples和tuples组。很像MongoDB中的auto-sharding feature。ScaleBase和H-Store常用这方法。</li>
+</ul>
+</li>
+</ul>
+<h2 id="并发控制"><a href="#并发控制" class="headerlink" title="并发控制"></a>并发控制</h2><ul>
+<li>需要保证原子性和隔离性</li>
+<li>主要有两种协调器：集中式或去中心化事务协商<ul>
+<li>集中式的：由一个协调器节点专门管这个事情，所有事务操作都要经过它。在1970-1980s的TP monitors这个方法就被提出了</li>
+<li>去中心化的：每个节点都保持一定的事务状态（访问其节点数据的），节点之间会相互协商来避免并发事务冲突。<ul>
+<li>优点：便于scalability</li>
+<li>缺点：需要记录DBMS节点的时钟来保证高同步，从而生成全局有序的事务。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="分布式架构"><a href="#分布式架构" class="headerlink" title="分布式架构"></a>分布式架构</h3><h4 id="2PL"><a href="#2PL" class="headerlink" title="2PL"></a>2PL</h4><ul>
+<li>SSD-1 由中心化的协调器管理shared-nothing nodes。</li>
+<li>IBM’s R*是去中心化协调器协调的，它使用了分布式的2PL协议，这样事务可以锁定正在访问的节点中的数据项。</li>
+<li>INGRES的分布式版本使用去中心化的2PL以及中心化的死锁检测。</li>
+<li>现在基本所有NewSQL都避开使用2PL，使用多版本时间戳排序。</li>
+</ul>
+<h4 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h4><ul>
+<li>MVCC既确保事务之间的竞争，也允许long-running,read-only事务不会阻塞writers。</li>
+<li>MemSQL,HyPer,HAHA,CockroachDB使用这个协议，他们对这个协议也各自做了工程上的优化和调整</li>
+</ul>
+<h4 id="2PL-amp-MVCC"><a href="#2PL-amp-MVCC" class="headerlink" title="2PL&amp;MVCC"></a>2PL&amp;MVCC</h4><ul>
+<li>修改数据库的时候需要去获取锁，修改完一条记录，那么为该记录创建一个新版本，使只读查询可以避免请求锁，因此不会阻塞写事务。</li>
+<li>MySQL’s InnoDB,Google’s Spanner,NuoDB（在MVCC基础上引用了gossip 协议在各节点之中广播版本信息）,Clustrix.</li>
+<li>Spanner（及其后代F1和SpannerSQL）使用硬件设备（如GPS,原子时钟）来确保高精度时钟同步</li>
+<li>CockroachDB使用混合时钟协议，结合松散 同步硬件时钟和逻辑计数器</li>
+<li>所有的中间件和DBaaS服务都继承了它们底层DBMS架构使用的并发控制方案，因为大部分都使用MySQL作为底层DBMS，所以大部分的都是使用的2PL加上MVCC方案。</li>
+</ul>
+<h4 id="TO"><a href="#TO" class="headerlink" title="TO"></a>TO</h4><ul>
+<li>VoltDB<ul>
+<li>安排事务在每个分区中一次只执行一个</li>
+<li>使用混合架构：去中心化方式安排单分区事务，中心化协调器对应多分区事务</li>
+<li>通过逻辑时间戳对事务进行排序，然后调度它们以便在轮到它们时在分区上执行</li>
+<li>不足：当事务横跨多个区时，由于网络的交互延迟导致节点等待message的时候空闲。</li>
+</ul>
+</li>
+</ul>
+<h2 id="二级索引（辅助索引）"><a href="#二级索引（辅助索引）" class="headerlink" title="二级索引（辅助索引）"></a>二级索引（辅助索引）</h2><ul>
+<li><p>次级索引包含来自表的不同于其主键的属性集。它允许DBMS支持主键和分区键以外的快速查询。</p>
+</li>
+<li><p>分布式数据库中二级索引的challenge是他们不能总是像其他的数据库一样以相同的方式进行partition（如直接根据主键进行partition了）。</p>
+</li>
+<li>在分布式数据库中支持二级索引的两个设计思想：<ul>
+<li>二级索引存在哪儿</li>
+<li>如何在事务中维持二级索引</li>
+</ul>
+</li>
+<li>中心化的协调器<ul>
+<li>二级索引既在协调器节点，又在shard nodes。</li>
+<li>优：整个系统中只有单个版本的index，维持起来很方便</li>
+<li>劣：修改的时候需要修改所有节点上的副本。</li>
+</ul>
+</li>
+<li>去中心化的协调器<ul>
+<li>所有基于新架构的NewSQL都是去中心化的，且使用划分好的二级索引</li>
+<li>每个节点都存储index的一部分。</li>
+<li>优：修改的时候只需要修改一个节点</li>
+<li>劣：查询的时候需要去横跨多个节点去找数据在哪儿</li>
+</ul>
+</li>
+<li>Clustrix：既有replicated，粗粒度的(range-based)index在每个节点上，允许查询使用一个属性（并非partitioning属性找到合适的节点）；各个节点上又有第二partitioned index，能根据index找到该节点的tuples。但是都是ranges，而不是单个的值，减少了保持索引副本在集群中同步所需的调度次数。【没太理解】</li>
+</ul>
+<h2 id="复制-冗余"><a href="#复制-冗余" class="headerlink" title="复制(冗余)"></a>复制(冗余)</h2><h3 id="结点间数据一致性"><a href="#结点间数据一致性" class="headerlink" title="结点间数据一致性"></a>结点间数据一致性</h3><ul>
+<li>强一致的事务，事务的写入必须必须在被确认提交（即持久化）之前被确认并安装到所有副本上。需要使用原子提交协议（2PC）<ul>
+<li>优点：事务读起来方便，各个结点都满足一致性</li>
+<li>缺点：开销也太大了吧，如果有一个节点失败了，或者网络分区延迟，系统就停着不动了。</li>
+</ul>
+</li>
+</ul>
+<h3 id="两种不同传播的执行模型"><a href="#两种不同传播的执行模型" class="headerlink" title="两种不同传播的执行模型"></a>两种不同传播的执行模型</h3><h4 id="active-active-复制"><a href="#active-active-复制" class="headerlink" title="active-active 复制"></a>active-active 复制</h4><ul>
+<li>每个副本结点都同步执行相同的query</li>
+</ul>
+<h4 id="active-passive-复制"><a href="#active-passive-复制" class="headerlink" title="active-passive 复制"></a>active-passive 复制</h4><ul>
+<li>先在单个结点处理请求，然后将DBMS所得状态传送到其他副本</li>
+<li>大多数NewSQL DBMS都用这种方式，因为它们使用非确定性并发控制方案。（因为它们可能在不同副本上以不同的顺序执行，并且数据库的状态将在每个副本处出现分歧。因为执行顺序取决于很多因素，包括网络延迟，缓存停滞，时钟偏差等。）</li>
+<li>确定性DBMS（例如，H-Store，VoltDB，ClearDB）不执行这些附加的协调步骤。因为它们保证事务的操作在每个副本上以相同的顺序执行，从而保证数据库的状态相同。</li>
+</ul>
+<h3 id="通过广域网WAN来进行复制"><a href="#通过广域网WAN来进行复制" class="headerlink" title="通过广域网WAN来进行复制"></a>通过广域网WAN来进行复制</h3><ul>
+<li>因为会引起延迟，所以一般采用异步复制。</li>
+<li>NewSQL系统中只有Spanner和CockroachDB能提供广域网上强一致副本的复制方案。Spanner使用了原子钟和GPS来做时间同步，而CockroachDB使用的是混合时钟方案。</li>
+</ul>
+<h2 id="恢复机制"><a href="#恢复机制" class="headerlink" title="恢复机制"></a>恢复机制</h2><ul>
+<li><p>保证数据的更新不会丢失，最小化停机时间</p>
+</li>
+<li><p>操作：</p>
+<ul>
+<li>当主节点崩溃时，系统将会自动提升某个从节点充当新的主节点</li>
+<li>而之前崩溃的主节点重新联机后，需要从新的主节点或者其他副本中更新自己的数据，弥补在停机这段时间内缺失的数据。</li>
+</ul>
+</li>
+</ul>
+<h3 id="两种方法恢复"><a href="#两种方法恢复" class="headerlink" title="两种方法恢复"></a>两种方法恢复</h3><ul>
+<li>复的节点仍然从自身的存储中加载最后的检查点和写入日志，然后从其他节点读取缺失的日志部分。</li>
+<li>节点重新联机时丢弃其检查点，让系统给它另一个新的检查点，然后从这个点开始恢复（系统中加入新的副本节点时也可以用同样的机制。）</li>
+</ul>
+<h1 id="未来趋势"><a href="#未来趋势" class="headerlink" title="未来趋势"></a>未来趋势</h1><h2 id="HTAP"><a href="#HTAP" class="headerlink" title="HTAP"></a>HTAP</h2><ul>
+<li>分析新数据和历史数据的组合来进行知识推断，获得洞察力</li>
+</ul>
+<h3 id="三种方法"><a href="#三种方法" class="headerlink" title="三种方法"></a>三种方法</h3><h4 id="分别构建OLAT和OLTP数据库"><a href="#分别构建OLAT和OLTP数据库" class="headerlink" title="分别构建OLAT和OLTP数据库"></a>分别构建OLAT和OLTP数据库</h4><ul>
+<li><p>前端的OLTP DBMS存储所有由事务创建的新数据，而在后端，系统使用ETL（extract-transform-load）工具将数据从OLTP DBMS导入到另一个后台的数据仓库DBMS</p>
+</li>
+<li><p>所有在OLAP系统中产生的新数据也将会被推送到OLTP库中。</p>
+</li>
+</ul>
+<h4 id="Lambda架构"><a href="#Lambda架构" class="headerlink" title="Lambda架构"></a>Lambda架构</h4><ul>
+<li>使用单独的批处理系统（例如，Hadoop，Spark）来计算历史数据视图，同时使用流处理系统（例如，Storm，Spark Streaming）来提供输入数据视图</li>
+</ul>
+<h4 id="HTAP数据库"><a href="#HTAP数据库" class="headerlink" title="HTAP数据库"></a>HTAP数据库</h4><ul>
+<li><p>前两种方法的问题：</p>
+<ul>
+<li>数据传输时间开销大</li>
+<li>部署和维护两种不同DBMS的管理开销巨大</li>
+</ul>
+</li>
+<li><p>HTAP：结合了最近十年来在OLTP（例如，内存存储，无锁执行）和OLAP（例如，列式存储，矢量化执行 ）领域的技术积累，而且只需要一个DBMS。</p>
+</li>
+<li><p>HTAP例子：</p>
+<ul>
+<li>SAP HANA：在内部使用多个执行引擎，一个用于更适合事务的行数据，另一个用于更适合于分析的列数据。</li>
+<li>MemSQL：使用两个不同的存储管理器（一个管理行，一个管理列），但是混合在同一个执行引擎中。</li>
+</ul>
+</li>
+<li><p>OLTP转HTAP例子:</p>
+<ul>
+<li>HyPer将H-Store（OLTP）切换到MVCC的HTAP，可以支持更复杂的OLAP查询</li>
+<li>VoltDB将OLTP性能转向提供流式语义【不清楚流式语义】</li>
+</ul>
+</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>NewSQL系统的采用率相对较低，因为NewSQL DBMS的设计目标是支持事务性的工作负载，而这些应用大多数是企业应用（这些比较保守）</li>
+<li>巨头们更愿意在自己的系统上进行改进和创新，而不是去收购初创的NewSQL公司。2014年Microsoft在SQLServer上新增了内存Hekaton引擎来增强OLTP处理能力。Oracle和IBM的创新进度比较慢，他们最近才为系统添加了列存储扩展，与新兴的OLAP DMBS（例如HP Vertica和Amazon Redshift）展开竞争，并有可能在未来推出内存中的OLTP工作负载处理系统。</li>
+</ul>
+<p><img src="/2020/08/28/NewSQL/image-20200827155826028.png" alt="image-20200827155826028"></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/08/05/查询优化/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -340,7 +789,221 @@
       
         
           
-            
+            <p>数据库系统实现第四章（查询执行）、第五章（查询编译器）笔记</p>
+<h1 id="查询处理器"><a href="#查询处理器" class="headerlink" title="查询处理器"></a>查询处理器</h1><ul>
+<li><p>查询处理器的主要部分</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200726201722939.png" alt="image-20200726201722939" style="zoom:67%;"></p>
+</li>
+<li><p>查询编译概貌</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200726201736827.png" alt="image-20200726201736827" style="zoom:67%;"></p>
+</li>
+<li><p>每个操作符的算法的选择是将逻辑查询计划转变为物理查询计划过程中的一个必不可少的部分。</p>
+</li>
+</ul>
+<h1 id="查询执行"><a href="#查询执行" class="headerlink" title="查询执行"></a>查询执行</h1><h2 id="物理查询计划操作符介绍"><a href="#物理查询计划操作符介绍" class="headerlink" title="物理查询计划操作符介绍"></a>物理查询计划操作符介绍</h2><ul>
+<li><p>扫描表：</p>
+<ul>
+<li>读一个关系R的所有元组，无论是表-扫描或是索引-扫描</li>
+</ul>
+</li>
+<li><p>排序-扫描：</p>
+<ul>
+<li>若排序的属性a上有<strong>B树索引</strong>（B树索引是有序的吗？不是按照key值吗，key是属性a的值吗）或R是按a排序的索引顺序文件来存储的时候，可以直接对索引进行扫描即可得到所需排序的R。</li>
+<li>若R很小，可以装进内存，那么可以使用表扫描或索引扫描得到元组，再使用主存排序算法</li>
+<li>若R大，无法装进内存，通过多路归并得到排序好的R。</li>
+</ul>
+</li>
+<li><p>物理操作符计算模型</p>
+<ul>
+<li>使用磁盘I/O数目作为操作符的“代价”</li>
+</ul>
+</li>
+<li><p>衡量代价的参数</p>
+<ul>
+<li>关系R的所有元组所需的块的数目B(R)</li>
+<li>关系R中的元组的数目 T(R)</li>
+<li>关系的一个列中不同值的数目V(R,a)</li>
+</ul>
+</li>
+<li><p>实现物理操作符的迭代器</p>
+<ul>
+<li>迭代器是三个方法的集合：Open(),GetNext(),Close()</li>
+<li>使用迭代器时，同一时刻活跃的操作就有很多，元组只需要在操作符之间传递，无需将每个操作符得到的整个结果存放在磁盘或内存中。</li>
+</ul>
+</li>
+</ul>
+<h2 id="一趟算法"><a href="#一趟算法" class="headerlink" title="一趟算法"></a>一趟算法</h2><ul>
+<li>至少一个操作对象能完全装入内存</li>
+</ul>
+<h3 id="一次单个元组操作的一趟算法"><a href="#一次单个元组操作的一趟算法" class="headerlink" title="一次单个元组操作的一趟算法"></a>一次单个元组操作的一趟算法</h3><ul>
+<li>例子：选择和投影操作</li>
+</ul>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200727164357896.png" alt="image-20200727164357896" style="zoom:67%;"></p>
+<ul>
+<li>因为输出缓冲区可能是其他操作的输入缓冲区，因此不把它算在所需空间内。</li>
+<li>R如果一开始在磁盘上（可能从其他操作过来），那么代价就是执行一个表-扫描or索引-扫描所需代价。</li>
+</ul>
+<h3 id="整个关系的一元操作的一趟算法"><a href="#整个关系的一元操作的一趟算法" class="headerlink" title="整个关系的一元操作的一趟算法"></a>整个关系的一元操作的一趟算法</h3><ul>
+<li>例子：分组操作符和去重操作符</li>
+</ul>
+<h4 id="消除重复"><a href="#消除重复" class="headerlink" title="消除重复"></a>消除重复</h4><ul>
+<li><p>第一次看到该元组就将它复制到输出并且加入缓冲区中。</p>
+</li>
+<li><p>若缓冲区中存在该元组，就不必输出。为了加快判别，通常维护一个具有大量桶的散列表或者某种形式的平衡二叉查找树，可将散列表的存储开销忽视。</p>
+</li>
+<li><p>注：R中不重复的元组的block数要&lt;= M（内存缓冲区的块数）</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200727170533716.png" alt="image-20200727170533716" style="zoom:67%;"></p>
+</li>
+</ul>
+<h4 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h4><ul>
+<li>在主存中为分组属性的每一个值创建一个项，该项包括：分组属性的值和每个聚集的一个或多个累计值。<ul>
+<li>Min(),Max()函数，保持最小值或最大值即可。</li>
+<li>Count(),为组中见到的每个元组加1</li>
+<li>SUM(),增加非NULL属性a的值</li>
+<li>AVG(),总和&amp;个数</li>
+</ul>
+</li>
+<li>直到扫描最后一个元组后，才开始为分组操作创建输出，故这种算法不适合迭代器结构，因为要求在Open方法的时候必须将全部分组做好（不实际）</li>
+<li>同样用一个内存数据结构在已知分组属性值找到分组的项（散列表&amp;各分组的项）</li>
+<li>一般，关系R都没有聚簇，故读取R的全部元组需要进行T(R)次I/O</li>
+</ul>
+<h3 id="二元操作的一趟算法"><a href="#二元操作的一趟算法" class="headerlink" title="二元操作的一趟算法"></a>二元操作的一趟算法</h3><ul>
+<li><p>例子：除了上方的操作之外的都可以归为这一类，如并、交、差、连接和积的集合形式以及包形式</p>
+</li>
+<li><p>以下假定,<strong>R是两个关系中较大的一个</strong>，将D放在内存中。</p>
+</li>
+<li>集合与包的区别：集合操作自动消除重复，包操作是不消除重复的</li>
+</ul>
+<h4 id="集合并"><a href="#集合并" class="headerlink" title="集合并"></a>集合并</h4><ul>
+<li>将S读到内存的M-1个缓冲区中建立一个查找结构，查找关键字是整个元组，现将S的元组都复制到输出。然后一次一块将R的每一块读到第M个缓冲区中，对于R的每一个元组t，观察t是否在S中，若不在，也将t复制到输出。</li>
+</ul>
+<h4 id="集合交"><a href="#集合交" class="headerlink" title="集合交"></a>集合交</h4><ul>
+<li>跟并类似，但t若在S中，复制到输出。</li>
+</ul>
+<h4 id="集合差"><a href="#集合差" class="headerlink" title="集合差"></a>集合差</h4><ul>
+<li>R-S：检查R中每一个元组t，若t不在S中，将t复制到输出。</li>
+<li>S-R：检查R中每一个元组t，若t在S中，从主存中S的副本中删掉t，考虑完R的每一个元组后，将S中剩余的那些元组复制到输出。</li>
+</ul>
+<h4 id="包交"><a href="#包交" class="headerlink" title="包交"></a>包交</h4><ul>
+<li>将S中每一个不同的元组与<strong>一个计数</strong>联系起来，其初值是该元组在S中出现的次数。读出R的每一块，对于R的每一个元组t，观察t是否在S中出现，若出现，且与t对应的计数为正值，<strong>那么输出t并将计数减1</strong>.</li>
+</ul>
+<h4 id="包差"><a href="#包差" class="headerlink" title="包差"></a>包差</h4><ul>
+<li>S-R：依次读取R的每个元组，若t在S中出现，则将与之对应的计数递减1，最后将内存中计数时正数的每一个元组复制到输出，复制的次数等于其计数。</li>
+<li>R-S：依次读取R的元组t，若t不在S中出现，则将t复制到输出，若t在S中出现，查看t对应的计数c的当前值，若c=0，则将t复制到输出，若c&gt;0，则不将t复制到输出，但将c值减1。</li>
+</ul>
+<h4 id="积"><a href="#积" class="headerlink" title="积"></a>积</h4><ul>
+<li>读取R中的每一块，对R中每一个元组t与主存S(M-1个缓冲区)中的每一个元组连接，形成后即将其输出。输出所占空间很大，且处理R的每一个元组所耗的时间很长。</li>
+</ul>
+<h4 id="自然连接"><a href="#自然连接" class="headerlink" title="自然连接"></a>自然连接</h4><ul>
+<li>将R(X,Y)与S(Y,Z)连接。<ul>
+<li>读取S的所有元组，构造一个以Y的属性为查找关键字的内存查找结构（M-1个缓冲块中）。</li>
+<li>将R的每一块读到第M个缓冲块中，对于R的元组t，利用查找结构找到S中与t在Y的所有属性上相符合的元组与t进行连接后形成一个元组输出。</li>
+</ul>
+</li>
+</ul>
+<h2 id="嵌套循环连接"><a href="#嵌套循环连接" class="headerlink" title="嵌套循环连接"></a>嵌套循环连接</h2><ul>
+<li><p>R（X,Y）与S(Y,Z)连接，R在内循环，S在外循环，假定B(S)&lt;=B(R)[外层循环中使用较小的关系略有优势]</p>
+</li>
+<li><p>没有必要要求有一个关系必须能装入内存</p>
+</li>
+<li><p>基于元组的嵌套循环连接：</p>
+</li>
+<li><p>改进：在R的连接属性（Y)上建立索引，便于查找元组。</p>
+</li>
+<li><p>基于元组的嵌套循环连接的迭代器</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200728213534782.png" alt="image-20200728213534782"></p>
+</li>
+<li><p>基于块的嵌套循环连接算法</p>
+<ul>
+<li>S作为外层循环，可能B(S)&gt;=M,那么需要将S分多次迭代。</li>
+<li>R作为内层循环，每次读入一个块，依次将块中元组和缓冲区的S元组做连接，输出结果。</li>
+</ul>
+</li>
+<li><p>嵌套循环连接的分析：</p>
+<ul>
+<li>代价与两个关系的大小(blocks数)的乘积再除以M得到的商成比例</li>
+</ul>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><img src="/2020/08/05/查询优化/查询优化\image-20200728214802020.png" alt="image-20200728214802020" style="zoom:67%;"></p>
+<h2 id="基于排序的两趟算法"><a href="#基于排序的两趟算法" class="headerlink" title="基于排序的两趟算法"></a>基于排序的两趟算法</h2><ul>
+<li>数据先被读到内存处理了一下之后再写回磁盘，然后重新读取磁盘完成操作。</li>
+<li>以下假定B(R)&gt;M,将R分成大小为M的chunk并排序。</li>
+</ul>
+<h3 id="两阶段多路归并排序（2PMMS）"><a href="#两阶段多路归并排序（2PMMS）" class="headerlink" title="两阶段多路归并排序（2PMMS）"></a>两阶段多路归并排序（2PMMS）</h3><ul>
+<li><p>有一个子表的概念，子表不能超过M-1个（缓冲区数为M个），假定R占用B个块，因为每个子表可以包括M个块，于是子表数目为B/M,要求B/M &lt;= M-1。</p>
+</li>
+<li><p>阶段1：将R中的元组放入M个缓冲区中，利用主存排序进行排序，将排序得到的子表存到外存外【保证每个子表（最多M个）是有序的】</p>
+</li>
+<li><p>阶段2：将排好序的子表进行归并（选择每个子表最前面的块读入M-1个缓冲使用归并进行排序）</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200728220718306.png" alt="image-20200728220718306" style="zoom:67%;"></p>
+</li>
+</ul>
+<h3 id="利用排序去除重复"><a href="#利用排序去除重复" class="headerlink" title="利用排序去除重复"></a>利用排序去除重复</h3><ul>
+<li>与2PMMS的阶段1一样，就是在阶段2时，不断复制<strong>每一块的第一个</strong>未考虑的元组t到输出并忽略与它相同的所有元组，即将输入快中所有的t删除。</li>
+</ul>
+<h3 id="利用排序进行分组和聚集"><a href="#利用排序进行分组和聚集" class="headerlink" title="利用排序进行分组和聚集"></a>利用排序进行分组和聚集</h3><ul>
+<li>与2PMMS相似</li>
+<li>阶段1：用分组属性作为排序关键字，对每M块排序</li>
+<li>阶段2：查找分组属性的最小值，将该最小值v成为下一分组，然后为这个组计算出聚集值即可。</li>
+</ul>
+<h3 id="基于排序的并算法"><a href="#基于排序的并算法" class="headerlink" title="基于排序的并算法"></a>基于排序的并算法</h3><ul>
+<li>与2PMMS相似</li>
+<li>阶段1：创建R与S的排序子表</li>
+<li>阶段2：为R和S的每个子表使用一个内存缓冲区，在缓冲区中找元组t，复制到输出，并且从缓冲区中删除t的所有副本。</li>
+</ul>
+<h3 id="基于排序的交和差算法"><a href="#基于排序的交和差算法" class="headerlink" title="基于排序的交和差算法"></a>基于排序的交和差算法</h3><ul>
+<li>除了t的副本什么情况下复制到输出缓冲区有所区别之外，其他都一样。</li>
+</ul>
+<h3 id="基于排序的一个简单的连接算法"><a href="#基于排序的一个简单的连接算法" class="headerlink" title="基于排序的一个简单的连接算法"></a>基于排序的一个简单的连接算法</h3><ul>
+<li>先将R和S都使用2PMMS根据连接值进行排序（假定只有一个连接键）</li>
+<li><p>阶段1：R和S个占一块缓冲区，剩下的M-2都用来装连接值为y的所有元组</p>
+</li>
+<li><p>代价：5(B(R)+B(S))次磁盘I/O，B(R)&lt;=M^2且B(S)&lt;=M^2，用于连接的属性具有公共的值的所有元组必须能全部装入M个缓冲区中。</p>
+</li>
+</ul>
+<h3 id="一个更有效的基于排序的连接"><a href="#一个更有效的基于排序的连接" class="headerlink" title="一个更有效的基于排序的连接"></a>一个更有效的基于排序的连接</h3><ul>
+<li>当连接属性具有公共的值元组不多的时候，可以将排序的第二阶段和连接本身合并。</li>
+<li>区别：为R和S创建大小为M的排序的子表</li>
+</ul>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p><img src="/2020/08/05/查询优化/查询优化\image-20200731225846330.png" alt="image-20200731225846330" style="zoom:67%;"></p>
+<h2 id="基于散列的两趟算法"><a href="#基于散列的两趟算法" class="headerlink" title="基于散列的两趟算法"></a>基于散列的两趟算法</h2><ul>
+<li>M个缓冲区，将关系R分到M-1个桶中，每一个桶和一个缓冲区联系起来，当一个缓冲区满了，就将它写到磁盘并且初始化另一个块。</li>
+<li>上致跟上面都差不多..</li>
+</ul>
+<h2 id="缓冲区管理"><a href="#缓冲区管理" class="headerlink" title="缓冲区管理"></a>缓冲区管理</h2><ul>
+<li>之前的操作都假定可以获得数量M的内存缓冲区，但实际上缓冲区很少预先分配给操作符，是由缓冲区管理器来进行统一分配的。</li>
+</ul>
+<h3 id="缓冲区管理结构"><a href="#缓冲区管理结构" class="headerlink" title="缓冲区管理结构"></a>缓冲区管理结构</h3><ul>
+<li>有两个主要的缓冲区管理结构<ul>
+<li>缓冲区直接控制内存（缓冲区只有内存部分）</li>
+<li>缓冲区在虚拟内存中分配空间（一部分缓冲区还在磁盘上，但是我们不关心），这情况下换进换出多了，会抖动。</li>
+</ul>
+</li>
+<li>一般，DBMS初始化时，都会先设缓冲区的数目（作为一个参数）。</li>
+</ul>
+<h3 id="缓冲区管理策略"><a href="#缓冲区管理策略" class="headerlink" title="缓冲区管理策略"></a>缓冲区管理策略</h3><ul>
+<li>跟操作系统中的调度策略一样…</li>
+<li>查询处理的内存管理：<ul>
+<li>在某些DBMS中，内存是在多个缓冲池中（具有不同目的），有些是用来存放磁盘页面，有些是用来存放散列表。</li>
+</ul>
+</li>
+<li>最近最少使用（LRU)<ul>
+<li>缓冲区管理器保持每个块最后一次时间访问的表</li>
+</ul>
+</li>
+<li>先进先出(FIFO)</li>
+<li>“时钟”算法（第二次机会）</li>
+<li>系统控制<ul>
+<li>针对“被钉住的”块（有其他指向它的块），缓冲区管理器都不能驱除它。</li>
+</ul>
+</li>
+<li>这节没怎么仔细看..</li>
+</ul>
+<h2 id="使用超过两趟的算法"><a href="#使用超过两趟的算法" class="headerlink" title="使用超过两趟的算法"></a>使用超过两趟的算法</h2><ul>
+<li>这节没看..</li>
+</ul>
+<h1 id="查询编译器"><a href="#查询编译器" class="headerlink" title="查询编译器"></a>查询编译器</h1>
           
         
       
@@ -2442,288 +3105,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/Hadoop分布式文件系统（HDFS）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/06/Hadoop分布式文件系统（HDFS）/" itemprop="url">Hadoop分布式文件系统（HDFS）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T12:10:31Z">
-                2020-05-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式模型与编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="设计考量"><a href="#设计考量" class="headerlink" title="设计考量"></a>设计考量</h1><h2 id="HDFS设计假设、目标"><a href="#HDFS设计假设、目标" class="headerlink" title="HDFS设计假设、目标"></a>HDFS设计假设、目标</h2><ul>
-<li>硬件失效<ul>
-<li>硬件的异常比软件的异常更加常见</li>
-</ul>
-</li>
-<li>流式数据访问<ul>
-<li>Dataflow</li>
-<li>hdfs是量身定制，并非以通用业务为目的</li>
-<li>关注吞吐量，并非响应时间</li>
-</ul>
-</li>
-<li><p>存储数据较大</p>
-</li>
-<li><p>简化的数据一致性模型</p>
-<ul>
-<li>数据写入之后，不允许再修改了，只允许在后面追加</li>
-</ul>
-</li>
-<li>多硬件平台支持<ul>
-<li>易于运行不同的平台上（故用java编写）</li>
-</ul>
-</li>
-<li>移动计算能力比移动数据更划算<ul>
-<li>计算和存储采用就近原则，计算离数据最近</li>
-<li>移动计算就是移动代码，对远程的数据进行计算</li>
-</ul>
-</li>
-</ul>
-<h2 id="如何应对大文件"><a href="#如何应对大文件" class="headerlink" title="如何应对大文件"></a>如何应对大文件</h2><h3 id="文件由数据块集合组成"><a href="#文件由数据块集合组成" class="headerlink" title="文件由数据块集合组成"></a>文件由数据块集合组成</h3><ul>
-<li>通常每块大小为64MB</li>
-<li>与os的块的区别：<ul>
-<li>os的目的：省io的时间、不满还是会占整个block的大小的</li>
-<li>hdfs目的：把大的文件切小、不满是不会占64mb的</li>
-</ul>
-</li>
-</ul>
-<h2 id="索引文件"><a href="#索引文件" class="headerlink" title="索引文件"></a>索引文件</h2><ul>
-<li>跨机器索引</li>
-</ul>
-<h1 id="HDFS-架构"><a href="#HDFS-架构" class="headerlink" title="HDFS 架构"></a>HDFS 架构</h1><h2 id="HDFS节点类型"><a href="#HDFS节点类型" class="headerlink" title="HDFS节点类型"></a>HDFS节点类型</h2><ul>
-<li>NameNode      每个集群一个名字节点（master）<ul>
-<li>负责文件系统元数据操作、数据块的复制和定位</li>
-</ul>
-</li>
-<li>SecondaryNamenode       NameNode的备份</li>
-<li>Datanode</li>
-</ul>
-<h2 id="NameNode-："><a href="#NameNode-：" class="headerlink" title="NameNode ："></a>NameNode ：</h2><ul>
-<li>作用：管理节点、接收用户的操作请求</li>
-<li>核心数据文件包括：<ul>
-<li>元数据镜像文件fsimage: 维护文件系统树以及文件树中所有的文件/目录的元数据</li>
-<li>操作日志文件EditLog: 记录所有针对文件的创建、删除、重命名等操作。<ul>
-<li>如果元数据镜像文件可以承受恢复的代价，那么日志也可以不需要了，日志为了减轻元数据镜像文件的负担。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>元数据保存在内存中</li>
-<li>做了block和datanode之间的映射关系</li>
-</ul>
-<h2 id="SecondaryNameNode"><a href="#SecondaryNameNode" class="headerlink" title="SecondaryNameNode"></a>SecondaryNameNode</h2><ul>
-<li>执行过程：<ul>
-<li>定期从Namenode上下载fsimage,edits，二者合并，生成新的fsimage</li>
-<li>在本地保存，并写回NameNode</li>
-</ul>
-</li>
-<li>它是“检查点”，而不是“热备份”（即并非实时备份）</li>
-</ul>
-<h2 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h2><ul>
-<li>作用：一共文件的存储</li>
-<li>文件块：一个Linux文件</li>
-<li>HDFS中，如果一个文件小于一个数据块的大小，并不占用整个数据块存储空间</li>
-<li>数据备份：默认是三个</li>
-<li>文件内容保存在磁盘</li>
-</ul>
-<h1 id="文件访问"><a href="#文件访问" class="headerlink" title="文件访问"></a>文件访问</h1><h2 id="文件写入HDFS"><a href="#文件写入HDFS" class="headerlink" title="文件写入HDFS"></a>文件写入HDFS</h2><ul>
-<li>NameNode 告知客户端文件的每一个数据块存储在何处<br>b. 客户端将数据块直接传输到指定的数据节点数据访问</li>
-</ul>
-<h2 id="从HDFS读取文件"><a href="#从HDFS读取文件" class="headerlink" title="从HDFS读取文件"></a>从HDFS读取文件</h2><ul>
-<li>从NameNode 返回每个数据块的位置给客户端</li>
-<li>从数据节点上传数据块（不同的数据块可以并行读取）</li>
-</ul>
-<h3 id="数据读取策略"><a href="#数据读取策略" class="headerlink" title="数据读取策略"></a>数据读取策略</h3><h3 id="文件访问模型"><a href="#文件访问模型" class="headerlink" title="文件访问模型"></a>文件访问模型</h3><ul>
-<li>“一次写入多次读取”<ul>
-<li>修改内容需删除，重新写入</li>
-<li>仅允许追加append()  <ul>
-<li>注： 此为追加一个block，而不是在原来的block追加内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>好处：避免读写冲突，无需文件锁</li>
-</ul>
-<h3 id="HDFS数据备份"><a href="#HDFS数据备份" class="headerlink" title="HDFS数据备份"></a>HDFS数据备份</h3><h1 id="备份与一致性"><a href="#备份与一致性" class="headerlink" title="备份与一致性"></a>备份与一致性</h1><ul>
-<li><p>一个文件有若干备份</p>
-</li>
-<li><p>备份之间是否可能不一致？</p>
-<ul>
-<li>同时append两个备份</li>
-</ul>
-</li>
-</ul>
-<h1 id="容错机制"><a href="#容错机制" class="headerlink" title="容错机制"></a>容错机制</h1><ul>
-<li><p>HDFS在设计时就考虑到故障（硬件和软件）会经常出现</p>
-</li>
-<li><p>DataNode故障：</p>
-<ul>
-<li>“宕机”：节点上面的所有数据都会被标记为“不可读”</li>
-<li>定期检查备份因子</li>
-</ul>
-</li>
-<li><p>NameNode故障</p>
-<ul>
-<li>根据SecondaryNameNode中的Fslmage和Editlog数据进行恢复</li>
-</ul>
-</li>
-<li><p>其他故障</p>
-<ul>
-<li>磁盘错误或故障：数据校验</li>
-<li>交换机/机架故障</li>
-<li>数据中心故障</li>
-</ul>
-</li>
-</ul>
-<h1 id="HDFS功能"><a href="#HDFS功能" class="headerlink" title="HDFS功能"></a>HDFS功能</h1><ul>
-<li><p>适用：</p>
-<ul>
-<li>大文件存储、流式数据访问</li>
-</ul>
-</li>
-<li><p>不合适:</p>
-<ul>
-<li>大量小文件（无法完美利用数据并行读取）</li>
-<li>随机读取（因为有固定的代价）</li>
-<li>低延迟读取</li>
-</ul>
-</li>
-</ul>
-<p>​        </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2776,7 +3157,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2787,7 +3168,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2798,7 +3179,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>

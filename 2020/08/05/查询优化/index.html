@@ -81,18 +81,27 @@
 
 
 
-<meta name="description" content="blog">
+<meta name="description" content="数据库系统实现第四章（查询执行）、第五章（查询编译器）笔记 查询处理器 查询处理器的主要部分   查询编译概貌   每个操作符的算法的选择是将逻辑查询计划转变为物理查询计划过程中的一个必不可少的部分。   查询执行物理查询计划操作符介绍 扫描表：  读一个关系R的所有元组，无论是表-扫描或是索引-扫描   排序-扫描：  若排序的属性a上有B树索引（B树索引是有序的吗？不是按照key值吗，key是">
 <meta name="keywords" content="个人博客">
 <meta property="og:type" content="article">
 <meta property="og:title" content="查询优化">
 <meta property="og:url" content="https://luyiqu.github.io/2020/08/05/查询优化/index.html">
 <meta property="og:site_name" content="瞿璐祎的博客">
-<meta property="og:description" content="blog">
+<meta property="og:description" content="数据库系统实现第四章（查询执行）、第五章（查询编译器）笔记 查询处理器 查询处理器的主要部分   查询编译概貌   每个操作符的算法的选择是将逻辑查询计划转变为物理查询计划过程中的一个必不可少的部分。   查询执行物理查询计划操作符介绍 扫描表：  读一个关系R的所有元组，无论是表-扫描或是索引-扫描   排序-扫描：  若排序的属性a上有B树索引（B树索引是有序的吗？不是按照key值吗，key是">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-05T07:13:07.355Z">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200726201722939.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200726201736827.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200727164357896.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200727170533716.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200728213534782.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200728214802020.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200728220718306.png">
+<meta property="og:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200731225846330.png">
+<meta property="og:updated_time" content="2020-08-11T08:40:13.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="查询优化">
-<meta name="twitter:description" content="blog">
+<meta name="twitter:description" content="数据库系统实现第四章（查询执行）、第五章（查询编译器）笔记 查询处理器 查询处理器的主要部分   查询编译概貌   每个操作符的算法的选择是将逻辑查询计划转变为物理查询计划过程中的一个必不可少的部分。   查询执行物理查询计划操作符介绍 扫描表：  读一个关系R的所有元组，无论是表-扫描或是索引-扫描   排序-扫描：  若排序的属性a上有B树索引（B树索引是有序的吗？不是按照key值吗，key是">
+<meta name="twitter:image" content="https://luyiqu.github.io/2020/08/05/查询优化/查询优化/image-20200726201722939.png">
 
 
 
@@ -341,7 +350,221 @@
       
 
       
-        
+        <p>数据库系统实现第四章（查询执行）、第五章（查询编译器）笔记</p>
+<h1 id="查询处理器"><a href="#查询处理器" class="headerlink" title="查询处理器"></a>查询处理器</h1><ul>
+<li><p>查询处理器的主要部分</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200726201722939.png" alt="image-20200726201722939" style="zoom:67%;"></p>
+</li>
+<li><p>查询编译概貌</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200726201736827.png" alt="image-20200726201736827" style="zoom:67%;"></p>
+</li>
+<li><p>每个操作符的算法的选择是将逻辑查询计划转变为物理查询计划过程中的一个必不可少的部分。</p>
+</li>
+</ul>
+<h1 id="查询执行"><a href="#查询执行" class="headerlink" title="查询执行"></a>查询执行</h1><h2 id="物理查询计划操作符介绍"><a href="#物理查询计划操作符介绍" class="headerlink" title="物理查询计划操作符介绍"></a>物理查询计划操作符介绍</h2><ul>
+<li><p>扫描表：</p>
+<ul>
+<li>读一个关系R的所有元组，无论是表-扫描或是索引-扫描</li>
+</ul>
+</li>
+<li><p>排序-扫描：</p>
+<ul>
+<li>若排序的属性a上有<strong>B树索引</strong>（B树索引是有序的吗？不是按照key值吗，key是属性a的值吗）或R是按a排序的索引顺序文件来存储的时候，可以直接对索引进行扫描即可得到所需排序的R。</li>
+<li>若R很小，可以装进内存，那么可以使用表扫描或索引扫描得到元组，再使用主存排序算法</li>
+<li>若R大，无法装进内存，通过多路归并得到排序好的R。</li>
+</ul>
+</li>
+<li><p>物理操作符计算模型</p>
+<ul>
+<li>使用磁盘I/O数目作为操作符的“代价”</li>
+</ul>
+</li>
+<li><p>衡量代价的参数</p>
+<ul>
+<li>关系R的所有元组所需的块的数目B(R)</li>
+<li>关系R中的元组的数目 T(R)</li>
+<li>关系的一个列中不同值的数目V(R,a)</li>
+</ul>
+</li>
+<li><p>实现物理操作符的迭代器</p>
+<ul>
+<li>迭代器是三个方法的集合：Open(),GetNext(),Close()</li>
+<li>使用迭代器时，同一时刻活跃的操作就有很多，元组只需要在操作符之间传递，无需将每个操作符得到的整个结果存放在磁盘或内存中。</li>
+</ul>
+</li>
+</ul>
+<h2 id="一趟算法"><a href="#一趟算法" class="headerlink" title="一趟算法"></a>一趟算法</h2><ul>
+<li>至少一个操作对象能完全装入内存</li>
+</ul>
+<h3 id="一次单个元组操作的一趟算法"><a href="#一次单个元组操作的一趟算法" class="headerlink" title="一次单个元组操作的一趟算法"></a>一次单个元组操作的一趟算法</h3><ul>
+<li>例子：选择和投影操作</li>
+</ul>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200727164357896.png" alt="image-20200727164357896" style="zoom:67%;"></p>
+<ul>
+<li>因为输出缓冲区可能是其他操作的输入缓冲区，因此不把它算在所需空间内。</li>
+<li>R如果一开始在磁盘上（可能从其他操作过来），那么代价就是执行一个表-扫描or索引-扫描所需代价。</li>
+</ul>
+<h3 id="整个关系的一元操作的一趟算法"><a href="#整个关系的一元操作的一趟算法" class="headerlink" title="整个关系的一元操作的一趟算法"></a>整个关系的一元操作的一趟算法</h3><ul>
+<li>例子：分组操作符和去重操作符</li>
+</ul>
+<h4 id="消除重复"><a href="#消除重复" class="headerlink" title="消除重复"></a>消除重复</h4><ul>
+<li><p>第一次看到该元组就将它复制到输出并且加入缓冲区中。</p>
+</li>
+<li><p>若缓冲区中存在该元组，就不必输出。为了加快判别，通常维护一个具有大量桶的散列表或者某种形式的平衡二叉查找树，可将散列表的存储开销忽视。</p>
+</li>
+<li><p>注：R中不重复的元组的block数要&lt;= M（内存缓冲区的块数）</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200727170533716.png" alt="image-20200727170533716" style="zoom:67%;"></p>
+</li>
+</ul>
+<h4 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h4><ul>
+<li>在主存中为分组属性的每一个值创建一个项，该项包括：分组属性的值和每个聚集的一个或多个累计值。<ul>
+<li>Min(),Max()函数，保持最小值或最大值即可。</li>
+<li>Count(),为组中见到的每个元组加1</li>
+<li>SUM(),增加非NULL属性a的值</li>
+<li>AVG(),总和&amp;个数</li>
+</ul>
+</li>
+<li>直到扫描最后一个元组后，才开始为分组操作创建输出，故这种算法不适合迭代器结构，因为要求在Open方法的时候必须将全部分组做好（不实际）</li>
+<li>同样用一个内存数据结构在已知分组属性值找到分组的项（散列表&amp;各分组的项）</li>
+<li>一般，关系R都没有聚簇，故读取R的全部元组需要进行T(R)次I/O</li>
+</ul>
+<h3 id="二元操作的一趟算法"><a href="#二元操作的一趟算法" class="headerlink" title="二元操作的一趟算法"></a>二元操作的一趟算法</h3><ul>
+<li><p>例子：除了上方的操作之外的都可以归为这一类，如并、交、差、连接和积的集合形式以及包形式</p>
+</li>
+<li><p>以下假定,<strong>R是两个关系中较大的一个</strong>，将D放在内存中。</p>
+</li>
+<li>集合与包的区别：集合操作自动消除重复，包操作是不消除重复的</li>
+</ul>
+<h4 id="集合并"><a href="#集合并" class="headerlink" title="集合并"></a>集合并</h4><ul>
+<li>将S读到内存的M-1个缓冲区中建立一个查找结构，查找关键字是整个元组，现将S的元组都复制到输出。然后一次一块将R的每一块读到第M个缓冲区中，对于R的每一个元组t，观察t是否在S中，若不在，也将t复制到输出。</li>
+</ul>
+<h4 id="集合交"><a href="#集合交" class="headerlink" title="集合交"></a>集合交</h4><ul>
+<li>跟并类似，但t若在S中，复制到输出。</li>
+</ul>
+<h4 id="集合差"><a href="#集合差" class="headerlink" title="集合差"></a>集合差</h4><ul>
+<li>R-S：检查R中每一个元组t，若t不在S中，将t复制到输出。</li>
+<li>S-R：检查R中每一个元组t，若t在S中，从主存中S的副本中删掉t，考虑完R的每一个元组后，将S中剩余的那些元组复制到输出。</li>
+</ul>
+<h4 id="包交"><a href="#包交" class="headerlink" title="包交"></a>包交</h4><ul>
+<li>将S中每一个不同的元组与<strong>一个计数</strong>联系起来，其初值是该元组在S中出现的次数。读出R的每一块，对于R的每一个元组t，观察t是否在S中出现，若出现，且与t对应的计数为正值，<strong>那么输出t并将计数减1</strong>.</li>
+</ul>
+<h4 id="包差"><a href="#包差" class="headerlink" title="包差"></a>包差</h4><ul>
+<li>S-R：依次读取R的每个元组，若t在S中出现，则将与之对应的计数递减1，最后将内存中计数时正数的每一个元组复制到输出，复制的次数等于其计数。</li>
+<li>R-S：依次读取R的元组t，若t不在S中出现，则将t复制到输出，若t在S中出现，查看t对应的计数c的当前值，若c=0，则将t复制到输出，若c&gt;0，则不将t复制到输出，但将c值减1。</li>
+</ul>
+<h4 id="积"><a href="#积" class="headerlink" title="积"></a>积</h4><ul>
+<li>读取R中的每一块，对R中每一个元组t与主存S(M-1个缓冲区)中的每一个元组连接，形成后即将其输出。输出所占空间很大，且处理R的每一个元组所耗的时间很长。</li>
+</ul>
+<h4 id="自然连接"><a href="#自然连接" class="headerlink" title="自然连接"></a>自然连接</h4><ul>
+<li>将R(X,Y)与S(Y,Z)连接。<ul>
+<li>读取S的所有元组，构造一个以Y的属性为查找关键字的内存查找结构（M-1个缓冲块中）。</li>
+<li>将R的每一块读到第M个缓冲块中，对于R的元组t，利用查找结构找到S中与t在Y的所有属性上相符合的元组与t进行连接后形成一个元组输出。</li>
+</ul>
+</li>
+</ul>
+<h2 id="嵌套循环连接"><a href="#嵌套循环连接" class="headerlink" title="嵌套循环连接"></a>嵌套循环连接</h2><ul>
+<li><p>R（X,Y）与S(Y,Z)连接，R在内循环，S在外循环，假定B(S)&lt;=B(R)[外层循环中使用较小的关系略有优势]</p>
+</li>
+<li><p>没有必要要求有一个关系必须能装入内存</p>
+</li>
+<li><p>基于元组的嵌套循环连接：</p>
+</li>
+<li><p>改进：在R的连接属性（Y)上建立索引，便于查找元组。</p>
+</li>
+<li><p>基于元组的嵌套循环连接的迭代器</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200728213534782.png" alt="image-20200728213534782"></p>
+</li>
+<li><p>基于块的嵌套循环连接算法</p>
+<ul>
+<li>S作为外层循环，可能B(S)&gt;=M,那么需要将S分多次迭代。</li>
+<li>R作为内层循环，每次读入一个块，依次将块中元组和缓冲区的S元组做连接，输出结果。</li>
+</ul>
+</li>
+<li><p>嵌套循环连接的分析：</p>
+<ul>
+<li>代价与两个关系的大小(blocks数)的乘积再除以M得到的商成比例</li>
+</ul>
+</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><img src="/2020/08/05/查询优化/查询优化\image-20200728214802020.png" alt="image-20200728214802020" style="zoom:67%;"></p>
+<h2 id="基于排序的两趟算法"><a href="#基于排序的两趟算法" class="headerlink" title="基于排序的两趟算法"></a>基于排序的两趟算法</h2><ul>
+<li>数据先被读到内存处理了一下之后再写回磁盘，然后重新读取磁盘完成操作。</li>
+<li>以下假定B(R)&gt;M,将R分成大小为M的chunk并排序。</li>
+</ul>
+<h3 id="两阶段多路归并排序（2PMMS）"><a href="#两阶段多路归并排序（2PMMS）" class="headerlink" title="两阶段多路归并排序（2PMMS）"></a>两阶段多路归并排序（2PMMS）</h3><ul>
+<li><p>有一个子表的概念，子表不能超过M-1个（缓冲区数为M个），假定R占用B个块，因为每个子表可以包括M个块，于是子表数目为B/M,要求B/M &lt;= M-1。</p>
+</li>
+<li><p>阶段1：将R中的元组放入M个缓冲区中，利用主存排序进行排序，将排序得到的子表存到外存外【保证每个子表（最多M个）是有序的】</p>
+</li>
+<li><p>阶段2：将排好序的子表进行归并（选择每个子表最前面的块读入M-1个缓冲使用归并进行排序）</p>
+<p><img src="/2020/08/05/查询优化/查询优化\image-20200728220718306.png" alt="image-20200728220718306" style="zoom:67%;"></p>
+</li>
+</ul>
+<h3 id="利用排序去除重复"><a href="#利用排序去除重复" class="headerlink" title="利用排序去除重复"></a>利用排序去除重复</h3><ul>
+<li>与2PMMS的阶段1一样，就是在阶段2时，不断复制<strong>每一块的第一个</strong>未考虑的元组t到输出并忽略与它相同的所有元组，即将输入快中所有的t删除。</li>
+</ul>
+<h3 id="利用排序进行分组和聚集"><a href="#利用排序进行分组和聚集" class="headerlink" title="利用排序进行分组和聚集"></a>利用排序进行分组和聚集</h3><ul>
+<li>与2PMMS相似</li>
+<li>阶段1：用分组属性作为排序关键字，对每M块排序</li>
+<li>阶段2：查找分组属性的最小值，将该最小值v成为下一分组，然后为这个组计算出聚集值即可。</li>
+</ul>
+<h3 id="基于排序的并算法"><a href="#基于排序的并算法" class="headerlink" title="基于排序的并算法"></a>基于排序的并算法</h3><ul>
+<li>与2PMMS相似</li>
+<li>阶段1：创建R与S的排序子表</li>
+<li>阶段2：为R和S的每个子表使用一个内存缓冲区，在缓冲区中找元组t，复制到输出，并且从缓冲区中删除t的所有副本。</li>
+</ul>
+<h3 id="基于排序的交和差算法"><a href="#基于排序的交和差算法" class="headerlink" title="基于排序的交和差算法"></a>基于排序的交和差算法</h3><ul>
+<li>除了t的副本什么情况下复制到输出缓冲区有所区别之外，其他都一样。</li>
+</ul>
+<h3 id="基于排序的一个简单的连接算法"><a href="#基于排序的一个简单的连接算法" class="headerlink" title="基于排序的一个简单的连接算法"></a>基于排序的一个简单的连接算法</h3><ul>
+<li>先将R和S都使用2PMMS根据连接值进行排序（假定只有一个连接键）</li>
+<li><p>阶段1：R和S个占一块缓冲区，剩下的M-2都用来装连接值为y的所有元组</p>
+</li>
+<li><p>代价：5(B(R)+B(S))次磁盘I/O，B(R)&lt;=M^2且B(S)&lt;=M^2，用于连接的属性具有公共的值的所有元组必须能全部装入M个缓冲区中。</p>
+</li>
+</ul>
+<h3 id="一个更有效的基于排序的连接"><a href="#一个更有效的基于排序的连接" class="headerlink" title="一个更有效的基于排序的连接"></a>一个更有效的基于排序的连接</h3><ul>
+<li>当连接属性具有公共的值元组不多的时候，可以将排序的第二阶段和连接本身合并。</li>
+<li>区别：为R和S创建大小为M的排序的子表</li>
+</ul>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p><img src="/2020/08/05/查询优化/查询优化\image-20200731225846330.png" alt="image-20200731225846330" style="zoom:67%;"></p>
+<h2 id="基于散列的两趟算法"><a href="#基于散列的两趟算法" class="headerlink" title="基于散列的两趟算法"></a>基于散列的两趟算法</h2><ul>
+<li>M个缓冲区，将关系R分到M-1个桶中，每一个桶和一个缓冲区联系起来，当一个缓冲区满了，就将它写到磁盘并且初始化另一个块。</li>
+<li>上致跟上面都差不多..</li>
+</ul>
+<h2 id="缓冲区管理"><a href="#缓冲区管理" class="headerlink" title="缓冲区管理"></a>缓冲区管理</h2><ul>
+<li>之前的操作都假定可以获得数量M的内存缓冲区，但实际上缓冲区很少预先分配给操作符，是由缓冲区管理器来进行统一分配的。</li>
+</ul>
+<h3 id="缓冲区管理结构"><a href="#缓冲区管理结构" class="headerlink" title="缓冲区管理结构"></a>缓冲区管理结构</h3><ul>
+<li>有两个主要的缓冲区管理结构<ul>
+<li>缓冲区直接控制内存（缓冲区只有内存部分）</li>
+<li>缓冲区在虚拟内存中分配空间（一部分缓冲区还在磁盘上，但是我们不关心），这情况下换进换出多了，会抖动。</li>
+</ul>
+</li>
+<li>一般，DBMS初始化时，都会先设缓冲区的数目（作为一个参数）。</li>
+</ul>
+<h3 id="缓冲区管理策略"><a href="#缓冲区管理策略" class="headerlink" title="缓冲区管理策略"></a>缓冲区管理策略</h3><ul>
+<li>跟操作系统中的调度策略一样…</li>
+<li>查询处理的内存管理：<ul>
+<li>在某些DBMS中，内存是在多个缓冲池中（具有不同目的），有些是用来存放磁盘页面，有些是用来存放散列表。</li>
+</ul>
+</li>
+<li>最近最少使用（LRU)<ul>
+<li>缓冲区管理器保持每个块最后一次时间访问的表</li>
+</ul>
+</li>
+<li>先进先出(FIFO)</li>
+<li>“时钟”算法（第二次机会）</li>
+<li>系统控制<ul>
+<li>针对“被钉住的”块（有其他指向它的块），缓冲区管理器都不能驱除它。</li>
+</ul>
+</li>
+<li>这节没怎么仔细看..</li>
+</ul>
+<h2 id="使用超过两趟的算法"><a href="#使用超过两趟的算法" class="headerlink" title="使用超过两趟的算法"></a>使用超过两趟的算法</h2><ul>
+<li>这节没看..</li>
+</ul>
+<h1 id="查询编译器"><a href="#查询编译器" class="headerlink" title="查询编译器"></a>查询编译器</h1>
       
     </div>
     
@@ -397,6 +620,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/08/28/NewSQL/" rel="prev" title="What’s Really New with NewSQL">
+                What’s Really New with NewSQL <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -447,8 +674,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -465,7 +701,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -476,7 +712,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -487,7 +723,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -517,6 +753,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#查询处理器"><span class="nav-number">1.</span> <span class="nav-text">查询处理器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询执行"><span class="nav-number">2.</span> <span class="nav-text">查询执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理查询计划操作符介绍"><span class="nav-number">2.1.</span> <span class="nav-text">物理查询计划操作符介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一趟算法"><span class="nav-number">2.2.</span> <span class="nav-text">一趟算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一次单个元组操作的一趟算法"><span class="nav-number">2.2.1.</span> <span class="nav-text">一次单个元组操作的一趟算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#整个关系的一元操作的一趟算法"><span class="nav-number">2.2.2.</span> <span class="nav-text">整个关系的一元操作的一趟算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#消除重复"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">消除重复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分组"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">分组</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二元操作的一趟算法"><span class="nav-number">2.2.3.</span> <span class="nav-text">二元操作的一趟算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#集合并"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">集合并</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合交"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">集合交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集合差"><span class="nav-number">2.2.3.3.</span> <span class="nav-text">集合差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#包交"><span class="nav-number">2.2.3.4.</span> <span class="nav-text">包交</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#包差"><span class="nav-number">2.2.3.5.</span> <span class="nav-text">包差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#积"><span class="nav-number">2.2.3.6.</span> <span class="nav-text">积</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自然连接"><span class="nav-number">2.2.3.7.</span> <span class="nav-text">自然连接</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌套循环连接"><span class="nav-number">2.3.</span> <span class="nav-text">嵌套循环连接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于排序的两趟算法"><span class="nav-number">2.4.</span> <span class="nav-text">基于排序的两趟算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#两阶段多路归并排序（2PMMS）"><span class="nav-number">2.4.1.</span> <span class="nav-text">两阶段多路归并排序（2PMMS）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用排序去除重复"><span class="nav-number">2.4.2.</span> <span class="nav-text">利用排序去除重复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用排序进行分组和聚集"><span class="nav-number">2.4.3.</span> <span class="nav-text">利用排序进行分组和聚集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于排序的并算法"><span class="nav-number">2.4.4.</span> <span class="nav-text">基于排序的并算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于排序的交和差算法"><span class="nav-number">2.4.5.</span> <span class="nav-text">基于排序的交和差算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于排序的一个简单的连接算法"><span class="nav-number">2.4.6.</span> <span class="nav-text">基于排序的一个简单的连接算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个更有效的基于排序的连接"><span class="nav-number">2.4.7.</span> <span class="nav-text">一个更有效的基于排序的连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">2.4.8.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于散列的两趟算法"><span class="nav-number">2.5.</span> <span class="nav-text">基于散列的两趟算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓冲区管理"><span class="nav-number">2.6.</span> <span class="nav-text">缓冲区管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲区管理结构"><span class="nav-number">2.6.1.</span> <span class="nav-text">缓冲区管理结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲区管理策略"><span class="nav-number">2.6.2.</span> <span class="nav-text">缓冲区管理策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用超过两趟的算法"><span class="nav-number">2.7.</span> <span class="nav-text">使用超过两趟的算法</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#查询编译器"><span class="nav-number">3.</span> <span class="nav-text">查询编译器</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

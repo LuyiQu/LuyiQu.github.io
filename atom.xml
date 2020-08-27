@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://luyiqu.github.io/"/>
-  <updated>2020-08-05T07:13:07.355Z</updated>
+  <updated>2020-08-27T08:11:00.190Z</updated>
   <id>https://luyiqu.github.io/</id>
   
   <author>
@@ -17,13 +17,49 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>What’s Really New with NewSQL</title>
+    <link href="https://luyiqu.github.io/2020/08/28/NewSQL/"/>
+    <id>https://luyiqu.github.io/2020/08/28/NewSQL/</id>
+    <published>2020-08-27T16:06:22.000Z</published>
+    <updated>2020-08-27T08:11:00.190Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;hr&gt;
+&lt;hr&gt;
+&lt;h1 id=&quot;先导&quot;&gt;&lt;a href=&quot;#先导&quot; class=&quot;headerlink&quot; title=&quot;先导&quot;&gt;&lt;/a&gt;先导&lt;/h1&gt;&lt;h2 id=&quot;为什么需要NewSQL&quot;&gt;&lt;a href=&quot;#为什么需要NewSQL&quot; class=&quot;headerlink&quot; 
+      
+    
+    </summary>
+    
+      <category term="Paper" scheme="https://luyiqu.github.io/categories/Paper/"/>
+    
+    
+      <category term="NewSQL" scheme="https://luyiqu.github.io/tags/NewSQL/"/>
+    
+      <category term="DBMS" scheme="https://luyiqu.github.io/tags/DBMS/"/>
+    
+      <category term="paper" scheme="https://luyiqu.github.io/tags/paper/"/>
+    
+  </entry>
+  
+  <entry>
     <title>查询优化</title>
     <link href="https://luyiqu.github.io/2020/08/05/%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/"/>
     <id>https://luyiqu.github.io/2020/08/05/查询优化/</id>
     <published>2020-08-05T15:13:07.000Z</published>
-    <updated>2020-08-05T07:13:07.355Z</updated>
+    <updated>2020-08-11T08:40:13.088Z</updated>
     
     <summary type="html">
+    
+      
+      
+        &lt;p&gt;数据库系统实现第四章（查询执行）、第五章（查询编译器）笔记&lt;/p&gt;
+&lt;h1 id=&quot;查询处理器&quot;&gt;&lt;a href=&quot;#查询处理器&quot; class=&quot;headerlink&quot; title=&quot;查询处理器&quot;&gt;&lt;/a&gt;查询处理器&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;查询处理器的主要部分&lt;/
+      
     
     </summary>
     
@@ -446,29 +482,6 @@
       <category term="tfidf" scheme="https://luyiqu.github.io/tags/tfidf/"/>
     
       <category term="数据预处理" scheme="https://luyiqu.github.io/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Spark之join操作</title>
-    <link href="https://luyiqu.github.io/2018/11/12/Spark%E4%B9%8Bjoin%E6%93%8D%E4%BD%9C/"/>
-    <id>https://luyiqu.github.io/2018/11/12/Spark之join操作/</id>
-    <published>2018-11-11T22:28:48.000Z</published>
-    <updated>2020-05-05T12:32:50.798Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;Spark之join操作-md&quot;&gt;&lt;a href=&quot;#Spark之join操作-md&quot; class=&quot;headerlink&quot; title=&quot;Spark之join操作.md&quot;&gt;&lt;/a&gt;Spark之join操作.md&lt;/h1&gt;&lt;figure class=&quot;highli
-      
-    
-    </summary>
-    
-      <category term="分布式模型与编程" scheme="https://luyiqu.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E6%A8%A1%E5%9E%8B%E4%B8%8E%E7%BC%96%E7%A8%8B/"/>
-    
-    
-      <category term="spark" scheme="https://luyiqu.github.io/tags/spark/"/>
     
   </entry>
   

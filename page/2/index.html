@@ -269,6 +269,288 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/Hadoop分布式文件系统（HDFS）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="luyiqu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="瞿璐祎的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/06/Hadoop分布式文件系统（HDFS）/" itemprop="url">Hadoop分布式文件系统（HDFS）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-06T12:10:31Z">
+                2020-05-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式模型与编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="设计考量"><a href="#设计考量" class="headerlink" title="设计考量"></a>设计考量</h1><h2 id="HDFS设计假设、目标"><a href="#HDFS设计假设、目标" class="headerlink" title="HDFS设计假设、目标"></a>HDFS设计假设、目标</h2><ul>
+<li>硬件失效<ul>
+<li>硬件的异常比软件的异常更加常见</li>
+</ul>
+</li>
+<li>流式数据访问<ul>
+<li>Dataflow</li>
+<li>hdfs是量身定制，并非以通用业务为目的</li>
+<li>关注吞吐量，并非响应时间</li>
+</ul>
+</li>
+<li><p>存储数据较大</p>
+</li>
+<li><p>简化的数据一致性模型</p>
+<ul>
+<li>数据写入之后，不允许再修改了，只允许在后面追加</li>
+</ul>
+</li>
+<li>多硬件平台支持<ul>
+<li>易于运行不同的平台上（故用java编写）</li>
+</ul>
+</li>
+<li>移动计算能力比移动数据更划算<ul>
+<li>计算和存储采用就近原则，计算离数据最近</li>
+<li>移动计算就是移动代码，对远程的数据进行计算</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何应对大文件"><a href="#如何应对大文件" class="headerlink" title="如何应对大文件"></a>如何应对大文件</h2><h3 id="文件由数据块集合组成"><a href="#文件由数据块集合组成" class="headerlink" title="文件由数据块集合组成"></a>文件由数据块集合组成</h3><ul>
+<li>通常每块大小为64MB</li>
+<li>与os的块的区别：<ul>
+<li>os的目的：省io的时间、不满还是会占整个block的大小的</li>
+<li>hdfs目的：把大的文件切小、不满是不会占64mb的</li>
+</ul>
+</li>
+</ul>
+<h2 id="索引文件"><a href="#索引文件" class="headerlink" title="索引文件"></a>索引文件</h2><ul>
+<li>跨机器索引</li>
+</ul>
+<h1 id="HDFS-架构"><a href="#HDFS-架构" class="headerlink" title="HDFS 架构"></a>HDFS 架构</h1><h2 id="HDFS节点类型"><a href="#HDFS节点类型" class="headerlink" title="HDFS节点类型"></a>HDFS节点类型</h2><ul>
+<li>NameNode      每个集群一个名字节点（master）<ul>
+<li>负责文件系统元数据操作、数据块的复制和定位</li>
+</ul>
+</li>
+<li>SecondaryNamenode       NameNode的备份</li>
+<li>Datanode</li>
+</ul>
+<h2 id="NameNode-："><a href="#NameNode-：" class="headerlink" title="NameNode ："></a>NameNode ：</h2><ul>
+<li>作用：管理节点、接收用户的操作请求</li>
+<li>核心数据文件包括：<ul>
+<li>元数据镜像文件fsimage: 维护文件系统树以及文件树中所有的文件/目录的元数据</li>
+<li>操作日志文件EditLog: 记录所有针对文件的创建、删除、重命名等操作。<ul>
+<li>如果元数据镜像文件可以承受恢复的代价，那么日志也可以不需要了，日志为了减轻元数据镜像文件的负担。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>元数据保存在内存中</li>
+<li>做了block和datanode之间的映射关系</li>
+</ul>
+<h2 id="SecondaryNameNode"><a href="#SecondaryNameNode" class="headerlink" title="SecondaryNameNode"></a>SecondaryNameNode</h2><ul>
+<li>执行过程：<ul>
+<li>定期从Namenode上下载fsimage,edits，二者合并，生成新的fsimage</li>
+<li>在本地保存，并写回NameNode</li>
+</ul>
+</li>
+<li>它是“检查点”，而不是“热备份”（即并非实时备份）</li>
+</ul>
+<h2 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h2><ul>
+<li>作用：一共文件的存储</li>
+<li>文件块：一个Linux文件</li>
+<li>HDFS中，如果一个文件小于一个数据块的大小，并不占用整个数据块存储空间</li>
+<li>数据备份：默认是三个</li>
+<li>文件内容保存在磁盘</li>
+</ul>
+<h1 id="文件访问"><a href="#文件访问" class="headerlink" title="文件访问"></a>文件访问</h1><h2 id="文件写入HDFS"><a href="#文件写入HDFS" class="headerlink" title="文件写入HDFS"></a>文件写入HDFS</h2><ul>
+<li>NameNode 告知客户端文件的每一个数据块存储在何处<br>b. 客户端将数据块直接传输到指定的数据节点数据访问</li>
+</ul>
+<h2 id="从HDFS读取文件"><a href="#从HDFS读取文件" class="headerlink" title="从HDFS读取文件"></a>从HDFS读取文件</h2><ul>
+<li>从NameNode 返回每个数据块的位置给客户端</li>
+<li>从数据节点上传数据块（不同的数据块可以并行读取）</li>
+</ul>
+<h3 id="数据读取策略"><a href="#数据读取策略" class="headerlink" title="数据读取策略"></a>数据读取策略</h3><h3 id="文件访问模型"><a href="#文件访问模型" class="headerlink" title="文件访问模型"></a>文件访问模型</h3><ul>
+<li>“一次写入多次读取”<ul>
+<li>修改内容需删除，重新写入</li>
+<li>仅允许追加append()  <ul>
+<li>注： 此为追加一个block，而不是在原来的block追加内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>好处：避免读写冲突，无需文件锁</li>
+</ul>
+<h3 id="HDFS数据备份"><a href="#HDFS数据备份" class="headerlink" title="HDFS数据备份"></a>HDFS数据备份</h3><h1 id="备份与一致性"><a href="#备份与一致性" class="headerlink" title="备份与一致性"></a>备份与一致性</h1><ul>
+<li><p>一个文件有若干备份</p>
+</li>
+<li><p>备份之间是否可能不一致？</p>
+<ul>
+<li>同时append两个备份</li>
+</ul>
+</li>
+</ul>
+<h1 id="容错机制"><a href="#容错机制" class="headerlink" title="容错机制"></a>容错机制</h1><ul>
+<li><p>HDFS在设计时就考虑到故障（硬件和软件）会经常出现</p>
+</li>
+<li><p>DataNode故障：</p>
+<ul>
+<li>“宕机”：节点上面的所有数据都会被标记为“不可读”</li>
+<li>定期检查备份因子</li>
+</ul>
+</li>
+<li><p>NameNode故障</p>
+<ul>
+<li>根据SecondaryNameNode中的Fslmage和Editlog数据进行恢复</li>
+</ul>
+</li>
+<li><p>其他故障</p>
+<ul>
+<li>磁盘错误或故障：数据校验</li>
+<li>交换机/机架故障</li>
+<li>数据中心故障</li>
+</ul>
+</li>
+</ul>
+<h1 id="HDFS功能"><a href="#HDFS功能" class="headerlink" title="HDFS功能"></a>HDFS功能</h1><ul>
+<li><p>适用：</p>
+<ul>
+<li>大文件存储、流式数据访问</li>
+</ul>
+</li>
+<li><p>不合适:</p>
+<ul>
+<li>大量小文件（无法完美利用数据并行读取）</li>
+<li>随机读取（因为有固定的代价）</li>
+<li>低延迟读取</li>
+</ul>
+</li>
+</ul>
+<p>​        </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+<div>
+      
+</div>
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2020/05/06/序列化与压缩/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1589,156 +1871,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/Spark之join操作/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="luyiqu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="瞿璐祎的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/12/Spark之join操作/" itemprop="url">Spark之join操作</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-11T22:28:48Z">
-                2018-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式模型与编程/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式模型与编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Spark之join操作-md"><a href="#Spark之join操作-md" class="headerlink" title="Spark之join操作.md"></a>Spark之join操作.md</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.FlatMapFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">join</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SparkConf conf = <span class="keyword">new</span> SparkConf().setAppName(<span class="string">"join"</span>).setMaster(<span class="string">"local[*]"</span>);</span><br><span class="line">		JavaSparkContext jsc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br><span class="line">		JavaRDD&lt;String&gt; persons = jsc.textFile(<span class="string">"spark/input3/person.txt"</span>);</span><br><span class="line">		JavaRDD&lt;String&gt; addresses = jsc.textFile(<span class="string">"spark/input3/address.txt"</span>);</span><br><span class="line">		</span><br><span class="line"></span><br><span class="line">		<span class="comment">//得到 key: 邮编号，value:学号和名字</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; personkv = persons.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				</span><br><span class="line">					String[] personsplit = str.split(<span class="string">" |\t"</span>);     <span class="comment">// notice maybe \t</span></span><br><span class="line">					<span class="comment">//System.out.println("length"+personsplit.length);</span></span><br><span class="line">					<span class="comment">//处理缺省数据</span></span><br><span class="line">					<span class="keyword">if</span> (personsplit.length == <span class="number">3</span>)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="comment">//System.out.println("i am not null");</span></span><br><span class="line">						String code=personsplit[<span class="number">2</span>];</span><br><span class="line">						String value = personsplit[<span class="number">0</span>] +<span class="string">" "</span>+ personsplit[<span class="number">1</span>];		<span class="comment">//number + name</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span> &#123;</span><br><span class="line">						</span><br><span class="line">						<span class="comment">//System.out.println("null null null ++++++++="+personsplit.length);	</span></span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String,String&gt;(<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">						&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);  <span class="comment">// to split the person and get the form &lt;210000,1 Aaron&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//得到key: 邮编号 value:城市</span></span><br><span class="line">		JavaPairRDD&lt;String, String&gt; addresskv = addresses.mapToPair(<span class="keyword">new</span> PairFunction&lt;String, String,String&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> Tuple2&lt;String,String&gt; <span class="title">call</span><span class="params">(String str)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				String[] addresssplit = str.split(<span class="string">" |\t"</span>);</span><br><span class="line">				String code=addresssplit[<span class="number">0</span>];</span><br><span class="line">				String value = addresssplit[<span class="number">1</span>];		<span class="comment">//city</span></span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;String, String&gt;(code, value);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);				<span class="comment">//to split the address and get the  form &lt;210000,Nanjing&gt;</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//进行join操作</span></span><br><span class="line">		JavaPairRDD&lt;String, Tuple2&lt;String, String&gt;&gt; joinres=personkv.join(addresskv);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//遍历输出</span></span><br><span class="line">		joinres.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt;&gt;() &#123;</span><br><span class="line">			<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1L</span>;</span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;String, Tuple2&lt;String, String&gt;&gt; t)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">				System.out.println(t._2()._1+<span class="string">" "</span>+t._1+ <span class="string">" "</span>+t._2()._2);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		joinres.saveAsTextFile(<span class="string">"./spark/output3/"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="输入"><a href="#输入" class="headerlink" title="输入:"></a>输入:</h2><pre><code>person.txt:
-    1 Aaron 210000
-    .....
-address.txt:
-    210000 Nanjing
-    .........
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-<div>
-      
-</div>
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-categories" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://luyiqu.github.io/2018/11/12/数据模型/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -2014,7 +2146,7 @@ address.txt:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -2025,7 +2157,7 @@ address.txt:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
@@ -2036,7 +2168,7 @@ address.txt:
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
